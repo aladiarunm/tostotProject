@@ -1,0 +1,52 @@
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Login from './pages/Auth/Login';
+import Dashboard from './pages/Dashboard';
+import Profile from './pages/Profile';
+import BuyerManagement from './pages/BuyerManagement';
+import SellerManagement from './pages/SellerManagement';
+//---
+import BrandManagement from './pages/BrandManagement';
+import CategoryManagement from './pages/CategoryManagement';
+//---
+import ProductManagement from './pages/ProductManagement';
+import ProductCategory from './pages/ProductManagement/Category';
+import ProductType from './pages/ProductManagement/Type';
+import ProductStock from './pages/ProductManagement/Stock';
+import OrdersReceived from './pages/Orders/Received';
+import OrdersGiven from './pages/Orders/Given';
+import NotFound from './pages/NotFound';
+import ProtectedRoute from './components/ProtectedRoute';
+
+
+const AppRoutes = ({ onLogin }) => {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login onLogin={onLogin} />} />
+      <Route path="/" element={<ProtectedRoute />}>
+        <Route index element={<Dashboard />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="buyers" element={<BuyerManagement />} />
+        <Route path="sellers" element={<SellerManagement />} />
+
+        <Route path="brands" element={<BrandManagement />} />
+        <Route path="categories" element={<CategoryManagement />} />
+
+        <Route path="products" element={<ProductManagement />}>
+          <Route path="category" element={<ProductCategory />} />
+          <Route path="type" element={<ProductType />} />
+          <Route path="stock" element={<ProductStock />} />
+        </Route>
+
+        <Route path="orders">
+          <Route path="received" element={<OrdersReceived />} />
+          <Route path="given" element={<OrdersGiven />} />
+        </Route>
+      </Route>
+      
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
+
+export default AppRoutes;

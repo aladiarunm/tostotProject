@@ -1,0 +1,4123 @@
+<!--
+ * Copyright (c) Tostot Software Solutions Private Limited 2022 - All rights reserved *
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {
+              font-size: small;
+              font-family:'Courier New', Courier, monospace;
+            }
+            /* Style the buttons that are used to open and close the accordion panel */
+            .accordion {
+              background-color: #eee;
+              color: #444;
+              cursor: pointer;
+              padding: 8px;
+              width: 100%;
+              text-align: left;
+              border: none;
+              outline: none;
+              transition: 0.4s;
+            }
+
+            /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+            .active, .accordion:hover {
+              background-color: #ccc;
+            }
+
+            /* Style the accordion panel. Note: hidden by default */
+            .panel {
+              padding: 0 18px;
+              background-color: #0B0C0C;
+              color: white;
+              display: none;
+              overflow: hidden;
+            }
+            .accordion:after {
+              content: '\02795'; /* Unicode character for "plus" sign (+) */
+              font-size: 13px;
+              color: #777;
+              float: right;
+              margin-left: 5px;
+            }
+
+            .active:after {
+              content: "\2796"; /* Unicode character for "minus" sign (-) */
+            }
+            table, th, td {
+              border: 1px solid white;
+              border-collapse: collapse;
+              width: 100%;
+              padding: 10px;
+            }
+            td {
+              width: 25%;
+            }
+        </style>
+    </head>
+    <body>
+
+<button class="accordion">Basic Things</button>
+<div class="panel">
+  <pre>
+        <table>
+          <tr>
+            <td><strong>Testing URL for AWS Node Server: </strong></td>
+            <td>/api/test</td>
+          </tr>
+          <tr>
+            <td><strong>Base URL for ADMIM: </strong></td>
+            <td>/api/admin</td>
+          </tr>
+          <tr>
+            <td><strong>Base URL for PUBLIC: </strong></td>
+            <td>/api/public</td>
+          </tr>
+          <tr>
+            <td><strong>Server Error Codes:</strong></td>
+            <td>
+              401 - Unauthorized
+              409 - Error code for duplicate entry / reference found
+              404 - Error code for not found record during updates
+              500 - Other Internal server errors
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Security Token:</strong></td>
+            <td>Authorization: Bearer {accessToken}</td>
+          </tr>
+          <tr>
+            <td><strong>Header Paams:</strong></td>
+            <td>pincode & regionid are to be sent in all the public site apis once we validate the pincode</td>
+          </tr>
+        </table>
+  </pre>
+</div>
+
+<button class="accordion">Admin - Login</button>
+<div class="panel">
+  <pre>
+    
+POST:    /auth/login
+-------------------------------------------------------------------------------------
+Request Type: POST
+Request:
+{
+  "username": "sadmin",
+  "password": "Pa$$w0rd"
+}
+
+Response:
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE5NDg0MjY1LCJleHAiOjE3MTk1NzA2NjV9.tiSaCYklBhve3_5bnniuZaNYuzrKDGHF9cw02Wv-gvE",
+  "id": 1
+}
+
+GET:    /auth/user/:id
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "id": "1",
+  "username": "sadmin",
+  "firstName": "Super",
+  "lastName": "Admin",
+  "roleId": 1,
+  "roleName": "Super Admin",
+  "regionId": null,
+  "regionName": null,
+  "email": "sadmin@email.com",
+  "phone": "9999988888",
+  "status": "A"
+}
+  </pre>
+</div>
+
+<button class="accordion">Master - COMMON</button>
+<div class="panel">
+  <pre>
+
+
+LIST States: /master/states?id=&name=&status=&offset=0&pageSize=5&ordBy=&ordCl=
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+valid values: 
+pageSize [5, 10, 25, 50, 100]
+offset [first page: 0, for other pages: (pageSize) * (pageNumber - 1) ]
+ordBy ['id','name', 'status']
+ordCl ['A', 'D']
+
+pageSize & offset are one combination, ordBy & ordCl are another combination. 
+If all records are need send empty for pageSize & offset or don't send
+
+Response:
+{
+  "totalRecords": 36,
+  "list": [
+      {
+          "id": 1,
+          "name": "Andaman and Nico.In.",
+          "status": "A"
+      },
+      {
+          "id": 2,
+          "name": "Andhra Pradesh",
+          "status": "A"
+      },
+      {
+          "id": 3,
+          "name": "Arunachal Pradesh",
+          "status": "A"
+      },
+      {
+          "id": 4,
+          "name": "Assam",
+          "status": "A"
+      },
+      {
+          "id": 5,
+          "name": "Bihar",
+          "status": "A"
+      }
+  ]
+}
+
+LIST Districts: /master/districts?id=&stateId=&name=&status=&offset=0&pageSize=5&ordBy=&ordCl=
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+valid values: 
+pageSize [5, 10, 25, 50, 100]
+offset [first page: 0, for other pages: (pageSize) * (pageNumber - 1) ]
+ordBy ['id','stateId', 'name', 'status']
+ordCl ['A', 'D']
+
+pageSize & offset are one combination, ordBy & ordCl are another combination. 
+If all records are need send empty for pageSize & offset or don't send
+
+Response:
+{
+  "totalRecords": 34,
+  "list": [
+      {
+          "id": 544,
+          "name": "ARIYALUR",
+          "stateId": 31,
+          "stateName": "Tamil Nadu",
+          "status": "A"
+      },
+      {
+          "id": 545,
+          "name": "CHENNAI",
+          "stateId": 31,
+          "stateName": "Tamil Nadu",
+          "status": "A"
+      },
+      {
+          "id": 546,
+          "name": "COIMBATORE",
+          "stateId": 31,
+          "stateName": "Tamil Nadu",
+          "status": "A"
+      }
+  ]
+}
+
+LIST Pincodes: /master/pincodes?id=&stateId=31&districtId=577&pincode=&status=&pageSize=5&offset=0&ordBy=&ordCl=
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+valid values: 
+pageSize [5, 10, 25, 50, 100]
+offset [first page: 0, for other pages: (pageSize) * (pageNumber - 1) ]
+ordBy ['id','stateId', 'districtId', 'pincode', 'status']
+ordCl ['A', 'D']
+
+pageSize & offset are one combination, ordBy & ordCl are another combination. 
+If all records are need send empty for pageSize & offset or don't send
+
+stateId & districtId are Mandatory as the number of records are huge
+
+Response:
+{
+  "totalRecords": 57,
+  "list": [
+      {
+          "id": 15390,
+          "stateId": 31,
+          "districtId": 577,
+          "stateName": "Tamil Nadu",
+          "districtName": "VIRUDHUNAGAR",
+          "status": "A",
+          "pincode": "626001"
+      },
+      {
+          "id": 15391,
+          "stateId": 31,
+          "districtId": 577,
+          "stateName": "Tamil Nadu",
+          "districtName": "VIRUDHUNAGAR",
+          "status": "A",
+          "pincode": "626002"
+      },
+      {
+          "id": 15392,
+          "stateId": 31,
+          "districtId": 577,
+          "stateName": "Tamil Nadu",
+          "districtName": "VIRUDHUNAGAR",
+          "status": "A",
+          "pincode": "626003"
+      }
+  ]
+}
+
+LIST HSNs: /master/hsns
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+[
+  {
+    "hsnId": 1,
+    "code": "10063090",
+    "description": "Rice other than those put up in unit container and,- (a) bearing a registered brand name; or (b) bearing a brand name on which an actionable claim or enforceable right in a court of law is available [other than those where any actionable claim or enforceable right in respect of such brand name has been foregone voluntarily, subject to the conditions as in the ANNEXURE I]",
+    "hsnRateId": 1,
+    "cgstRate": "2.50",
+    "sgstRate": "2.50",
+    "igstRate": "5.00",
+    "effectiveDate": "2024-07-04T18:30:00.000Z",
+    "expirationDate": null
+  },
+  {
+    "hsnId": 2,
+    "code": "100820",
+    "description": "Buckwheat, millet and canary seed; other cereals such as Jawar, Bajra, Ragi] other than those put up in unit container and,- (a) bearing a registered brand name; or (b) bearing a brand name on which an actionable claim or enforceable right in a court of law is available [other than those where any actionable claim or enforceable right in respect of such brand name has been foregone voluntarily, su",
+    "hsnRateId": 2,
+    "cgstRate": "2.50",
+    "sgstRate": "2.50",
+    "igstRate": "5.00",
+    "effectiveDate": "2024-07-04T18:30:00.000Z",
+    "expirationDate": null
+  },
+  {
+    "hsnId": 3,
+    "code": "12022010",
+    "description": "GROUNDNUT SEEDS",
+    "hsnRateId": 3,
+    "cgstRate": "2.50",
+    "sgstRate": "2.50",
+    "igstRate": "5.00",
+    "effectiveDate": "2024-07-04T18:30:00.000Z",
+    "expirationDate": null
+  }
+]
+  </pre>
+</div>
+
+<button class="accordion">Master - Settings</button>
+<div class="panel">
+  <pre>
+LIST: /master/settings
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+[
+    {
+        "id": 1,
+        "code": "top_banner_scroll_text",
+        "value1": "Diwali sales ends in a week",
+        "value2": null
+    },
+    {
+        "id": 2,
+        "code": "cart_page_banner",
+        "value1": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/banner/2.png",
+        "value2": "http://13.202.118.242/products/164"
+    },
+    {
+        "id": 3,
+        "code": "home_page_banner1",
+        "value1": null,
+        "value2": null
+    },
+    {
+        "id": 4,
+        "code": "home_page_banner2",
+        "value1": null,
+        "value2": null
+    }
+]
+
+UPDATE: /master/setting/textUpdate/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+
+NOTE: THIS IS FOR TEXT ONLY SETTINGS UPDATE
+
+Request:
+{
+  "code": "top_banner_scroll_text",
+  "value1": "Diwali sales ends in a week",
+  "value2": null
+}
+
+Response:
+200
+
+UPLOAD IMAGE: /master/setting/fileUpdate/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT 
+Content-Type: multipart/form-data;
+
+NOTE: THIS IS FOR TEXT & IMAGE UPLOAD SETTINGS UPDATE
+
+Request:
+{
+  "file": <actual image file to upload>,
+  "code": "cart_page_banner",
+  "value2": "http://13.202.118.242/products/164"
+}
+
+Response:
+200
+
+REMOVE IMAGE: /master/setting/fileRemove/:id?code=cart_page_banner&removedFile=https://anjalifoods-local.s3.ap-south-1.amazonaws.com/banner/2.png
+-------------------------------------------------------------------------------------
+Request Type: DELETE 
+
+NOTE: THIS IS FOR TEXT & IMAGE UPLOAD SETTINGS UPDATE
+
+Request:
+
+Response:
+200 OK
+
+  </pre>
+</div>
+
+<button class="accordion">Master - Brand</button>
+<div class="panel">
+  <pre>
+CREATE:    /master/brand
+-------------------------------------------------------------------------------------
+Request Type: POST
+Request:
+{
+  "name": "ANJALI",
+  "description": "ANJALI brand",
+  "status": "A"
+}
+
+
+Response:
+{
+  "id": 1
+}
+
+GET:  /master/brand/:id
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "id": 2,
+  "name": "KING",
+  "description": "KING",
+  "status": "A"
+}
+
+UPDATE: /master/brand/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+{
+  "name": "ANJALI",
+  "description": "ANJALI brand",
+  "status": "A"
+}
+
+Response:
+200
+
+DELETE:  /master/brand/:id
+-------------------------------------------------------------------------------------
+Request Type: DELETE
+Request:
+
+Response:
+200 OK
+
+LIST: /master/brands?id=&name=&description=&status=&offset=0&pageSize=5&ordBy=&ordCl=
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+valid values: 
+pageSize [5, 10, 25, 50, 100]
+offset [first page: 0, for other pages: (pageSize) * (pageNumber - 1) ]
+ordBy ['id','name', 'description', 'status']
+ordCl ['A', 'D']
+
+pageSize & offset are one combination, ordBy & ordCl are another combination. 
+If all records are need send empty for pageSize & offset or don't send
+
+Response:
+{
+  "totalRecords": 4,
+  "list": [
+      {
+          "id": 1,
+          "name": "ANJALI",
+          "description": "ANJALI",
+          "status": "A"
+      },
+      {
+          "id": 2,
+          "name": "KING",
+          "description": "KING",
+          "status": "A"
+      },
+      {
+          "id": 3,
+          "name": "SUNLORA",
+          "description": "SUNLORA",
+          "status": "A"
+      },
+      {
+          "id": 4,
+          "name": "YENSTAR",
+          "description": "YENSTAR",
+          "status": "A"
+      }
+  ]
+}
+  </pre>
+</div>
+
+<button class="accordion">Master - Category</button>
+<div class="panel">
+  <pre>
+    CREATE:    /master/category
+-------------------------------------------------------------------------------------
+Request Type: POST
+Request:
+{
+  "name": "Oils",
+  "description": "Oils Category for the application",
+  "displayFlag": 1,
+  "displayOrder": 1,
+  "status": "A"
+}
+
+Response:
+{
+  "id": 1
+}
+
+UPLOAD IMAGE: /master/category/:id/image
+-------------------------------------------------------------------------------------
+Request Type: POST 
+Content-Type: multipart/form-data;
+
+Request:
+{
+  "file": <actual image file to upload>
+}
+
+Response:
+200
+
+REMOVE IMAGE: /master/category/:id/image?removedFile=https://anjali-foods-development.s3.ap-south-1.amazonaws.com/category/1.jpg
+-------------------------------------------------------------------------------------
+Request Type: DELETE 
+
+Request:
+
+Response:
+200 OK
+
+
+GET:    /master/category/:id
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "id": 1,
+  "name": "Oils",
+  "description": "Oils Category for the application",
+  "displayFlag": 1,
+  "displayOrder": 1,
+  "imagePath": "https://anjali-foods-development.s3.ap-south-1.amazonaws.com/category/1.jpeg",
+  "status": "A"
+}
+
+UPDATE: /master/category/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+{
+  "name": "Oils",
+  "description": "Oils Category for the application",
+  "displayFlag": 1,
+  "displayOrder": 2,
+  "status": "A"
+}
+
+Response:
+200
+
+UPDATE DISPLAY ORDER: /master/category/:id/displayOrder
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+{
+  "displayOrder": 2
+}
+
+Response:
+200
+
+LIST: /master/categories?id=&name=&description=&displayFlag=&displayOrder=&status=&offset=0&pageSize=5&ordBy=&ordCl=
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+valid values: 
+pageSize [5, 10, 25, 50, 100]
+offset [first page 0, then (pageSize) * (pageNumber - 1) ]
+ordBy ['id','name', 'description', 'displayFlag', 'displayOrder', 'status']
+ordCl ['A', 'D']
+
+pageSize & offset are one combination, ordBy & ordCl are another combination. 
+If all records are need send empty for pageSize & offset or don't send
+
+Response:
+{
+  "totalRecords": 2,
+  "list": [
+      {
+          "id": 1,
+          "name": "Oils",
+          "description": "Oils Category for the application",
+          "displayFlag": 1,
+          "displayOrder": 1,
+          "imagePath": "https://anjali-foods-development.s3.ap-south-1.amazonaws.com/category/1.jpeg",
+          "status": "A"
+      },
+      {
+          "id": 2,
+          "name": "Dals",
+          "description": "Dals Category for the application anjali foods",
+          "displayFlag": 1,
+          "displayOrder": 2,
+          "imagePath": "https://anjali-foods-development.s3.ap-south-1.amazonaws.com/category/2.jpeg",
+          "status": "A"
+      }
+  ]
+}
+  </pre>
+</div>
+
+<button class="accordion">Master - Sub Category</button>
+<div class="panel">
+  <pre>
+CREATE:    /master/subCategory
+-------------------------------------------------------------------------------------
+Request Type: POST
+Request:
+{
+  "categoryId": 1,
+  "name": "Groundnut Oils",
+  "description": "Groundnut Oils Category for the application...",
+  "status": "A"
+}
+
+Response:
+{
+  "id": 1
+}
+
+GET:  /master/subCategory/:id
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "id": 1,
+  "name": "Gingelly Oils",
+  "description": "Gingelly Oils Category for the application...",
+  "categoryId": 1,
+  "categoryName": "Oils",
+  "status": "A"
+}
+
+UPDATE: /master/subCategory/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+{
+  "name": "Gingelly Oils",
+  "description": "Gingelly Oils Category for the application...",
+  "categoryId": 1,
+  "status": "A"
+}
+Response:
+200
+
+
+LIST: /master/subCategories?id=&name=&description=&categoryId=&status=&offset=0&pageSize=5&ordBy=&ordCl=
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+valid values: 
+pageSize [5, 10, 25, 50, 100]
+offset [first page: 0, for other pages: (pageSize) * (pageNumber - 1) ]
+ordBy ['id','name', 'description', 'categoryId', 'status']
+ordCl ['A', 'D']
+
+pageSize & offset are one combination, ordBy & ordCl are another combination. 
+If all records are need send empty for pageSize & offset or don't send
+
+Response:
+{
+  "totalRecords": 2,
+  "list": [
+      {
+          "id": 1,
+          "name": "Gingelly Oils",
+          "description": "Gingelly Oils Category for the application...",
+          "categoryId": 1,
+          "categoryName": "Oils",
+          "status": "A"
+      },
+      {
+          "id": 3,
+          "name": "Groundnut Oils",
+          "description": "Groundnut Oils Category for the application...",
+          "categoryId": 1,
+          "categoryName": "Oils",
+          "status": "A"
+      }
+  ]
+}
+</pre>
+</div>
+
+<button class="accordion">Master - Region</button>
+<div class="panel">
+  <pre>
+CREATE:    /master/region
+-------------------------------------------------------------------------------------
+Request Type: POST
+Request:
+{
+  "name": "Mumbai - Despatch",
+  "description": null,
+  "status": "A",
+  "addressLine1": "No: 2/16, Pune High Way, ",
+  "addressLine2": "- Mumbai, - ",
+  "stateId": 21,
+  "districtId": 389,
+  "pincode": "400001",
+  "country": "India"
+}
+
+Response:
+{
+  "id": 4
+}
+
+GET:  /master/region/:id
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "id": 3,
+  "name": "Mumbai - Despatch",
+  "description": "despatch region for west india",
+  "status": "A",
+  "addressLine1": "No: 2/16, Pune High Way, ",
+  "addressLine2": "- Mumbai, - ",
+  "stateId": 21,
+  "stateName": "Maharashtra",
+  "districtId": 389,
+  "districtName": "MUMBAI",
+  "pincode": "400001",
+  "country": "India"
+}
+
+UPDATE: /master/region/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+{
+  "name": "Mumbai - Despatch",
+  "description": "despatch region for west india",
+  "status": "A",
+  "addressLine1": "No: 2/16, Pune High Way, ",
+  "addressLine2": "- Mumbai, - ",
+  "stateId": 21,
+  "districtId": 389,
+  "pincode": "400001",
+  "country": "India"
+}
+
+Response:
+200
+
+
+LIST: /master/regions?id=&name=&description=&status=&offset=0&pageSize=5&ordBy=&ordCl=
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+valid values: 
+pageSize [5, 10, 25, 50, 100]
+offset [first page: 0, for other pages: (pageSize) * (pageNumber - 1) ]
+ordBy ['id','name', 'description', 'status']
+ordCl ['A', 'D']
+
+pageSize & offset are one combination, ordBy & ordCl are another combination. 
+If all records are need send empty for pageSize & offset or don't send
+
+Response:
+{
+  "totalRecords": 3,
+  "list": [
+      {
+          "id": 1,
+          "name": "Madurai - Despatch",
+          "description": "",
+          "status": "A",
+          "addressLine1": "No: 2/16, Chennai High Way, ",
+          "addressLine2": "- Uthangudi, - ",
+          "stateId": 31,
+          "stateName": "Tamil Nadu",
+          "districtId": 556,
+          "districtName": "MADURAI",
+          "pincode": "625107",
+          "country": "India"
+      },
+      {
+          "id": 2,
+          "name": "Chennai - Despatch",
+          "description": null,
+          "status": "A",
+          "addressLine1": null,
+          "addressLine2": null,
+          "stateId": null,
+          "stateName": null,
+          "districtId": null,
+          "districtName": null,
+          "pincode": null,
+          "country": "India"
+      },
+      {
+          "id": 3,
+          "name": "Mumbai - Despatch",
+          "description": "despatch region for west india",
+          "status": "A",
+          "addressLine1": "No: 2/16, Pune High Way, ",
+          "addressLine2": "- Mumbai, - ",
+          "stateId": 21,
+          "stateName": "Maharashtra",
+          "districtId": 389,
+          "districtName": "MUMBAI",
+          "pincode": "400001",
+          "country": "India"
+      }
+  ]
+}
+  </pre>
+</div>
+
+<button class="accordion">Master - Region Coverage</button>
+<div class="panel">
+  <pre>
+CREATE/UPDATE:    /master/regionCoverage
+-------------------------------------------------------------------------------------
+
+When there is nothing to remove, then send removedDistricts as empty array 
+  - otherwise send the ids of the removed districts
+
+
+Request Type: POST
+Request:
+{
+  "regionId": 2,
+  "stateId": 32,
+  "removedDistricts": [],
+  "addedDistricts": [586, 587]
+}
+
+Response:
+200 OK
+
+GET:  /master/regionCoverage?regionId=2&stateId=31
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+If you want the coverage of entire region then send regionId alone
+If you want the coverage of particular region and particular state then send regionId and stateId
+
+
+Response:
+{
+  "regionId": 2,
+  "regionName": "Chennai - Despatch",
+  "status": "A",
+  "states": [
+      {
+          "id": 31,
+          "name": "Tamil Nadu",
+          "districts": [
+              {
+                  "id": 551,
+                  "name": "KANCHIPURAM"
+              },
+              {
+                  "id": 552,
+                  "name": "KANYAKUMARI"
+              }
+          ]
+      },
+      {
+          "id": 32,
+          "name": "Telangana",
+          "districts": [
+              {
+                  "id": 578,
+                  "name": "ADILABAD"
+              },
+              {
+                  "id": 579,
+                  "name": "BHONGIR"
+              }
+          ]
+      }
+  ]
+}
+
+When no coverage is added for a region, the response will be as follows:
+
+{
+  "regionId": 2,
+  "regionName": "Chennai - Despatch",
+  "status": "A",
+  "states": []
+}
+
+  </pre>
+</div>
+
+<button class="accordion">Master - Region Shipping Charge</button>
+<div class="panel">
+  <pre>
+Region Shipping Charges - LIST:    /master/region/:id/shippingCharges
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "regionId": 1,
+  "regionName": "Madurai - Despatch",
+  "shippingCharges": [
+      {
+          "refId": 1,
+          "stateId": 1,
+          "stateName": "Andaman and Nico.In.",
+          "shippingCharge": "110.00"
+      },
+      {
+          "refId": 2,
+          "stateId": 2,
+          "stateName": "Andhra Pradesh",
+          "shippingCharge": "100.00"
+      },
+      {
+          "refId": null,
+          "stateId": 3,
+          "stateName": "Arunachal Pradesh",
+          "shippingCharge": null
+      },
+      {
+          "refId": null,
+          "stateId": 4,
+          "stateName": "Assam",
+          "shippingCharge": null
+      },
+      {
+          "refId": null,
+          "stateId": 5,
+          "stateName": "Bihar",
+          "shippingCharge": null
+      },
+      {
+          "refId": null,
+          "stateId": 31,
+          "stateName": "Tamil Nadu",
+          "shippingCharge": null
+      },
+      {
+          "refId": null,
+          "stateId": 32,
+          "stateName": "Telangana",
+          "shippingCharge": null
+      }
+  ]
+}
+
+Region Shipping Charges - CREATE:    /master/region/:id/shippingCharge
+-------------------------------------------------------------------------------------
+IF refId IS NULL, THEN CALL CREATE
+ELSE CALL UPDATE
+
+Request Type: POST
+Request:
+{
+  "stateId": 31,
+  "shippingCharge": 0
+}
+
+Response:
+{
+  "id": 3
+}
+
+Region Shipping Charges - UPDATE:    /master/region/:id/shippingCharge
+-------------------------------------------------------------------------------------
+IF refId IS NULL, THEN CALL CREATE
+ELSE CALL UPDATE
+
+Request Type: PUT
+Request:
+{
+  "refId": 1,
+  "stateId": 1,
+  "shippingCharge": 110
+}
+
+Response:
+200 OK
+  </pre>
+</div>
+<button class="accordion">Master - Tag</button>
+<div class="panel">
+  <pre>
+CREATE:    /master/tag
+-------------------------------------------------------------------------------------
+Request Type: POST
+Request:
+{
+  "name": "edible"
+}
+
+Response:
+{
+  "id": 6
+}
+
+GET:  /master/tag/:id
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "id": 6,
+  "name": "edible"
+}
+
+UPDATE: /master/tag/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+{
+  "name": "edible items"
+}
+
+Response:
+200 OK
+
+DELETE: /master/tag/:id
+-------------------------------------------------------------------------------------
+Request Type: DELETE
+Request:
+
+Response:
+200 OK
+
+
+LIST: /master/tags?id=&name=&offset=0&pageSize=5&ordBy=&ordCl=
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+valid values: 
+pageSize [5, 10, 25, 50, 100]
+offset [first page: 0, for other pages: (pageSize) * (pageNumber - 1) ]
+ordBy ['id','name']
+ordCl ['A', 'D']
+
+pageSize & offset are one combination, ordBy & ordCl are another combination. 
+If all records are need send empty for pageSize & offset or don't send
+
+Response:
+{
+  "totalRecords": 3,
+  "list": [
+      {
+          "id": 4,
+          "name": "you deserve well"
+      },
+      {
+          "id": 5,
+          "name": "tag2"
+      },
+      {
+          "id": 6,
+          "name": "edible items"
+      }
+  ]
+}
+  </pre>
+</div>
+
+<button class="accordion">Master - Product</button>
+<div class="panel">
+  <pre>
+CREATE BASE PRODUCT:    /master/productBase
+-------------------------------------------------------------------------------------
+Request Type: POST
+
+VALID VALUES FOR unitUOM - 'ml','L','g', 'Kg', 'No.'
+
+Request:
+{
+  "brandId" : 1,
+  "categoryId" : 1,
+  "subCategoryId" : 1,
+  "name" : "Anjali Gingelly Oil 2 Litre Can",
+  "unitQuantity": 2,
+  "unitUOM": "L",
+  "shortDescription" : "",
+  "longDescription" : "",
+  "featuredFlag": 0
+}
+
+Response:
+{
+  "id": 1
+}
+
+UPDATE BASE PRODUCT:    /master/productBase/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+
+VALID VALUES FOR unitUOM - 'ml','L','g', 'Kg', 'No.'
+
+Request:
+{
+  "brandId" : 1,
+  "categoryId" : 1,
+  "subCategoryId" : 1,
+  "name" : "Anjali Gingelly Oil 2 Litre Can",
+  "unitQuantity": 2,
+  "unitUOM": "L",
+  "shortDescription" : "",
+  "longDescription" : "",
+  "featuredFlag": 0
+}
+
+Response:
+200 OK
+
+UPDATE PRODUCT PRICE:    /master/productPrice/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+{
+  "sku": "SUN-SF-1LP-02",
+  "barcode" : "barcode",
+  "itemMasterId" : "itemMasterId",
+  "hsnCode" : "15089099",
+  "mrp" : 440,
+  "sellPrice" : 420,
+  "minimumOrderQuantity": 3,
+  "maximumOrderQuantity": 10,
+  "length": 11,
+  "breadth": 8,
+  "height": 6,
+  "weight": 5
+}
+
+Response:
+200 OK
+
+UPDATE PRODUCT METAINFO:    /master/productMeta/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+{
+  "metaTitle" : "metaTitle",
+  "metaDescription" : "metaDescription",
+  "metaKeywords" : "metaKeywords"
+}
+
+Response:
+200 OK
+
+UPDATE PRODUCT TAGS:    /master/productTags/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+{
+  "tags" : {
+      "addedTags": [4,5],
+      "removedTags": [2,3]
+  }
+}
+
+Response:
+200 OK
+
+UPDATE PRODUCT REGION STOCK:    /master/productRegionStock/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+{
+  "regionStock": {
+      "regionId": 1,
+      "availableQuantity": 300,
+      "minimumStockLevel": 20
+  }
+}
+
+ADD PRODUCT VISIBILITY:    /master/productVisibility/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+
+Request:
+For Entire State:
+{
+  "visibility": {
+      "stateId" : 33,
+      "isEntireState": 1
+  }
+}
+For Selected Districts:
+{
+  "visibility": {
+      "stateId" : 34,
+      "isEntireState": 0,
+      "addedDistrictIds": [623, 624, 625]
+  }
+}
+
+Response:
+200 OK
+
+REMOVE PRODUCT VISIBILITY:    /master/productVisibility?
+-------------------------------------------------------------------------------------
+Request Type: DELETE
+
+Request QUERY PARAM:
+
+For district removal:
+productId=1&refId=12&stateId=34&districtId=623
+
+For state removal:
+productId=1&refId=5&stateId=1
+
+Response:
+200 OK
+
+UPDATE PRODUCT STATUS:    /master/productStatus/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+{
+  "status": 'A'
+}
+
+Response:
+200 OK
+
+UPLOAD COVER IMAGE: /master/product/:id/coverImage
+-------------------------------------------------------------------------------------
+Request Type: POST 
+Content-Type: multipart/form-data;
+
+Request:
+{
+  "file": <actual image file to upload>
+}
+
+Response:
+200 OK
+
+REMOVE COVER IMAGE: /master/product/:id/coverImage?removedFile=https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/coverImage.jpeg
+-------------------------------------------------------------------------------------
+Request Type: DELETE 
+
+Request:
+
+Response:
+200 OK
+
+UPLOAD GALLERY IMAGES: /master/product/:id/galleryImages
+-------------------------------------------------------------------------------------
+Request Type: POST 
+Content-Type: multipart/form-data;
+
+ALWAYS SEND THE NEWLY ADDED IMAGES AND THEIR COUNT
+Request:
+{
+  "fileCount": 3,
+  "file": [imageFile1, imageFile2, imageFile3]
+}
+
+Response:
+200 OK
+
+REMOVE GALLERY IMAGE: /master/product/:productImageId/galleryImage?removedFile=https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/gallery-1720776303198-.jpg
+-------------------------------------------------------------------------------------
+Request Type: DELETE 
+
+Request:
+
+Response:
+200 OK
+
+GET:  /master/product/:id
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "id": 2,
+  "brandId": 1,
+  "brandName": "ANJALI",
+  "categoryId": 1,
+  "categoryName": "Edible Oil",
+  "subCategoryId": 1,
+  "subCategoryName": "Gingelly Oil",
+  "name": "Anjali Gingelly Oil 2 Litre Can",
+  "unitQuantity": "2.00",
+  "unitUOM": "L",
+  "shortDescription": "",
+  "longDescription": "",
+  "status": "I",
+  "coverImagePath": null,
+  "featuredFlag": 0,
+  "sku": "SUN-SF-1LP-02",
+  "barcode": "barcode",
+  "itemMasterId": "itemMasterId",
+  "hsnCode": "15089099",
+  "gst": "14.00",
+  "mrp": "440.00",
+  "sellPrice": "420.00",
+  "minimumOrderQuantity": 1,
+  "maximumOrderQuantity": 10,
+  "length": "11.00",
+  "breadth": "8.00",
+  "height": "6.00",
+  "weight": "5.00",
+  "metaTitle": "metaTitle",
+  "metaDescription": "metaDescription",
+  "metaKeywords": "metaKeywords",
+  "images": [
+        {
+            "productImageId": 8,
+            "imagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/gallery-1720776303165-.jpg"
+        },
+        {
+            "productImageId": 9,
+            "imagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/gallery-1720776303168-.jpg"
+        }
+    ],
+    "tags": [
+    {
+        "productTagId": 8,
+        "tagId": 2,
+        "tagName": "edible"
+    },
+    {
+        "productTagId": 9,
+        "tagId": 3,
+        "tagName": "good for you"
+    }
+],
+  "regionStock": [
+      {
+          "productRegionStockId": 8,
+          "regionId": 1,
+          "availableQuantity": 300,
+          "inprocessQuantity": null,
+          "minimumStockLevel": 20,
+          "regionName": "Madurai - Despatch"
+      }
+  ],
+  "visibility": [
+        {
+            "stateId": 1,
+            "stateName": "Andaman and Nico.In.",
+            "isEntireState": 1,
+            "districtIds": [],
+            "refId": 8
+        },
+        {
+            "stateId": 31,
+            "stateName": "Tamil Nadu",
+            "isEntireState": 0,
+            "districtIds": [
+                {
+                    "refId": 6,
+                    "districtId": 544,
+                    "districtName": "ARIYALUR"
+                },
+                {
+                    "refId": 7,
+                    "districtId": 545,
+                    "districtName": "CHENNAI"
+                }
+            ]
+        },
+        {
+            "stateId": 34,
+            "stateName": "Uttar Pradesh",
+            "isEntireState": 1,
+            "districtIds": [],
+            "refId": 1
+        }
+    ]
+}
+
+LIST: /master/products?id=&name=&categoryId=&subCategoryId=&featuredFlag=&status=&hsnCode=&offset=0&pageSize=4&ordBy=&ordCl=
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+valid values: 
+pageSize [5, 10, 25, 50, 100]
+offset [first page 0, then (pageSize) * (pageNumber - 1) ]
+ordBy ['id','name', 'categoryId', 'subCategoryId', 'featuredFlag', 'status', 'hsnCode']
+ordCl ['A', 'D']
+
+pageSize & offset are one combination, ordBy & ordCl are another combination. 
+If all records are need send empty for pageSize & offset or don't send
+
+Response:
+{
+  "totalRecords": 2,
+  "list": [
+      {
+          "id": 1,
+          "brandId": 1,
+          "brandName": "ANJALI",
+          "categoryId": 1,
+          "categoryName": "Edible Oil",
+          "subCategoryId": 1,
+          "subCategoryName": "Gingelly Oil",
+          "name": "Anjali Gingelly Oil 1 Litre Can",
+          "shortDescription": "",
+          "longDescription": "",
+          "status": "I",
+          "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/coverImage.jpeg",
+          "featuredFlag": 0,
+          "barcode": "barcode",
+          "itemMasterId": "itemMasterId",
+          "hsnCode": "15089099",
+          "gst": "14.00",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "minimumOrderQuantity": 1,
+          "maximumOrderQuantity": 10,
+          "metaTitle": "metaTitle",
+          "metaDescription": "metaDescription",
+          "metaKeywords": "metaKeywords"
+      },
+      {
+          "id": 2,
+          "brandId": 1,
+          "brandName": "ANJALI",
+          "categoryId": 1,
+          "categoryName": "Edible Oil",
+          "subCategoryId": 1,
+          "subCategoryName": "Gingelly Oil",
+          "name": "Anjali Gingelly Oil 2 Litre Can",
+          "shortDescription": "",
+          "longDescription": "",
+          "status": "I",
+          "coverImagePath": null,
+          "featuredFlag": 0,
+          "barcode": "barcode",
+          "itemMasterId": "itemMasterId",
+          "hsnCode": "15089099",
+          "gst": "14.00",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "minimumOrderQuantity": 1,
+          "maximumOrderQuantity": 10,
+          "metaTitle": "metaTitle",
+          "metaDescription": "metaDescription",
+          "metaKeywords": "metaKeywords"
+      }
+  ]
+}
+
+  </pre>
+</div>
+
+<button class="accordion">Master - Offer</button>
+<div class="panel">
+  <pre>
+
+LIST PRODUCTS BY CATEGORIES: /master/productsMin
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+[
+    {
+        "categoryId": 1,
+        "categoryName": "Edible Oil",
+        "subcategories": [
+            {
+                "subCategoryId": 1,
+                "subCategoryName": "Gingelly Oil",
+                "products": [
+                    {
+                        "productId": 1,
+                        "productName": "Anjali Gingelly Oil 1 Litre Can",
+                        "brandId": 1,
+                        "brandName": "ANJALI",
+                        "mrp": "440.00",
+                        "sellPrice": "420.00"
+                    },
+                    {
+                        "productId": 2,
+                        "productName": "Anjali Gingelly Oil 2 Litre Can",
+                        "brandId": 4,
+                        "brandName": "YENSTAR",
+                        "mrp": "440.00",
+                        "sellPrice": "420.00"
+                    }
+                ]
+            },
+            {
+                "subCategoryId": 2,
+                "subCategoryName": "Groundnut Oil",
+                "products": [
+                    {
+                        "productId": 4,
+                        "productName": "Anjali Pulses 1 Kg",
+                        "brandId": 1,
+                        "brandName": "ANJALI",
+                        "mrp": "340.00",
+                        "sellPrice": "320.00"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoryId": 2,
+        "categoryName": "Pulses",
+        "subcategories": [
+            {
+                "subCategoryId": 9,
+                "subCategoryName": "Urad Dal",
+                "products": [
+                    {
+                        "productId": 5,
+                        "productName": "Anjali Urad Dal Oil 1 Kg Pack",
+                        "brandId": 1,
+                        "brandName": "ANJALI",
+                        "mrp": "140.00",
+                        "sellPrice": "120.00"
+                    }
+                ]
+            },
+            {
+                "subCategoryId": 10,
+                "subCategoryName": "Toor Dal",
+                "products": [
+                    {
+                        "productId": 6,
+                        "productName": "Anjali Urad 5 Kg",
+                        "brandId": 2,
+                        "brandName": "KING",
+                        "mrp": "570.00",
+                        "sellPrice": "570.00"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoryId": 3,
+        "categoryName": "Rice",
+        "subcategories": [
+            {
+                "subCategoryId": 13,
+                "subCategoryName": "Ponni",
+                "products": [
+                    {
+                        "productId": 7,
+                        "productName": "Anjali Ponni Rice 5 Kg",
+                        "brandId": 2,
+                        "brandName": "KING",
+                        "mrp": "370.00",
+                        "sellPrice": "370.00"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "categoryId": 4,
+        "categoryName": "Millets",
+        "subcategories": [
+            {
+                "subCategoryId": 18,
+                "subCategoryName": "Little Millet",
+                "products": [
+                    {
+                        "productId": 8,
+                        "productName": "Little Millet 5 Kg",
+                        "brandId": 3,
+                        "brandName": "SUNLORA",
+                        "mrp": "270.00",
+                        "sellPrice": "270.00"
+                    }
+                ]
+            }
+        ]
+    }
+]
+
+CREATE OFFER:    /master/offer
+-------------------------------------------------------------------------------------
+Request Type: POST
+
+<table>
+  <tr>
+    <td style="text-align: center; width: fit-content"><strong></strong></td>
+    <td style="text-align: center; width: fit-content"><strong>State Level Offer: </strong></td>
+    <td style="text-align: center; width: fit-content"><strong>District Level Offer: </strong></td>
+    <td style="text-align: center; width: fit-content"><strong>Pincode Level Offer: </strong></td>
+  </tr>
+  <tr>
+    <td>
+      Request    
+    </td>
+    <td>
+      {
+        "title" : "Offer 10%",
+        "percent": 10,
+        "level": "state",
+        "startDate" : "2024-09-13 00:00:01",
+        "endDate" : "2024-09-25 11:59:59",
+        "products": [1,2],
+        "stateIds": [1]
+      }
+    </td>
+    <td>
+      Level Offer:
+     {
+       "title" : "Offer 10%",
+       "percent": 10,
+       "level": "district",
+       "startDate" : "2024-09-14 00:00:01",
+       "endDate" : "2024-09-25 11:59:59",
+       "products": [1,2],
+       "districtIds": [134,135]
+     }
+   </td>
+   <td>
+    {
+      "title" : "Offer 10%",
+      "percent": 10,
+      "level": "pincode",
+      "startDate" : "2024-09-14 00:00:01",
+      "endDate" : "2024-09-25 11:59:59",
+      "products": [1,2],
+      "pincodeIds": [13456, 13457]
+    }
+  </td>
+    
+  </tr>
+  <tr>
+    <td>
+      Response     
+    </td>
+    <td>
+      {
+        "id": 19
+      }
+    </td>
+    <td>
+      {
+        "id": 20
+      }
+    </td>
+    <td>
+      {
+        "id": 21
+      }
+    </td>
+  </tr>
+</table>
+
+GET OFFER:  /master/offer/:id
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+<table>
+  <tr>
+    <td colspan="3" style="text-align: center; width: fit-content"><strong>Response</strong></td>
+  </tr>
+  <tr>
+    <td style="text-align: center; width: fit-content"><strong>State Level Offer: </strong></td>
+    <td style="text-align: center; width: fit-content"><strong>District Level Offer: </strong></td>
+    <td style="text-align: center; width: fit-content"><strong>Pincode Level Offer: </strong></td>
+  </tr>
+  <tr>
+    <td>
+{
+  "id": 19,
+  "title": "Offer 10%",
+  "status": "A",
+  "level": "state",
+  "percent": "10.00",
+  "startDate": "2024-09-13 00:00:01",
+  "endDate": "2024-09-25 11:59:59",
+  "products": [
+      {
+          "recordId": 1,
+          "productId": 1,
+          "productName": "Anjali Gingelly Oil 1 Litre Can",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "brandId": 1,
+          "brandName": "ANJALI",
+          "categoryId": 1,
+          "categoryName": "Edible Oil",
+          "subCategoryId": 1,
+          "subCategoryName": "Gingelly Oil"
+      },
+      {
+          "recordId": 2,
+          "productId": 2,
+          "productName": "Anjali Gingelly Oil 2 Litre Can",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "brandId": 4,
+          "brandName": "YENSTAR",
+          "categoryId": 1,
+          "categoryName": "Edible Oil",
+          "subCategoryId": 1,
+          "subCategoryName": "Gingelly Oil"
+      }
+  ],
+  "states": [
+      {
+          "stateId": 1,
+          "stateName": "Andaman and Nico.In."
+      }
+  ]
+}
+    </td>
+    <td>
+{
+  "id": 20,
+  "title": "Offer 10%",
+  "status": "A",
+  "level": "district",
+  "percent": "10.00",
+  "startDate": "2024-09-14 00:00:01",
+  "endDate": "2024-09-25 11:59:59",
+  "products": [
+      {
+          "recordId": 1,
+          "productId": 1,
+          "productName": "Anjali Gingelly Oil 1 Litre Can",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "brandId": 1,
+          "brandName": "ANJALI",
+          "categoryId": 1,
+          "categoryName": "Edible Oil",
+          "subCategoryId": 1,
+          "subCategoryName": "Gingelly Oil"
+      },
+      {
+          "recordId": 2,
+          "productId": 2,
+          "productName": "Anjali Gingelly Oil 2 Litre Can",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "brandId": 4,
+          "brandName": "YENSTAR",
+          "categoryId": 1,
+          "categoryName": "Edible Oil",
+          "subCategoryId": 1,
+          "subCategoryName": "Gingelly Oil"
+      }
+  ],
+  "districts": [
+      {
+          "stateId": 9,
+          "stateName": "Daman and Diu",
+          "districts": [
+              {
+                  "districtId": 134,
+                  "districtName": "BASTI"
+              },
+              {
+                  "districtId": 135,
+                  "districtName": "DAMAN"
+              }
+          ]
+      }
+  ]
+}
+    </td>
+    <td>
+{
+  "id": 21,
+  "title": "Offer 10%",
+  "status": "A",
+  "level": "pincode",
+  "percent": "10.00",
+  "startDate": "2024-09-14 00:00:01",
+  "endDate": "2024-09-25 11:59:59",
+  "products": [
+      {
+          "recordId": 1,
+          "productId": 1,
+          "productName": "Anjali Gingelly Oil 1 Litre Can",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "brandId": 1,
+          "brandName": "ANJALI",
+          "categoryId": 1,
+          "categoryName": "Edible Oil",
+          "subCategoryId": 1,
+          "subCategoryName": "Gingelly Oil"
+      },
+      {
+          "recordId": 2,
+          "productId": 2,
+          "productName": "Anjali Gingelly Oil 2 Litre Can",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "brandId": 4,
+          "brandName": "YENSTAR",
+          "categoryId": 1,
+          "categoryName": "Edible Oil",
+          "subCategoryId": 1,
+          "subCategoryName": "Gingelly Oil"
+      }
+  ],
+  "pincodes": [
+      {
+          "stateId": 31,
+          "stateName": "Tamil Nadu",
+          "districts": [
+              {
+                  "districtId": 545,
+                  "districtName": "CHENNAI",
+                  "pincodes": [
+                      "600030",
+                      "600031"
+                  ]
+              }
+          ]
+      }
+  ]
+}
+    </td>
+  </tr>
+</table>
+
+LIST: /master/offers?id=&title=&percent=&runningDate=2024-07-19 04:00:00&status=&level=&offset=0&pageSize=20&ordBy=&ordCl=
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+valid values: 
+pageSize [5, 10, 25, 50, 100]
+offset [first page 0, then (pageSize) * (pageNumber - 1) ]
+ordBy ['id','title', 'percent', 'runningDate', 'status', 'level']
+ordCl ['A', 'D']
+
+pageSize & offset are one combination, ordBy & ordCl are another combination. 
+If all records are need send empty for pageSize & offset or don't send
+
+Response:
+{
+  "totalRecords": 3,
+  "list": [
+      {
+          "id": 19,
+          "title": "Offer 10%",
+          "status": "A",
+          "level": "state",
+          "percent": "10.00",
+          "startDate": "2024-09-13 00:00:01",
+          "endDate": "2024-09-25 11:59:59"
+      },
+      {
+          "id": 20,
+          "title": "Offer 10%",
+          "status": "A",
+          "level": "district",
+          "percent": "10.00",
+          "startDate": "2024-09-14 00:00:01",
+          "endDate": "2024-09-25 11:59:59"
+      },
+      {
+          "id": 21,
+          "title": "Offer 10%",
+          "status": "A",
+          "level": "pincode",
+          "percent": "10.00",
+          "startDate": "2024-09-14 00:00:01",
+          "endDate": "2024-09-25 11:59:59"
+      }
+  ]
+}
+
+EXTEND OFFER:    /master/offerExtend/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+{
+  "endDate": "2024-07-25 00:00:00"
+}
+
+Response:
+200 OK
+
+
+UPDATE OFFER:    /master/offer/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+State Level Offer:
+{
+  "level": "state",
+  "stateIds": [9]
+}
+
+District Level Offer:
+{
+  "level": "district",
+  "districtIds": [134]
+}
+
+Pincode Level Offer:
+{
+  "level": "pincode",
+  "pincodeIds": [3018]
+}
+
+Response:
+200 OK
+
+UPDATE OFFER STATUS:    /master/offerStatus/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+{
+  "status": 'A'
+}
+
+Response:
+200 OK
+  </pre>
+</div>
+
+<button class="accordion">Master - Customer</button>
+<div class="panel">
+  <pre>
+
+LIST: /master/customers?id=&mobile=&status=&fullName=&stateId=&districtId=&pageSize=&ordBy=&ordCl=
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+valid values: 
+pageSize [5, 10, 25, 50, 100]
+offset [first page 0, then (pageSize) * (pageNumber - 1) ]
+ordBy ['id','mobile', 'status', 'fullName', 'stateId', 'districtId']
+ordCl ['A', 'D']
+
+pageSize & offset are one combination, ordBy & ordCl are another combination. 
+If all records are needed send empty for pageSize & offset or don't send
+
+Response:
+{
+  "totalRecords": 2,
+  "list": [
+      {
+          "id": 1,
+          "mobile": "9940661236",
+          "status": "A",
+          "address": {
+              "id": 1,
+              "customerId": 1,
+              "type": "B",
+              "fullName": "Kumaran Govindan",
+              "phone": "99444556677",
+              "email": "gkumaran77@gmail.com",
+              "addressLine1": "100, 10th Street",
+              "addressLine2": "Rajapalayam",
+              "stateId": 31,
+              "stateName": "Tamil Nadu",
+              "districtId": 577,
+              "districtName": "VIRUDHUNAGAR",
+              "pincode": "626108",
+              "country": "India",
+              "status": "A"
+          }
+      },
+      {
+          "id": 2,
+          "mobile": "9940661237",
+          "status": "A",
+          "address": {
+              "id": 5,
+              "customerId": 2,
+              "type": "B",
+              "fullName": "Kumaran G",
+              "phone": "99444556677",
+              "email": "gkumaran77@gmail.com",
+              "addressLine1": "100, 10th Street",
+              "addressLine2": "Rajapalayam",
+              "stateId": 31,
+              "stateName": "Tamil Nadu",
+              "districtId": 577,
+              "districtName": "VIRUDHUNAGAR",
+              "pincode": "626108",
+              "country": "India",
+              "status": "A"
+          }
+      }
+  ]
+}
+
+LIST: /master/customer/:id/addresses
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+request param: customerId
+
+Response:
+[
+    {
+        "id": 1,
+        "customerId": 1,
+        "type": "B",
+        "fullName": "Kumaran Govindan",
+        "phone": "99444556677",
+        "email": "gkumaran77@gmail.com",
+        "addressLine1": "100, 10th Street",
+        "addressLine2": "Rajapalayam",
+        "stateId": 31,
+        "stateName": "Tamil Nadu",
+        "districtId": 577,
+        "districtName": "VIRUDHUNAGAR",
+        "pincode": "626108",
+        "country": "India",
+        "status": "A"
+    },
+    {
+        "id": 2,
+        "customerId": 1,
+        "type": "S",
+        "fullName": "Kumaran Govindan",
+        "phone": "99444556677",
+        "email": "gkumaran77@gmail.com",
+        "addressLine1": "100, 10th Street",
+        "addressLine2": "Rajapalayam",
+        "stateId": 31,
+        "stateName": "Tamil Nadu",
+        "districtId": 577,
+        "districtName": "VIRUDHUNAGAR",
+        "pincode": "626117",
+        "country": "India",
+        "status": "A"
+    }
+]
+
+ORDER - LIST: /master/customer/orders?id=&customerId=&fromDate=&toDate=&orderStatus=&offset=0&pageSize=20&ordBy=&ordCl=
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+<u>Notes:</u>
+valid values: 
+fromDate: 2024-08-18 00:00:00 (IF THIS DATE IS GIVEN, THE FORMAT SHOULD BE START OF THE DAY)
+toDate: 2024-08-18 23:59:59 (IF THIS DATE IS GIVEN, THE FORMAT SHOULD BE END OF THE DAY)
+orderStatus: 'pending', 'confirmed','shipped', 'delivered', 'cancelled', 'returned'
+
+pageSize [5, 10, 25, 50, 100]
+offset [first page 0, then (pageSize) * (pageNumber - 1) ]
+ordBy ['id','orderDate','orderStatus']
+ordCl ['A', 'D']
+
+pageSize & offset are one combination, ordBy & ordCl are another combination. 
+If all records are needed send empty for pageSize & offset or don't send
+
+
+Response:
+{
+  "totalRecords": 11,
+  "list": [
+      {
+          "id": 27,
+          "customerId": 3,
+          "orderDate": "2024-09-20 21:25:21",
+          "orderStatus": "cancelled",
+          "totalPrice": "866.00",
+          "customerEmail": "gkumaran77@gmail.com",
+          "customerMobile": "919940661236",
+          "customerName": "Kumaran Govindan",
+          "shippingPincode": "626108",
+          "regionId": 1,
+          "paymentMethod": "Cash On Delivery",
+          "paymentStatus": "cod-waiting"
+      },
+      {
+          "id": 26,
+          "customerId": 3,
+          "orderDate": "2024-09-11 10:39:18",
+          "orderStatus": "cancelled",
+          "totalPrice": "1350.00",
+          "customerEmail": "gkumaran77@gmail.com",
+          "customerMobile": "919940661236",
+          "customerName": "Kumaran Govindan",
+          "shippingPincode": "626108",
+          "regionId": 1,
+          "paymentMethod": "Cash On Delivery",
+          "paymentStatus": "cod-waiting"
+      },
+      {
+          "id": 25,
+          "customerId": 3,
+          "orderDate": "2024-09-11 10:29:59",
+          "orderStatus": "cancelled",
+          "totalPrice": "1350.00",
+          "customerEmail": "gkumaran77@gmail.com",
+          "customerMobile": "919940661236",
+          "customerName": "Kumaran Govindan",
+          "shippingPincode": "626108",
+          "regionId": 1,
+          "paymentMethod": "Cash On Delivery",
+          "paymentStatus": "cod-waiting"
+      },
+      {
+          "id": 24,
+          "customerId": 3,
+          "orderDate": "2024-09-09 12:10:13",
+          "orderStatus": "delivered",
+          "totalPrice": "3030.00",
+          "customerEmail": "gkumaran77@gmail.com",
+          "customerMobile": "919940661236",
+          "customerName": "Kumaran Govindan",
+          "shippingPincode": "626108",
+          "regionId": 1,
+          "paymentMethod": "Cash On Delivery",
+          "paymentStatus": "paid"
+      },
+      {
+          "id": 23,
+          "customerId": 3,
+          "orderDate": "2024-09-02 13:57:23",
+          "orderStatus": "returned",
+          "totalPrice": "3030.00",
+          "customerEmail": "gkumaran77@gmail.com",
+          "customerMobile": "9199444556677",
+          "customerName": "Kumaran Govindan",
+          "shippingPincode": "626108",
+          "regionId": 1,
+          "paymentMethod": "netbanking",
+          "paymentStatus": "paid"
+      }
+  ]
+}
+
+ORDER Status Count - GET: /master/customer/ordersStatusCount
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "pending": 2,
+  "confirmed": 1,
+  "booking-failed": 1,
+  "shipped": 1,
+  "delivered": 3,
+  "cancelled": 5,
+  "returned": 1
+}
+
+ORDER - GET: /master/customer/:customerId/order/:orderId
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "id": 13,
+  "customerId": 3,
+  "orderDate": "2024-08-19 16:08:04",
+  "orderStatus": "confirmed",
+  "productsTotal": "4176.00",
+  "includedTaxAmount": "208.80",
+  "shippingCharge": "70.00",
+  "discountAmount": null,
+  "totalPrice": "4246.00",
+  "regionId": 1,
+  "regionAddress": "Madurai - Despatch\nNo: 2/16, Chennai High Way, \n- Uthangudi, - \n625107\nMADURAI\nTamil Nadu\nIndia\n",
+  "regionStateId": 31,
+  "billingAddress": "Kumaran Govindan\n100, 10th Street\nRajapalayam\n626108\nVIRUDHUNAGAR\nTamil Nadu\nIndia\nssgkumaran77@gmail.com\n9199444556677",
+  "billingEmail": "ssgkumaran77@gmail.com",
+  "billingMobile": "99444556677",
+  "shippingAddress": "Kumaran Govindan\n100, 10th Street\nRajapalayam\n626108\nVIRUDHUNAGAR\nTamil Nadu\nIndia\ndddgkumaran77@gmail.com\n9199444556677",
+  "shippingEmail": "dddgkumaran77@gmail.com",
+  "shippingMobile": "99444556677",
+  "shippingStateId": 31,
+  "orderStateType": "intra-state",
+  "shipmentTrackingNumber": "AX23423423",
+  "shipmentTrackingURL": null,
+  "invoiceNumber": 5,
+  "invoiceDate": "2024-08-19 16:08:04",
+  "remarks": null,
+  "paymentInfo": {
+      "orderPaymentInfoId": 7,
+      "razorpayOrderId": "order_Omj4U7cKptlBf9",
+      "razorpayPaymentId": "pay_Omj5hPxZQrXKPw",
+      "paymentStatus": "paid",
+      "paymentMethod": "netbanking",
+      "paymentDate": "2024-08-19 16:08:19",
+      "paymentAmount": "4246.00",
+      "razorpayMessage": null
+  },
+  "products": [
+      {
+          "recordId": 26,
+          "orderId": 13,
+          "productId": 1,
+          "productName": "Anjali Gingelly Oil 1 Litre Can",
+          "hsnCode": "15089099",
+          "cgstRate": "2.50",
+          "sgstRate": "2.50",
+          "igstRate": "5.00",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "offerPrice": "378.00",
+          "offerId": 2,
+          "orderQuantity": 4,
+          "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/coverImage.jpeg",
+          "itemMasterId": "itemMasterId",
+          "barcode": "barcode",
+          "length": "11.00",
+          "breadth": "8.00",
+          "height": "6.00",
+          "weight": "2.00"
+      },
+      {
+          "recordId": 27,
+          "orderId": 13,
+          "productId": 2,
+          "productName": "Anjali Gingelly Oil 2 Litre Can",
+          "hsnCode": "15089099",
+          "cgstRate": "2.50",
+          "sgstRate": "2.50",
+          "igstRate": "5.00",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "offerPrice": "378.00",
+          "offerId": 2,
+          "orderQuantity": 4,
+          "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/2/coverImage.jpg",
+          "itemMasterId": "itemMasterId",
+          "barcode": "barcode",
+          "length": "11.00",
+          "breadth": "8.00",
+          "height": "6.00",
+          "weight": "2.00"
+      },
+      {
+          "recordId": 25,
+          "orderId": 13,
+          "productId": 4,
+          "productName": "Anjali Pulses 1 Kg",
+          "hsnCode": "15089099",
+          "cgstRate": "2.50",
+          "sgstRate": "2.50",
+          "igstRate": "5.00",
+          "mrp": "340.00",
+          "sellPrice": "320.00",
+          "offerPrice": "288.00",
+          "offerId": 2,
+          "orderQuantity": 4,
+          "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/4/coverImage.jpg",
+          "itemMasterId": "itemMasterId",
+          "barcode": "barcode",
+          "length": "11.00",
+          "breadth": "8.00",
+          "height": "6.00",
+          "weight": "2.00"
+      }
+  ],
+  "orderStatusHistory": [
+      {
+          "recordId": 17,
+          "orderId": 13,
+          "orderStatus": "confirmed",
+          "orderStatusDate": "2024-08-19 16:04:04"
+      },
+      {
+          "recordId": 16,
+          "orderId": 13,
+          "orderStatus": "pending",
+          "orderStatusDate": "2024-08-19 16:01:49"
+      }
+  ],
+  "orderPaymentStatusHistory": [
+      {
+          "recordId": 31,
+          "orderId": 13,
+          "paymentStatus": "paid",
+          "paymentStatusDate": "2024-08-19 16:08:19",
+          "razorpayMessage": null
+      },
+      {
+          "recordId": 30,
+          "orderId": 13,
+          "paymentStatus": "failed",
+          "paymentStatusDate": "2024-08-19 16:08:55",
+          "razorpayMessage": "Your payment didn't go through as it was declined by the bank. Try another payment method or contact your bank."
+      },
+      {
+          "recordId": 29,
+          "orderId": 13,
+          "paymentStatus": "not-initiated",
+          "paymentStatusDate": "2024-08-19 16:02:09",
+          "razorpayMessage": null
+      }
+  ]
+}
+
+ORDER - STATUS UPDATE: /master/customer/order/:id
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+
+<table>
+  <tr>
+    <td colspan="6" style="text-align: center; width: fit-content"><strong>status</strong></td>
+  </tr>
+  <tr>
+    <td style="text-align: center; width: fit-content"><strong>booked</strong></td>
+    <td style="text-align: center; width: fit-content"><strong>booking-cancelled</strong></td>
+    <td style="text-align: center; width: fit-content"><strong>shipped</strong></td>
+    <td style="text-align: center; width: fit-content"><strong>delivered</strong></td>
+    <td style="text-align: center; width: fit-content"><strong>returned</strong></td>
+    <td style="text-align: center; width: fit-content"><strong>cancelled</strong></td>
+  </tr>
+  <tr>
+    <td>
+bluedart carrier:
+{
+  "orderStatus": "booked",
+  "customerId": 3,
+  "regionId": 1,
+  "shipmentCarrierId": 1
+}
+
+other carriers:
+{
+  "orderStatus": "booked",
+  "customerId": 3,
+  "regionId": 1,
+  "shipmentCarrierId": 2,
+  "shipmentTrackingNumber": 
+    "AX23423423",
+  "shipmentTrackingURL": 
+    "https://www.tpcindia.com/"
+}
+    </td>
+    <td>
+bluedart carrier 
+or 
+other carriers:
+{
+  "orderStatus": 
+    "booking-cancelled",
+  "customerId": 3,
+  "regionId": 1,
+  "shipmentCarrierId": 1 or 2
+}
+    </td>
+    <td>
+{
+  "orderStatus": "shipped",
+  "customerId": 3,
+  "regionId": 1
+}
+    </td>
+    <td>
+paid status:
+{
+  "orderStatus": "delivered",
+  "customerId": 3,
+  "regionId": 1   
+}
+
+cod-waiting status:
+{
+  "orderStatus": "delivered",
+  "customerId": 3,
+  "regionId": 1,
+  "paymentDate": 
+    "2024-09-09 10:09:08"    
+}
+    </td>
+    <td>
+{
+  "orderStatus": "returned",
+  "customerId": 3,
+  "regionId": 1
+}
+    </td>
+    <td>
+{
+  "orderStatus": "cancelled",
+  "customerId": 3,
+  "remarks": 
+    "Customer called to cancel",
+  "regionId": 1
+}
+</td>
+  </tr>
+</table>
+
+
+Response:
+200 OK
+
+ORDER - GET: /master/customer/order/:orderId/waybill
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+pdf file
+
+INVOICE - GET: /master/customer/:customerId/order/:orderId/invoice
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+pdf file
+
+  </pre>
+</div>
+
+<button class="accordion">Master - HSN</button>
+<div class="panel">
+  <pre>
+CREATE:    /master/hsn
+-------------------------------------------------------------------------------------
+Request Type: POST
+Request:
+{
+  "code": "12340987",
+  "description": "Test HSN",
+  "cgstRate": 2.5,
+  "sgstRate": 2.5,
+  "igstRate": 5,
+  "effectiveDate": "2024-09-13 00:00:01"
+}
+
+
+Response:
+{
+  "id": 22
+}
+
+GET:  /master/hsn/:id
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "id": 22,
+  "code": "12340987",
+  "description": "Test HSN updated",
+  "rates": [
+      {
+          "refId": 25,
+          "cgstRate": "4.00",
+          "sgstRate": "4.00",
+          "igstRate": "8.00",
+          "effectiveDate": "2024-09-17 00:00:01",
+          "expirationDate": null
+      },
+      {
+          "refId": 24,
+          "cgstRate": "3.00",
+          "sgstRate": "3.00",
+          "igstRate": "6.00",
+          "effectiveDate": "2024-09-16 00:00:01",
+          "expirationDate": "2024-09-16 23:59:59"
+      },
+      {
+          "refId": 22,
+          "cgstRate": "2.50",
+          "sgstRate": "2.50",
+          "igstRate": "5.00",
+          "effectiveDate": "2024-09-13 00:00:01",
+          "expirationDate": "2024-09-15 23:59:59"
+      }
+  ]
+}
+
+UPDATE: /master/hsn/:id?type=
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+
+queryParam type=update
+{
+  "description": "Test HSN updated"
+}
+
+queryParam type=expire
+{
+  "refId": 22,
+  "effectiveDate": "2024-09-15 23:59:59"
+}
+
+queryParam type=newRate
+{
+  "cgstRate": 3,
+  "sgstRate": 3,
+  "igstRate": 6,
+  "effectiveDate": "2024-09-16 00:00:01"
+}
+
+Response:
+200 OK
+
+LIST: /master/listHSNs?id=&code=&cgstRate=&sgstRate=&igstRate=&effectiveDate=&expirationDate=&offset=0&pageSize=5&ordBy=&ordCl=
+-------------------------------------------------------------------------------------
+
+<B>******* USE THIS METHOD ONLY FOR ADMIN PANEL LISTING - FOR PRODUCT PAGE DROPDOWN THE EXISTING API WHICH HAS BEEN USED NEED NOT BE CHANGED *******</B>
+
+Request Type: GET
+Request:
+
+valid values: 
+pageSize [5, 10, 25, 50, 100]
+offset [first page: 0, for other pages: (pageSize) * (pageNumber - 1) ]
+ordBy ['id','code', 'cgstRate', 'sgstRate', 'igstRate', 'effectiveDate', 'expirationDate']
+ordCl ['A', 'D']
+
+pageSize & offset are one combination, ordBy & ordCl are another combination. 
+If all records are need send empty for pageSize & offset or don't send
+
+Response:
+{
+  "totalRecords": 21,
+  "list": [
+      {
+          "id": 1,
+          "code": "10063090",
+          "cgstRate": "2.50",
+          "sgstRate": "2.50",
+          "igstRate": "5.00",
+          "effectiveDate": "2024-07-05 00:00:00",
+          "expirationDate": null
+      },
+      {
+          "id": 2,
+          "code": "100820",
+          "cgstRate": "2.50",
+          "sgstRate": "2.50",
+          "igstRate": "5.00",
+          "effectiveDate": "2024-07-05 00:00:00",
+          "expirationDate": null
+      },
+      {
+          "id": 3,
+          "code": "12022010",
+          "cgstRate": "2.50",
+          "sgstRate": "2.50",
+          "igstRate": "5.00",
+          "effectiveDate": "2024-07-05 00:00:00",
+          "expirationDate": null
+      },
+      {
+          "id": 4,
+          "code": "12074010",
+          "cgstRate": "2.50",
+          "sgstRate": "2.50",
+          "igstRate": "5.00",
+          "effectiveDate": "2024-07-05 00:00:00",
+          "expirationDate": null
+      },
+      {
+          "id": 5,
+          "code": "1508",
+          "cgstRate": "2.50",
+          "sgstRate": "2.50",
+          "igstRate": "5.00",
+          "effectiveDate": "2024-07-05 00:00:00",
+          "expirationDate": null
+      }
+  ]
+}
+  </pre>
+</div>
+
+<button class="accordion">Public - Home</button>
+<div class="panel">
+  <pre>
+
+LIST Categories for Menu: /home/menus
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+[
+    {
+        "categoryId": 1,
+        "categoryName": "Edible Oil",
+        "subcategories": [
+            {
+                "subCategoryId": 1,
+                "subCategoryName": "Gingelly Oil"
+            },
+            {
+                "subCategoryId": 2,
+                "subCategoryName": "Groundnut Oil"
+            },
+            {
+                "subCategoryId": 3,
+                "subCategoryName": "Sunflower Oil"
+            }
+        ]
+    },
+    {
+        "categoryId": 2,
+        "categoryName": "Pulses",
+        "subcategories": [
+            {
+                "subCategoryId": 9,
+                "subCategoryName": "Urad Dal"
+            },
+            {
+                "subCategoryId": 10,
+                "subCategoryName": "Toor Dal"
+            }
+        ]
+    }
+]
+
+VALIDATE PINCODE:    /home/validatePincode
+-------------------------------------------------------------------------------------
+Request Type: GET
+
+Send the actual pincode (not pincodeId) in the header as 'pincode'
+Header params:
+    pincode: 744301
+
+Request:
+
+Response:
+{
+  "pincodeId": 1,
+  "pincode": "744301",
+  "regionId": 1,
+  "districtName": "Nicobar"
+}
+
+List Offers By Pincode: /home/offerProductsByPincode
+-------------------------------------------------------------------------------------
+Request Type: GET
+
+Header params:
+    pincode: 744301
+    regionid: 1
+Request:
+
+Response:
+[
+    {
+        "offerId": 2,
+        "offerPercent": "10.00",
+        "productId": 1,
+        "productName": "Anjali Gingelly Oil 1 Litre Can",
+        "mrp": "440.00",
+        "sellPrice": "420.00",
+        "offerPrice": "378.00",
+        "minimumOrderQuantity": 1,
+        "maximumOrderQuantity": 5,
+        "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/coverImage.jpeg",
+        "isLimitedStock": 0,
+        "isWishlisted": 1,
+        "wishlistProductRefId": 7
+    },
+    {
+        "offerId": 2,
+        "offerPercent": "10.00",
+        "productId": 2,
+        "productName": "Anjali Gingelly Oil 2 Litre Can",
+        "mrp": "440.00",
+        "sellPrice": "420.00",
+        "offerPrice": "378.00",
+        "minimumOrderQuantity": 6,
+        "maximumOrderQuantity": 10,
+        "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/2/coverImage.jpg",
+        "isLimitedStock": 0,
+        "isWishlisted": 0,
+        "wishlistProductRefId": null
+    },
+    {
+        "offerId": 2,
+        "offerPercent": "10.00",
+        "productId": 4,
+        "productName": "Anjali Pulses 1 Kg",
+        "mrp": "340.00",
+        "sellPrice": "320.00",
+        "offerPrice": "288.00",
+        "minimumOrderQuantity": 2,
+        "maximumOrderQuantity": 10,
+        "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/4/coverImage.jpg",
+        "isLimitedStock": 0,
+        "isWishlisted": 0,
+        "wishlistProductRefId": null
+    }
+]
+
+List Top Categories: /home/topCategories
+-------------------------------------------------------------------------------------
+Request Type: GET
+
+Header params:
+    pincode: 744301
+    regionid: 1
+
+Request:
+
+Response:
+{
+  "totalRecords": 5,
+  "list": [
+      {
+          "id": 1,
+          "name": "Edible Oil",
+          "description": "Edible Oil",
+          "displayFlag": 1,
+          "displayOrder": 1,
+          "imagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/category/1.jpeg",
+          "status": "A"
+      },
+      {
+          "id": 2,
+          "name": "Pulses",
+          "description": "Pulses",
+          "displayFlag": 1,
+          "displayOrder": 2,
+          "imagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/category/2.jpeg",
+          "status": "A"
+      },
+      {
+          "id": 3,
+          "name": "Rice",
+          "description": "Rice",
+          "displayFlag": 1,
+          "displayOrder": 3,
+          "imagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/category/3.jpg",
+          "status": "A"
+      },
+      {
+          "id": 4,
+          "name": "Millets",
+          "description": "Millets",
+          "displayFlag": 1,
+          "displayOrder": 4,
+          "imagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/category/4.jpg",
+          "status": "A"
+      },
+      {
+          "id": 5,
+          "name": "Oils",
+          "description": "Oils Category for the application",
+          "displayFlag": 1,
+          "displayOrder": 5,
+          "imagePath": null,
+          "status": "A"
+      }
+  ]
+}
+
+List Category Products: /home/categoryProducts?categoryId=1&pageSize=5
+-------------------------------------------------------------------------------------
+Request Type: GET
+
+Header params:
+    pincode: 744301
+    regionid: 1
+
+Request:
+
+Response:
+{
+  "categoryId": 1,
+  "categoryName": "Edible Oil",
+  "categoryImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/category/1.jpeg",
+  "products": [
+      {
+          "productId": 1,
+          "productName": "Anjali Gingelly Oil 1 Litre Can",
+          "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/coverImage.jpeg",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "minimumOrderQuantity": 1,
+          "maximumOrderQuantity": 5,
+          "isLimitedStock": 0,
+          "offerId": 2,
+          "offerTitle": "Offer 10%",
+          "offerPercent": "10.00",
+          "offerPrice": "378.00"
+      },
+      {
+          "productId": 2,
+          "productName": "Anjali Gingelly Oil 2 Litre Can",
+          "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/2/coverImage.jpg",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "minimumOrderQuantity": 6,
+          "maximumOrderQuantity": 10,
+          "isLimitedStock": 0,
+          "offerId": 2,
+          "offerTitle": "Offer 10%",
+          "offerPercent": "10.00",
+          "offerPrice": "378.00"
+      },
+      {
+          "productId": 4,
+          "productName": "Anjali Pulses 1 Kg",
+          "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/4/coverImage.jpg",
+          "mrp": "340.00",
+          "sellPrice": "320.00",
+          "minimumOrderQuantity": 2,
+          "maximumOrderQuantity": 10,
+          "isLimitedStock": 0,
+          "offerId": 2,
+          "offerTitle": "Offer 10%",
+          "offerPercent": "10.00",
+          "offerPrice": "288.00"
+      }
+  ]
+}
+
+List Featured Products: /home/featuredProducts?pageSize=5
+-------------------------------------------------------------------------------------
+Request Type: GET
+
+Header params:
+    pincode: 744301
+    regionid: 1
+
+Request:
+
+Response:
+[
+    {
+        "productId": 1,
+        "productName": "Anjali Gingelly Oil 1 Litre Can",
+        "mrp": "440.00",
+        "sellPrice": "420.00",
+        "minimumOrderQuantity": 1,
+        "maximumOrderQuantity": 5,
+        "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/coverImage.jpeg",
+        "isLimitedStock": 0,
+        "isWishlisted": 1,
+        "wishlistProductRefId": 7,
+        "offerId": 2,
+        "offerTitle": "Offer 10%",
+        "offerPercent": "10.00",
+        "offerPrice": "378.00"
+    },
+    {
+        "productId": 4,
+        "productName": "Anjali Pulses 1 Kg",
+        "mrp": "340.00",
+        "sellPrice": "320.00",
+        "minimumOrderQuantity": 2,
+        "maximumOrderQuantity": 10,
+        "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/4/coverImage.jpg",
+        "isLimitedStock": 0,
+        "isWishlisted": 0,
+        "wishlistProductRefId": null,
+        "offerId": 2,
+        "offerTitle": "Offer 10%",
+        "offerPercent": "10.00",
+        "offerPrice": "288.00"
+    },
+    {
+        "productId": 6,
+        "productName": "Anjali Urad 5 Kg",
+        "mrp": "570.00",
+        "sellPrice": "570.00",
+        "minimumOrderQuantity": 2,
+        "maximumOrderQuantity": 10,
+        "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/6/coverImage.jpg",
+        "isLimitedStock": 1,
+        "isWishlisted": 0,
+        "wishlistProductRefId": null,
+        "offerId": null,
+        "offerTitle": null,
+        "offerPercent": null,
+        "offerPrice": null
+    }
+]
+
+SETTING GET BY CODE:    common/setting?code=
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+[top_banner_scroll_text, cart_page_banner, home_page_banner1, home_page_banner2]
+
+Response:
+{
+  "code": "top_banner_scroll_text",
+  "value1": "Diwali sales ends in a week",
+  "value2": null
+}
+
+{
+  "code": "cart_page_banner",
+  "value1": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/banner/2.png",
+  "value2": "http://13.202.118.242/products/164"
+}
+
+</pre>
+</div>
+
+<button class="accordion">Public - Product Info Page OR Popup Page</button>
+<div class="panel">
+  <pre>
+
+Get Product Detail: /product/info?id=1
+-------------------------------------------------------------------------------------
+Request Type: GET
+
+Header params:
+    pincode: 744301
+    regionid: 1
+
+Request:
+
+Response:
+{
+  "brandId": 1,
+  "brandName": "ANJALI",
+  "categoryId": 1,
+  "categoryName": "Edible Oil",
+  "subCategoryId": 1,
+  "subCategoryName": "Gingelly Oil",
+  "productId": 1,
+  "productName": "Anjali Gingelly Oil 1 Litre Can",
+  "mrp": "440.00",
+  "sellPrice": "420.00",
+  "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/coverImage.jpeg",
+  "minimumOrderQuantity": 1,
+  "maximumOrderQuantity": 5,
+  "hsnCode": "15089099",
+  "shortDescription": "Anjali Sesame oil are pressed from",
+  "longDescription": "Sesame oil has a slightly nutty taste, making it excellent for stir- ",
+  "isLimitedStock": 0,
+  "isWishlisted": 1,
+  "wishlistProductRefId": 7,
+  "offerId": 2,
+  "offerTitle": "Offer 10%",
+  "offerPercent": "10.00",
+  "offerPrice": "378.00",
+  "images": [
+      {
+          "productImageId": 8,
+          "imagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/gallery-1720776303165-.jpg"
+      },
+      {
+          "productImageId": 9,
+          "imagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/gallery-1720776303168-.jpg"
+      }
+  ],
+  "tags": [
+      {
+          "productTagId": 8,
+          "tagId": 2,
+          "tagName": "edible"
+      },
+      {
+          "productTagId": 9,
+          "tagId": 3,
+          "tagName": "good for you"
+      },
+      {
+          "productTagId": 12,
+          "tagId": 4,
+          "tagName": "you deserve well"
+      },
+      {
+          "productTagId": 13,
+          "tagId": 5,
+          "tagName": "edible items"
+      }
+  ]
+}
+
+</pre>
+</div>
+
+<button class="accordion">Public - Product Listing Page</button>
+<div class="panel">
+  <pre>
+
+Filter Page - Product List: /product/list
+-------------------------------------------------------------------------------------
+Request Type: POST
+
+Header params:
+    pincode: 744301
+    regionid: 1
+
+Request:
+  valid values: 
+  ....................................................................................
+    pageSize [5, 10, 25, 50, 100] or whatever decided
+    offset [first page 0, then (pageSize) * (pageNumber - 1) ]
+    orderBy ['NEW' - Newest First, 'OLD' - Oldest First, 'LTH' - Price Low To High, 'HTL' - Price High To Low ]
+  ....................................................................................
+
+  <table>
+    <tr>
+      <td style="text-align: center; width: fit-content"><strong>1</strong></td>
+      <td style="text-align: center; width: fit-content"><strong>2</strong></td>
+      <td style="text-align: center; width: fit-content"><strong>3</strong></td>
+      <td style="text-align: center; width: fit-content"><strong>4</strong></td>
+      <td style="text-align: center; width: fit-content"><strong>5</strong></td>
+      <td style="text-align: center; width: fit-content"><strong>6</strong></td>
+      <td style="text-align: center; width: fit-content"><strong>7</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Category on Menu <br>OR <br>View All <br>in Category Products<br>OR<br>Click any image on <br>Top Categories</strong></td>
+      <td><strong>Sub Category on Menu</strong></td>
+      <td><strong>Brand on Product Page <br>OR <br>Popup </strong></td>
+      <td><strong>A Tag on Product Page <br>OR <br>Popup </strong></td>
+      <td><strong>Combination of <br>1/2/3/4/Price <br>in Filter Page </strong></td>
+      <td><strong>Search Bar on TOP </strong></td>
+      <td><strong>Product Details for <br>localstorage cart </strong></td>
+    </tr>
+    <tr>
+      <td>
+{
+  "categoryId": 1,
+  "orderBy": "NEW",
+  "pageSize": "8",
+  "offset": "0"
+}
+      </td>
+      <td>
+{
+  "categoryId": 1,
+  "subCategoryId": 1,
+  "orderBy": "NEW",
+  "pageSize": "8",
+  "offset": "0"
+}
+      </td>
+      <td>
+{
+  "brandIds": [1],
+  "orderBy": "NEW",
+  "pageSize": "8",
+  "offset": "0"
+}
+      </td>
+      <td>
+{
+"tags": [ "healthy" ],
+"orderBy": "NEW",
+"pageSize": "8",
+"offset": "0"
+}
+      </td>
+      <td>
+{
+  "categoryId": 1,
+  "subCategoryId": 1,
+  "brandIds": [1,2,3,4],
+  "price": {
+      "min": 50,
+      "max": 500
+  },
+  "tags": [
+      "healthy", 
+      "edible", 
+      "you deserve well"
+  ],
+  "orderBy": "NEW",
+  "pageSize": "8",
+  "offset": "0"
+}
+      </td>
+      <td>
+{
+  "searchText": "anjali oil",
+  "orderBy": "NEW",
+  "pageSize": "8",
+  "offset": "0"
+}
+      </td>
+      <td>
+{
+  "products": [8,1,7,5,6,4],
+  "orderBy": "none"
+}
+      </td>
+    </tr>
+  </table>
+
+Response:
+{
+  "totalRecords": 6,
+  "list": [
+      {
+          "productId": 1,
+          "productName": "Anjali Gingelly Oil 1 Litre Can",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/coverImage.jpeg",
+          "minimumOrderQuantity": 1,
+          "maximumOrderQuantity": 5,
+          "isLimitedStock": 0,
+          "isWishlisted": 1,
+          "wishlistProductRefId": 7,
+          "offerId": 2,
+          "offerTitle": "Offer 10%",
+          "offerPercent": "10.00",
+          "offerPrice": "388.00"
+      },
+      {
+          "productId": 2,
+          "productName": "Anjali Gingelly Oil 2 Litre Can",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/2/coverImage.jpg",
+          "minimumOrderQuantity": 6,
+          "maximumOrderQuantity": 10,
+          "isLimitedStock": 0,
+          "isWishlisted": 0,
+          "wishlistProductRefId": null,
+          "offerId": 2,
+          "offerTitle": "Offer 10%",
+          "offerPercent": "10.00",
+          "offerPrice": "388.00"
+      },
+      {
+          "productId": 5,
+          "productName": "Anjali Urad Dal Oil 1 Kg Pack",
+          "mrp": "140.00",
+          "sellPrice": "120.00",
+          "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/5/coverImage.jpg",
+          "minimumOrderQuantity": 2,
+          "maximumOrderQuantity": 10,
+          "isLimitedStock": 0,
+          "isWishlisted": 0,
+          "wishlistProductRefId": null,
+          "offerId": null,
+          "offerTitle": null,
+          "offerPercent": null,
+          "offerPrice": null
+      },
+      {
+          "productId": 6,
+          "productName": "Anjali Urad 5 Kg",
+          "mrp": "570.00",
+          "sellPrice": "570.00",
+          "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/6/coverImage.jpg",
+          "minimumOrderQuantity": 2,
+          "maximumOrderQuantity": 10,
+          "isLimitedStock": 1,
+          "isWishlisted": 0,
+          "wishlistProductRefId": null,
+          "offerId": null,
+          "offerTitle": null,
+          "offerPercent": null,
+          "offerPrice": null
+      }
+  ]
+}
+
+LIST BRANDS: /product/brands
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+
+Response:
+{
+  "totalRecords": 4,
+  "list": [
+      {
+          "id": 1,
+          "name": "ANJALI",
+          "description": "ANJALI",
+          "status": "A"
+      },
+      {
+          "id": 2,
+          "name": "KING",
+          "description": "KING",
+          "status": "A"
+      },
+      {
+          "id": 3,
+          "name": "SUNLORA",
+          "description": "SUNLORA",
+          "status": "A"
+      },
+      {
+          "id": 4,
+          "name": "YENSTAR",
+          "description": "YENSTAR",
+          "status": "A"
+      }
+  ]
+}
+
+LIST TAGS: /product/tags
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "totalRecords": 3,
+  "list": [
+      {
+          "id": 4,
+          "name": "you deserve well"
+      },
+      {
+          "id": 5,
+          "name": "tag2"
+      },
+      {
+          "id": 6,
+          "name": "edible items"
+      }
+  ]
+}
+  </pre>
+</div>
+
+<button class="accordion">Public - Login</button>
+<div class="panel">
+  <pre>
+
+SEND OTP: /auth/sendOTP
+-------------------------------------------------------------------------------------
+Request Type: POST
+Request:
+{
+  "mobile": "8989898989"
+}
+
+Response:
+200 - OK 
+
+400 - [display this error message to the user]
+{
+  "message": "Error Message",
+  "type": "error"
+}
+
+500 - [display a standaard error message to the user]
+{
+  "message": "Error Message",
+}
+
+RESEND OTP: /auth/resendOTP
+-------------------------------------------------------------------------------------
+Request Type: POST
+Request:
+{
+  "mobile": "8989898989"
+}
+
+Response:
+200 - OK 
+
+400 - [display this error message to the user]
+{
+  "message": "Error Message",
+  "type": "error"
+}
+
+500 - [display a standaard error message to the user]
+{
+  "message": "Error Message",
+}
+
+VERIFY OTP: /auth/verifyOTP
+-------------------------------------------------------------------------------------
+Request Type: POST
+Request:
+{
+  "mobile": "8989898989",
+  "otp": "1234"
+}
+
+Response:
+200 - OK 
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzIyNzUzNDY5fQ.FkH2-ttVglAcWUq287ZLciS2phP_Jdf2B2yMICrTTuQ",
+  "mobile": "9940661237"
+}
+
+400 - [display this error message to the user]
+{
+  "message": "Error Message",
+  "type": "error"
+}
+
+500 - [display a standaard error message to the user]
+{
+  "message": "Error Message",
+}
+  </pre>
+</div>
+
+<button class="accordion">Public - Customer Address Profile</button>
+<div class="panel">
+  <pre>
+
+GET CUSTOMER PROFILE: /customer/profile
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+if customer has entered billing address,
+{
+  "id": 3,
+  "mobile": "9940661237",
+  "fullName": "Kumaran Govindan",
+  "phone": "9940661236",
+  "email": "gkumaran77@gmail.com"
+}
+
+if customer has not entered billing address,
+{
+  "id": 8,
+  "mobile": "9999900000",
+  "fullName": null,
+  "phone": null,
+  "email": null
+}
+
+CREATE CUSTOMER ADDRESS: /customer/address
+-------------------------------------------------------------------------------------
+Request Type: POST
+Request:
+[
+    {
+        "type": "B",
+        "fullName": "Kumaran G",
+        "phone": "99444556677",
+        "email": "gkumaran77@gmail.com",
+        "address_line1": "100, 10th Street",
+        "address_line2": "Rajapalayam",
+        "stateId": 31,
+        "districtId": 577,
+        "pincode": "626108",
+        "country": "India"
+    },
+    {
+        "type": "S",
+        "fullName": "Kumaran G",
+        "phone": "99444556677",
+        "email": "gkumaran77@gmail.com",
+        "address_line1": "100, 10th Street",
+        "address_line2": "Rajapalayam",
+        "stateId": 31,
+        "districtId": 577,
+        "pincode": "626108",
+        "country": "India"
+    }
+]
+
+Response:
+200 - OK 
+
+LIST CUSTOMER ADDRESSES: /customer/addresses
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+[
+    {
+        "id": 5,
+        "customerId": 2,
+        "type": "B",
+        "fullName": "Kumaran G",
+        "phone": "99444556677",
+        "email": "gkumaran77@gmail.com",
+        "addressLine1": "100, 10th Street",
+        "addressLine2": "Rajapalayam",
+        "stateId": 31,
+        "stateName": "Tamil Nadu",
+        "districtId": 577,
+        "districtName": "VIRUDHUNAGAR",
+        "pincode": "626108",
+        "country": "India",
+        "status": "A"
+    },
+    {
+        "id": 6,
+        "customerId": 2,
+        "type": "S",
+        "fullName": "Kumaran G",
+        "phone": "99444556677",
+        "email": "gkumaran77@gmail.com",
+        "addressLine1": "100, 10th Street",
+        "addressLine2": "Rajapalayam",
+        "stateId": 31,
+        "stateName": "Tamil Nadu",
+        "districtId": 577,
+        "districtName": "VIRUDHUNAGAR",
+        "pincode": "626108",
+        "country": "India",
+        "status": "A"
+    }
+]
+
+GET CUSTOMER ADDRESS: /customer/addresses/:customerAddressId
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "id": 5,
+  "customerId": 2,
+  "type": "B",
+  "fullName": "Kumaran G",
+  "phone": "99444556677",
+  "email": "gkumaran77@gmail.com",
+  "addressLine1": "100, 10th Street",
+  "addressLine2": "Rajapalayam",
+  "stateId": 31,
+  "stateName": "Tamil Nadu",
+  "districtId": 577,
+  "districtName": "VIRUDHUNAGAR",
+  "pincode": "626108",
+  "country": "India",
+  "status": "A"
+}
+
+UPDATE CUSTOMER ADDRESS: /customer/address/:customerAddressId
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+{
+  "type": "S",
+  "fullName": "Kumaran Govindan",
+  "phone": "99444556677",
+  "email": "gkumaran77@gmail.com",
+  "addressLine1": "100, 10th Street",
+  "addressLine2": "Rajapalayam",
+  "stateId": 31,
+  "districtId": 577,
+  "pincode": "626117",
+  "country": "India",
+  "status": "A"
+}
+
+Response:
+200 - OK 
+  </pre>
+</div>
+
+<button class="accordion">Public - Customer Cart</button>
+<div class="panel">
+  <pre>
+
+GET PRODUCT DETAILS FOR CART ITEMS IN LOCAL STORAGE (while the user is not logged in): 
+-------------------------------------------------------------------------------------
+
+USE [Filter Page - Product List: /product/list] API FROM [Public - Product Listing Page]
+DETAILS AT #7 COLUMN
+
+GET CART COUNT: /customer/cart/count
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "count": 4
+}
+
+PUSH TO CART: /customer/cart/products
+-------------------------------------------------------------------------------------
+Request Type: POST
+Request:
+[
+    {
+        "productId": 5,
+        "quantity": 1
+    },
+    {
+        "productId": 1,
+        "quantity": 2
+    },
+    {
+        "productId": 4,
+        "quantity": 2
+    }
+]
+
+Response:
+200 - OK 
+
+ADD TO CART: /customer/cart/product
+-------------------------------------------------------------------------------------
+Request Type: POST
+Request:
+{
+  "productId": 6,
+  "quantity": 1
+}
+
+Response:
+200 - OK 
+
+GET CART: /customer/cart/products
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+[
+    {
+        "productId": 5,
+        "productName": "Anjali Urad Dal Oil 1 Kg Pack",
+        "mrp": "140.00",
+        "sellPrice": "120.00",
+        "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/5/coverImage.jpg",
+        "minimumOrderQuantity": 2,
+        "maximumOrderQuantity": 10,
+        "isLimitedStock": 0,
+        "cgstRate": "2.50",
+        "sgstRate": "2.50",
+        "igstRate": "5.00",
+        "offerId": null,
+        "offerTitle": null,
+        "offerPercent": null,
+        "offerPrice": null,
+        "cartQuantity": 1,
+        "cartProductRefId": 1
+    },
+    {
+        "productId": 1,
+        "productName": "Anjali Gingelly Oil 1 Litre Can",
+        "mrp": "440.00",
+        "sellPrice": "420.00",
+        "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/coverImage.jpeg",
+        "minimumOrderQuantity": 1,
+        "maximumOrderQuantity": 5,
+        "isLimitedStock": 0,
+        "cgstRate": "2.50",
+        "sgstRate": "2.50",
+        "igstRate": "5.00",
+        "offerId": 2,
+        "offerTitle": "Offer 10%",
+        "offerPercent": "10.00",
+        "offerPrice": "378.00",
+        "cartQuantity": 2,
+        "cartProductRefId": 2
+    },
+    {
+        "productId": 4,
+        "productName": "Anjali Pulses 1 Kg",
+        "mrp": "340.00",
+        "sellPrice": "320.00",
+        "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/4/coverImage.jpg",
+        "minimumOrderQuantity": 2,
+        "maximumOrderQuantity": 10,
+        "isLimitedStock": 0,
+        "cgstRate": "2.50",
+        "sgstRate": "2.50",
+        "igstRate": "5.00",
+        "offerId": 2,
+        "offerTitle": "Offer 10%",
+        "offerPercent": "10.00",
+        "offerPrice": "288.00",
+        "cartQuantity": 2,
+        "cartProductRefId": 3
+    },
+    {
+        "productId": 6,
+        "productName": "Anjali Urad 5 Kg",
+        "mrp": "570.00",
+        "sellPrice": "570.00",
+        "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/6/coverImage.jpg",
+        "minimumOrderQuantity": 2,
+        "maximumOrderQuantity": 10,
+        "isLimitedStock": 1,
+        "cgstRate": "2.50",
+        "sgstRate": "2.50",
+        "igstRate": "5.00",
+        "offerId": null,
+        "offerTitle": null,
+        "offerPercent": null,
+        "offerPrice": null,
+        "cartQuantity": 1,
+        "cartProductRefId": 4
+    }
+]
+
+REMOVE FROM CART: /customer/cart/:cartProductRefId
+-------------------------------------------------------------------------------------
+Request Type: DELETE
+Request:
+
+Response:
+200 - OK 
+
+  </pre>
+</div>
+
+<button class="accordion">Public - Customer Cart to Order - Razorpay</button>
+<div class="panel">
+  <pre>
+
+GET SHIPPING CHARGE: /customer/cart/shippingCharge
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "shippingCharge": 70
+}
+
+GET CART TOTALS: /customer/cart/totals
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "productsTotal": 4176,
+  "includedTaxAmount": 208.8,
+  "shippingCharge": 70,
+  "totalPrice": 4246
+}
+
+ORDER - CREATE: /customer/order
+-------------------------------------------------------------------------------------
+Request Type: POST
+Request:
+{
+  "billingAddressId": 7,
+  "shippingAddressId": 8
+}
+
+Response:
+{
+  "orderId": 12
+}
+
+Order - Initiate Razor Pay: /customer/order/initiateRazorpay/12
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+
+Response:
+{
+  "razorpayKey": "rzp_test_wtaMq3KJqSzalq",
+  "razorpayOrderId": "order_Omf3GGNr0qk503",
+  "paymentAmount": "424600",
+  "currency": "INR",
+  "customer": {
+      "name": "Kumaran Govindan",
+      "email": "ssgkumaran77@gmail.com",
+      "phone": "99444556677"
+  },
+  "business": {
+      "name": "Anjali Foods"
+  }
+}
+
+Order - Update Payment: /customer/order/updatePayment/12?type=cod OR razorpay
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+
+type = cod OR razorpay 
+
+Response:
+{
+  "paymentSuccess": true
+}
+
+ORDER - LIST: /customer/orders?offset=0&pageSize=20&ordBy=&ordCl=
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+<u>Notes:</u>
+valid values: 
+pageSize [5, 10, 25, 50, 100]
+offset [first page 0, then (pageSize) * (pageNumber - 1) ]
+ordBy ['id','orderDate','orderStatus']
+ordCl ['A', 'D']
+
+pageSize & offset are one combination, ordBy & ordCl are another combination. 
+If all records are needed send empty for pageSize & offset or don't send
+
+FOR PUBLIC SITE LISTING:- no need to give parameters other than this as we don't have filtering
+  ordBy : 'id'
+  ordCl : 'D'
+  pageSize : any value
+  offset : any value
+For recent orders, the pageSize can be like 5 and offset can be 0
+For Order History, we can use the full pagination process
+
+Response:
+{
+  "totalRecords": 11,
+  "list": [
+      {
+          "id": 27,
+          "customerId": 3,
+          "orderDate": "2024-09-20 21:25:21",
+          "orderStatus": "cancelled",
+          "totalPrice": "866.00",
+          "customerEmail": "gkumaran77@gmail.com",
+          "customerMobile": "919940661236",
+          "customerName": "Kumaran Govindan",
+          "shippingPincode": "626108",
+          "regionId": 1,
+          "paymentMethod": "Cash On Delivery",
+          "paymentStatus": "cod-waiting"
+      },
+      {
+          "id": 26,
+          "customerId": 3,
+          "orderDate": "2024-09-11 10:39:18",
+          "orderStatus": "cancelled",
+          "totalPrice": "1350.00",
+          "customerEmail": "gkumaran77@gmail.com",
+          "customerMobile": "919940661236",
+          "customerName": "Kumaran Govindan",
+          "shippingPincode": "626108",
+          "regionId": 1,
+          "paymentMethod": "Cash On Delivery",
+          "paymentStatus": "cod-waiting"
+      },
+      {
+          "id": 25,
+          "customerId": 3,
+          "orderDate": "2024-09-11 10:29:59",
+          "orderStatus": "cancelled",
+          "totalPrice": "1350.00",
+          "customerEmail": "gkumaran77@gmail.com",
+          "customerMobile": "919940661236",
+          "customerName": "Kumaran Govindan",
+          "shippingPincode": "626108",
+          "regionId": 1,
+          "paymentMethod": "Cash On Delivery",
+          "paymentStatus": "cod-waiting"
+      },
+      {
+          "id": 24,
+          "customerId": 3,
+          "orderDate": "2024-09-09 12:10:13",
+          "orderStatus": "delivered",
+          "totalPrice": "3030.00",
+          "customerEmail": "gkumaran77@gmail.com",
+          "customerMobile": "919940661236",
+          "customerName": "Kumaran Govindan",
+          "shippingPincode": "626108",
+          "regionId": 1,
+          "paymentMethod": "Cash On Delivery",
+          "paymentStatus": "paid"
+      },
+      {
+          "id": 23,
+          "customerId": 3,
+          "orderDate": "2024-09-02 13:57:23",
+          "orderStatus": "returned",
+          "totalPrice": "3030.00",
+          "customerEmail": "gkumaran77@gmail.com",
+          "customerMobile": "9199444556677",
+          "customerName": "Kumaran Govindan",
+          "shippingPincode": "626108",
+          "regionId": 1,
+          "paymentMethod": "netbanking",
+          "paymentStatus": "paid"
+      }
+  ]
+}
+
+ORDER - GET: /customer/order/:id
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+{
+  "id": 13,
+  "customerId": 3,
+  "orderDate": "2024-08-19 16:08:04",
+  "orderStatus": "confirmed",
+  "productsTotal": "4176.00",
+  "includedTaxAmount": "208.80",
+  "shippingCharge": "70.00",
+  "discountAmount": null,
+  "totalPrice": "4246.00",
+  "regionId": 1,
+  "regionAddress": "Madurai - Despatch\nNo: 2/16, Chennai High Way, \n- Uthangudi, - \n625107\nMADURAI\nTamil Nadu\nIndia\n",
+  "regionStateId": 31,
+  "billingAddress": "Kumaran Govindan\n100, 10th Street\nRajapalayam\n626108\nVIRUDHUNAGAR\nTamil Nadu\nIndia\nssgkumaran77@gmail.com\n9199444556677",
+  "billingEmail": "ssgkumaran77@gmail.com",
+  "billingMobile": "99444556677",
+  "shippingAddress": "Kumaran Govindan\n100, 10th Street\nRajapalayam\n626108\nVIRUDHUNAGAR\nTamil Nadu\nIndia\ndddgkumaran77@gmail.com\n9199444556677",
+  "shippingEmail": "dddgkumaran77@gmail.com",
+  "shippingMobile": "99444556677",
+  "shippingStateId": 31,
+  "orderStateType": "intra-state",
+  "shipmentTrackingNumber": "AX23423423",
+  "shipmentTrackingURL": null,
+  "invoiceNumber": 5,
+  "invoiceDate": "2024-08-19 16:08:04",
+  "remarks": null,
+  "paymentInfo": {
+      "orderPaymentInfoId": 7,
+      "razorpayOrderId": "order_Omj4U7cKptlBf9",
+      "razorpayPaymentId": "pay_Omj5hPxZQrXKPw",
+      "paymentStatus": "paid",
+      "paymentMethod": "netbanking",
+      "paymentDate": "2024-08-19 16:08:19",
+      "paymentAmount": "4246.00",
+      "razorpayMessage": null
+  },
+  "products": [
+      {
+          "recordId": 26,
+          "orderId": 13,
+          "productId": 1,
+          "productName": "Anjali Gingelly Oil 1 Litre Can",
+          "hsnCode": "15089099",
+          "cgstRate": "2.50",
+          "sgstRate": "2.50",
+          "igstRate": "5.00",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "offerPrice": "378.00",
+          "offerId": 2,
+          "orderQuantity": 4,
+          "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/coverImage.jpeg",
+          "itemMasterId": "itemMasterId",
+          "barcode": "barcode",
+          "length": "11.00",
+          "breadth": "8.00",
+          "height": "6.00",
+          "weight": "2.00"
+      },
+      {
+          "recordId": 27,
+          "orderId": 13,
+          "productId": 2,
+          "productName": "Anjali Gingelly Oil 2 Litre Can",
+          "hsnCode": "15089099",
+          "cgstRate": "2.50",
+          "sgstRate": "2.50",
+          "igstRate": "5.00",
+          "mrp": "440.00",
+          "sellPrice": "420.00",
+          "offerPrice": "378.00",
+          "offerId": 2,
+          "orderQuantity": 4,
+          "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/2/coverImage.jpg",
+          "itemMasterId": "itemMasterId",
+          "barcode": "barcode",
+          "length": "11.00",
+          "breadth": "8.00",
+          "height": "6.00",
+          "weight": "2.00"
+      },
+      {
+          "recordId": 25,
+          "orderId": 13,
+          "productId": 4,
+          "productName": "Anjali Pulses 1 Kg",
+          "hsnCode": "15089099",
+          "cgstRate": "2.50",
+          "sgstRate": "2.50",
+          "igstRate": "5.00",
+          "mrp": "340.00",
+          "sellPrice": "320.00",
+          "offerPrice": "288.00",
+          "offerId": 2,
+          "orderQuantity": 4,
+          "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/4/coverImage.jpg",
+          "itemMasterId": "itemMasterId",
+          "barcode": "barcode",
+          "length": "11.00",
+          "breadth": "8.00",
+          "height": "6.00",
+          "weight": "2.00"
+      }
+  ],
+  "orderStatusHistory": [
+      {
+          "recordId": 17,
+          "orderId": 13,
+          "orderStatus": "confirmed",
+          "orderStatusDate": "2024-08-19 16:04:04"
+      },
+      {
+          "recordId": 16,
+          "orderId": 13,
+          "orderStatus": "pending",
+          "orderStatusDate": "2024-08-19 16:01:49"
+      }
+  ],
+  "orderPaymentStatusHistory": [
+      {
+          "recordId": 31,
+          "orderId": 13,
+          "paymentStatus": "paid",
+          "paymentStatusDate": "2024-08-19 16:08:19",
+          "razorpayMessage": null
+      },
+      {
+          "recordId": 30,
+          "orderId": 13,
+          "paymentStatus": "failed",
+          "paymentStatusDate": "2024-08-19 16:08:55",
+          "razorpayMessage": "Your payment didn't go through as it was declined by the bank. Try another payment method or contact your bank."
+      },
+      {
+          "recordId": 29,
+          "orderId": 13,
+          "paymentStatus": "not-initiated",
+          "paymentStatusDate": "2024-08-19 16:02:09",
+          "razorpayMessage": null
+      }
+  ]
+}
+
+ORDER CANCEL - PUT: /customer/order/:id/cancel
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+
+Response:
+200 OK
+
+INVOICE - GET: /customer/order/:id/invoice
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+pdf file
+
+  </pre>
+</div>
+
+<button class="accordion">Public - Customer Wishlist</button>
+<div class="panel">
+  <pre>
+
+ADD TO WISHLIST: /customer/wishlist/product
+-------------------------------------------------------------------------------------
+Request Type: POST
+Request:
+{
+  "productId": 6
+}
+
+Response:
+{
+  "wishlistProductRefId": 12
+}
+
+REMOVE FROM WISHLIST: /customer/wishlist/:wishlistProductRefId
+-------------------------------------------------------------------------------------
+Request Type: DELETE
+Request:
+
+Response:
+200 - OK 
+
+GET WISHLIST: /customer/wishlist/products
+-------------------------------------------------------------------------------------
+Request Type: GET
+Request:
+
+Response:
+[
+    {
+        "productId": 1,
+        "productName": "Anjali Gingelly Oil 1 Litre Can",
+        "mrp": "440.00",
+        "sellPrice": "420.00",
+        "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/1/coverImage.jpeg",
+        "minimumOrderQuantity": 1,
+        "maximumOrderQuantity": 5,
+        "isLimitedStock": 0,
+        "hsnCode": "15089099",
+        "cgstRate": "2.50",
+        "sgstRate": "2.50",
+        "igstRate": "5.00",
+        "offerId": 2,
+        "offerTitle": "Offer 10%",
+        "offerPercent": "10.00",
+        "offerPrice": "378.00",
+        "wishlistProductRefId": 7
+    },
+    {
+        "productId": 5,
+        "productName": "Anjali Urad Dal Oil 1 Kg Pack",
+        "mrp": "140.50",
+        "sellPrice": "120.00",
+        "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/5/coverImage.jpg",
+        "minimumOrderQuantity": 2,
+        "maximumOrderQuantity": 10,
+        "isLimitedStock": 0,
+        "hsnCode": "15089099",
+        "cgstRate": "2.50",
+        "sgstRate": "2.50",
+        "igstRate": "5.00",
+        "offerId": null,
+        "offerTitle": null,
+        "offerPercent": null,
+        "offerPrice": null,
+        "wishlistProductRefId": 9
+    },
+    {
+        "productId": 2,
+        "productName": "Anjali Gingelly Oil 2 Litre Can",
+        "mrp": "440.00",
+        "sellPrice": "420.00",
+        "coverImagePath": "https://anjalifoods-local.s3.ap-south-1.amazonaws.com/product/2/coverImage.jpg",
+        "minimumOrderQuantity": 6,
+        "maximumOrderQuantity": 10,
+        "isLimitedStock": 0,
+        "hsnCode": "15089099",
+        "cgstRate": "2.50",
+        "sgstRate": "2.50",
+        "igstRate": "5.00",
+        "offerId": 2,
+        "offerTitle": "Offer 10%",
+        "offerPercent": "10.00",
+        "offerPrice": "378.00",
+        "wishlistProductRefId": 11
+    }
+]
+
+MOVE TO CART: /customer/wishlist/product
+-------------------------------------------------------------------------------------
+Request Type: PUT
+Request:
+{
+  "productId": 5,
+  "wishlistProductRefId": 1
+}
+
+Response:
+200 - OK 
+
+  </pre>
+</div>
+
+</body>
+
+
+
+<script type="text/javascript">
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        /* Toggle between adding and removing the "active" class,
+        to highlight the button that controls the panel */
+        this.classList.toggle("active");
+
+        /* Toggle between hiding and showing the active panel */
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+          panel.style.display = "none";
+        } else {
+          panel.style.display = "block";
+        }
+      });
+    }
+    acc[0].classList.toggle("active");
+    var panel = acc[0].nextElementSibling;
+    panel.style.display = "block";
+
+</script>
+
+</html>
