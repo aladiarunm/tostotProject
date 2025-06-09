@@ -64,7 +64,7 @@ Brand.update = (id, brand, result) => {
 
 // Delete brand by ID
 Brand.delete = (id, result) => {
-  sql.query('DELETE FROM orders_dev_db.ext_brand WHERE id = ?', id, (err, res) => {
+  sql.query("UPDATE orders_dev_db.ext_brand SET status = 'D' WHERE id = ?",id, (err, res) => {
     if (err) {
       console.error('Error deleting brand:', err);
       result(err, null);

@@ -64,7 +64,7 @@ Category.update = (id, category, result) => {
 
 // Delete category by ID
 Category.delete = (id, result) => {
-  sql.query('DELETE FROM orders_dev_db.ext_category WHERE id = ?', id, (err, res) => {
+  sql.query("UPDATE orders_dev_db.ext_category SET status = 'D' WHERE id = ?", id, (err, res) => {
     if (err) {
       console.error('Error deleting category:', err);
       result(err, null);
