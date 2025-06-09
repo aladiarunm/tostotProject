@@ -19,7 +19,7 @@ const statusMap = {
   D: { label: 'Deleted', variant: 'danger' },
 };
 
-
+// Add and Edit Form
 const BrandForm = ({ brand, onCancel, onSave }) => {
   const [name, setName] = useState(brand?.name || '');
   const [description, setDescription] = useState(brand?.description || '');
@@ -54,16 +54,37 @@ const BrandForm = ({ brand, onCancel, onSave }) => {
             />
           </div>
           <div className="mb-3">
-            <label>Status</label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="form-control"
-            >
-              <option value="A">Active</option>
-              <option value="I">Inactive</option>
-              <option value="D">Deleted</option>
-            </select>
+            <label >Status</label>
+
+            <div className="form-check form-check-inline" style={{ marginLeft: '10px' }}>
+              <input
+                type="radio"
+                name="status"
+                value="A"
+                checked={status === 'A'}
+                onChange={(e) => setStatus(e.target.value)}
+                className="form-check-input"
+                id="statusActive"
+              />
+              <label htmlFor="statusActive" className="form-check-label">
+                Active
+              </label>
+            </div>
+
+            <div className="form-check form-check-inline">
+              <input
+                type="radio"
+                name="status"
+                value="I"
+                checked={status === 'I'}
+                onChange={(e) => setStatus(e.target.value)}
+                className="form-check-input"
+                id="statusInactive"
+              />
+              <label htmlFor="statusInactive" className="form-check-label">
+                Inactive
+              </label>
+            </div>
           </div>
           <Button type="submit" variant="success" className="me-2">
             Save
@@ -89,7 +110,10 @@ const BrandManager = () => {
   const [addingBrand, setAddingBrand] = useState(false);
 
 
-  const [filterText, setFilterText] = useState(''); //--changes
+  const [filterId, setFilterId] = useState('');
+  const [filterName, setFilterName] = useState('');
+  const [filterDesc, setFilterDesc] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
 
 
   useEffect(() => {
@@ -143,10 +167,17 @@ const BrandManager = () => {
   const closeViewModal = () => setViewBrand(null);
 
   const handleEditFromView = (category) => {
-    closeViewModal(); // step 1: close view
+    closeViewModal();
     setTimeout(() => {
-      handleEdit(category); // step 2: wait and then go to edit
-    }, 300); // wait for modal animation to complete
+      handleEdit(category);
+    }, 300);
+  };
+
+  const handleDeleteFromView = (category) => {
+    closeViewModal();
+    setTimeout(() => {
+      handleDeleteClick(category.id);
+    }, 300);
   };
 
 
@@ -201,25 +232,53 @@ const BrandManager = () => {
             {error && <Alert variant="danger" dismissible onClose={() => setError('')}>{error}</Alert>}
             {success && <Alert variant="success" dismissible onClose={() => setSuccess('')}>{success}</Alert>}
 
-        
-            <div className="mb-3"> 
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Filter by brand name..."
-                value={filterText}
-                onChange={(e) => setFilterText(e.target.value)}
-              />
+            <div className="d-none d-md-block mb-3">
+              <div className="d-flex align-items-center" style={{ gap: '8px' }}>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Filter by ID"
+                  style={{ width: '10%' }}
+                  value={filterId}
+                  onChange={(e) => setFilterId(e.target.value)}
+                />
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Filter by Name"
+                  style={{ width: '19%' }}
+                  value={filterName}
+                  onChange={(e) => setFilterName(e.target.value)}
+                />
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Filter by Description"
+                  style={{ width: '24%' }}
+                  value={filterDesc}
+                  onChange={(e) => setFilterDesc(e.target.value)}
+                />
+                <select
+                  className="form-control"
+                  style={{ width: '15%' }}
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                >
+                  <option value="">All Status</option>
+                  <option value="A">Active</option>
+                  <option value="I">Inactive</option>
+                  <option value="D">Deleted</option>
+                </select>
+              </div>
             </div>
-
 
             <Table striped bordered hover responsive>
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Description</th>
-                  <th>Status</th>
+                  <th style={{ width: '10%' }}>ID</th>
+                  <th style={{ width: '20%' }}>Name</th>
+                  <th style={{ width: '25%' }}>Description</th>
+                  <th style={{ width: '15%' }}>Status</th>
                   <th>Created On</th>
                   <th>Last Modified On</th>
                   <th style={{ minWidth: '130px' }}>Actions</th>
@@ -231,7 +290,12 @@ const BrandManager = () => {
                     <td colSpan="7" className="text-center">No brands found</td>
                   </tr>
                 ) : (
-                  brands.filter((brand) => brand.name.toLowerCase().includes(filterText.toLowerCase())).map((brand) => (
+                  brands.filter((brand) =>
+                      brand.id.toString().includes(filterId) &&
+                      brand.name.toLowerCase().includes(filterName.toLowerCase()) &&
+                      (brand.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
+                      brand.status.toString().includes(filterStatus)
+                    ).map((brand) =>(
                     <tr key={brand.id}>
                       <td>{brand.id}</td>
                       <td>{brand.name}</td>
@@ -290,6 +354,7 @@ const BrandManager = () => {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="warning" onClick={() => handleEditFromView(viewBrand)}>Edit</Button>
+              <Button variant="danger" onClick={() => handleDeleteFromView(viewBrand)}>Delete</Button>
               <Button variant="secondary" onClick={closeViewModal}>Close</Button>
             </Modal.Footer>
           </Modal>

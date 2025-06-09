@@ -24,6 +24,7 @@ const statusMap = {
   D: { label: 'Deleted', variant: 'danger' },
 };
 
+// Add and Edit Form
 const CategoryForm = ({ category, onCancel, onSave }) => {
   const [name, setName] = useState(category?.name || '');
   const [description, setDescription] = useState(category?.description || '');
@@ -59,15 +60,36 @@ const CategoryForm = ({ category, onCancel, onSave }) => {
           </div>
           <div className="mb-3">
             <label>Status</label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="form-control"
-            >
-              <option value="A">Active</option>
-              <option value="I">Inactive</option>
-              <option value="D">Deleted</option>
-            </select>
+
+            <div className="form-check form-check-inline" style={{ marginLeft: '10px' }}>
+              <input
+                type="radio"
+                name="status"
+                value="A"
+                checked={status === 'A'}
+                onChange={(e) => setStatus(e.target.value)}
+                className="form-check-input"
+                id="statusActive"
+              />
+              <label htmlFor="statusActive" className="form-check-label">
+                Active
+              </label>
+            </div>
+
+            <div className="form-check form-check-inline">
+              <input
+                type="radio"
+                name="status"
+                value="I"
+                checked={status === 'I'}
+                onChange={(e) => setStatus(e.target.value)}
+                className="form-check-input"
+                id="statusInactive"
+              />
+              <label htmlFor="statusInactive" className="form-check-label">
+                Inactive
+              </label>
+            </div>
           </div>
           <Button type="submit" variant="success" className="me-2">
             Save
@@ -81,6 +103,7 @@ const CategoryForm = ({ category, onCancel, onSave }) => {
   );
 };
 
+
 const CategoryManager = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -92,7 +115,11 @@ const CategoryManager = () => {
   const [editingCategory, setEditingCategory] = useState(null);
   const [addingCategory, setAddingCategory] = useState(false);
 
-  const [filterText, setFilterText] = useState(''); //changes for filter
+  //states for filter
+  const [filterId, setFilterId] = useState('');
+  const [filterName, setFilterName] = useState('');
+  const [filterDesc, setFilterDesc] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
 
   useEffect(() => {
     fetchCategories();
@@ -145,10 +172,17 @@ const CategoryManager = () => {
   const closeViewModal = () => setViewCategory(null);
 
   const handleEditFromView = (category) => {
-    closeViewModal(); // step 1: close view
+    closeViewModal();
     setTimeout(() => {
-      handleEdit(category); // step 2: wait and then go to edit
-    }, 300); // wait for modal animation to complete
+      handleEdit(category);
+    }, 300); 
+  };
+
+  const handleDeleteFromView = (category) => {
+    closeViewModal();
+    setTimeout(() => {
+      handleDeleteClick(category.id);
+    }, 300);
   };
 
 
@@ -203,24 +237,105 @@ const CategoryManager = () => {
             {error && <Alert variant="danger" dismissible onClose={() => setError('')}>{error}</Alert>}
             {success && <Alert variant="success" dismissible onClose={() => setSuccess('')}>{success}</Alert>}
 
-
-            <div className="mb-3"> 
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Filter by Category name..."
-                value={filterText}
-                onChange={(e) => setFilterText(e.target.value)}
-              />
+            <div className="d-none d-md-block mb-3">
+              <div className="d-flex align-items-center" style={{ gap: '8px' }}>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Filter by ID"
+                  style={{ width: '10%' }}
+                  value={filterId}
+                  onChange={(e) => setFilterId(e.target.value)}
+                />
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Filter by Name"
+                  style={{ width: '19%' }}
+                  value={filterName}
+                  onChange={(e) => setFilterName(e.target.value)}
+                />
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Filter by Description"
+                  style={{ width: '24%' }}
+                  value={filterDesc}
+                  onChange={(e) => setFilterDesc(e.target.value)}
+                />
+                <select
+                  className="form-control"
+                  style={{ width: '15%' }}
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                >
+                  <option value="">All Status</option>
+                  <option value="A">Active</option>
+                  <option value="I">Inactive</option>
+                  <option value="D">Deleted</option>
+                </select>
+              </div>
             </div>
+
 
             <Table striped bordered hover responsive>
               <thead>
+                {/* <tr> // filter inside table another option
+                  <th>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      placeholder="Filter ID"
+                      value={filterId}
+                      onChange={(e) => setFilterId(e.target.value)}
+                    />
+                  </th>
+                  <th>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      placeholder="Filter Name"
+                      value={filterName}
+                      onChange={(e) => setFilterName(e.target.value)}
+                    />
+                  </th>
+                  <th>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      placeholder="Filter Description"
+                      value={filterDesc}
+                      onChange={(e) => setFilterDesc(e.target.value)}
+                    />
+                  </th>
+                  <th>
+                    <select
+                      className="form-control form-control-sm"
+                      value={filterStatus}
+                      onChange={(e) => setFilterStatus(e.target.value)}
+                    >
+                      <option value="">All</option>
+                      <option value="A">Active</option>
+                      <option value="I">Inactive</option>
+                      <option value="D">Deleted</option>
+                    </select>
+                  </th>
+                  <th colSpan="4"></th>
+                </tr>
                 <tr>
                   <th>ID</th>
                   <th>Name</th>
                   <th>Description</th>
                   <th>Status</th>
+                  <th>Created On</th>
+                  <th>Last Modified On</th>
+                  <th style={{ minWidth: '130px' }}>Actions</th>
+                </tr> */}
+                <tr>
+                  <th style={{ width: '10%' }}>ID</th>
+                  <th style={{ width: '20%' }}>Name</th>
+                  <th style={{ width: '25%' }}>Description</th>
+                  <th style={{ width: '15%' }}>Status</th>
                   <th>Created On</th>
                   <th>Last Modified On</th>
                   <th style={{ minWidth: '130px' }}>Actions</th>
@@ -232,7 +347,12 @@ const CategoryManager = () => {
                     <td colSpan="7" className="text-center">No categories found</td>
                   </tr>
                 ) : (
-                  categories.filter((categories) => categories.name.toLowerCase().includes(filterText.toLowerCase())).map((category) => (
+                  categories.filter((category) =>
+                      category.id.toString().includes(filterId) &&
+                      category.name.toLowerCase().includes(filterName.toLowerCase()) &&
+                      (category.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
+                      category.status.toString().includes(filterStatus)
+                    ).map((category) =>(
                     <tr key={category.id}>
                       <td>{category.id}</td>
                       <td>{category.name}</td>
@@ -317,6 +437,7 @@ const CategoryManager = () => {
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="warning" onClick={() => handleEditFromView(viewCategory)}>Edit</Button>
+                <Button variant="danger" onClick={() => handleDeleteFromView(viewCategory)}>Delete</Button>
                 <Button variant="secondary" onClick={closeViewModal}>Close</Button>
               </Modal.Footer>
             </Modal>
