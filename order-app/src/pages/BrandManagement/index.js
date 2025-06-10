@@ -9,7 +9,7 @@ import {
   Modal,
   Badge,
 } from 'react-bootstrap';
-import { FaEdit, FaTrash, FaEye } from 'react-icons/fa';
+import { FaEdit, FaFilter, FaTrash, FaEye } from 'react-icons/fa';
 
 import { getBrands, deleteBrand, addBrand, updateBrand } from '../../api/brands';
 
@@ -115,6 +115,31 @@ const BrandManager = () => {
   const [filterDesc, setFilterDesc] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
 
+  // Define temporary states above (to capture input before filtering)
+  const [tempFilterId, setTempFilterId] = useState('');
+  const [tempFilterName, setTempFilterName] = useState('');
+  const [tempFilterDesc, setTempFilterDesc] = useState('');
+  const [tempFilterStatus, setTempFilterStatus] = useState('');
+
+  // Button click handler
+  const handleApplyFilters = () => {
+    setFilterId(tempFilterId);
+    setFilterName(tempFilterName);
+    setFilterDesc(tempFilterDesc);
+    setFilterStatus(tempFilterStatus);
+  };
+
+  const handleClearFilter = () => {
+    setFilterId('');
+    setFilterName('');
+    setFilterDesc('');
+    setFilterStatus('');
+    setTempFilterId('');
+    setTempFilterName('');
+    setTempFilterDesc('');
+    setTempFilterStatus('');
+  };
+    
 
   useEffect(() => {
     fetchBrands();
@@ -239,36 +264,44 @@ const BrandManager = () => {
                   className="form-control"
                   placeholder="Filter by ID"
                   style={{ width: '10%' }}
-                  value={filterId}
-                  onChange={(e) => setFilterId(e.target.value)}
+                  value={tempFilterId}
+                  onChange={(e) => setTempFilterId(e.target.value)}
                 />
                 <input
                   type="text"
                   className="form-control"
                   placeholder="Filter by Name"
                   style={{ width: '19%' }}
-                  value={filterName}
-                  onChange={(e) => setFilterName(e.target.value)}
+                  value={tempFilterName}
+                  onChange={(e) => setTempFilterName(e.target.value)}
                 />
                 <input
                   type="text"
                   className="form-control"
                   placeholder="Filter by Description"
                   style={{ width: '24%' }}
-                  value={filterDesc}
-                  onChange={(e) => setFilterDesc(e.target.value)}
+                  value={tempFilterDesc}
+                  onChange={(e) => setTempFilterDesc(e.target.value)}
                 />
                 <select
                   className="form-control"
                   style={{ width: '15%' }}
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
+                  value={tempFilterStatus}
+                  onChange={(e) => setTempFilterStatus(e.target.value)}
                 >
                   <option value="">All Status</option>
                   <option value="A">Active</option>
                   <option value="I">Inactive</option>
                   <option value="D">Deleted</option>
                 </select>
+
+                <Button variant="primary"  style={{ width: '9%' }} onClick={handleApplyFilters}>
+                  <FaFilter/>
+                    Filter
+                </Button>
+                <Button variant="secondary"  style={{ width: '9%' }} onClick={handleClearFilter}>
+                    Clear Filter
+                </Button>
               </div>
             </div>
 

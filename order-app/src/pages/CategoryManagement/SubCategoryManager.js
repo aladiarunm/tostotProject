@@ -9,23 +9,22 @@ import {
   Modal,
   Badge,
 } from 'react-bootstrap';
-import { FaEdit, FaFilter ,FaTrash, FaEye } from 'react-icons/fa';
+import { FaEdit,FaFilter, FaTrash, FaEye } from 'react-icons/fa';
 
 import {
   getCategories,
   deleteCategory,
   addCategory,
   updateCategory,
-} from '../../api/category';
-
-//importing SubCategory
-import SubCategoryManager from './SubCategoryManager';
+} from '../../api/subCategory';
 
 const statusMap = {
   A: { label: 'Active', variant: 'success' },
   I: { label: 'Inactive', variant: 'secondary' },
   D: { label: 'Deleted', variant: 'danger' },
 };
+
+
 
 // Add and Edit Form
 const CategoryForm = ({ category, onCancel, onSave }) => {
@@ -107,8 +106,8 @@ const CategoryForm = ({ category, onCancel, onSave }) => {
 };
 
 
-const CategoryManager = () => {
-  const [categories, setCategories] = useState([]);
+const SubCategoryManager = ({onClose ,subCategoryId}) => {
+  const [subCategories, setSubCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -117,22 +116,20 @@ const CategoryManager = () => {
   const [viewCategory, setViewCategory] = useState(null);
   const [editingCategory, setEditingCategory] = useState(null);
   const [addingCategory, setAddingCategory] = useState(false);
-
-  //for sub category
-  const [subCategory,setSubCategory] = useState('');
-  const [showSubCategory, setShowSubCategory] = useState(false);
+  
   //states for filter
   const [filterId, setFilterId] = useState('');
   const [filterName, setFilterName] = useState('');
   const [filterDesc, setFilterDesc] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
 
-  // Define temporary states above (to capture input before filtering)
+    // Define temporary states above (to capture input before filtering)
   const [tempFilterId, setTempFilterId] = useState('');
   const [tempFilterName, setTempFilterName] = useState('');
   const [tempFilterDesc, setTempFilterDesc] = useState('');
   const [tempFilterStatus, setTempFilterStatus] = useState('');
 
+  // Button click handler
   const handleApplyFilters = () => {
     setFilterId(tempFilterId);
     setFilterName(tempFilterName);
@@ -152,21 +149,22 @@ const CategoryManager = () => {
   };
 
   useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const fetchCategories = async () => {
+    fetchCategories(subCategoryId);
+  }, [subCategoryId]);
+  
+  const fetchCategories = async (subCategoryId) => {
     setLoading(true);
     setError('');
     try {
-      const response = await getCategories();
+      console.log(subCategoryId);
+      const response = await getCategories(subCategoryId);
       if (response.success) {
-        setCategories(response.data);
+        setSubCategories(response.data);
       } else {
-        setError('Failed to load categories');
+        setError('Failed to load subCategories');
       }
     } catch {
-      setError('Error loading categories');
+      setError('Error loading subCategories');
     } finally {
       setLoading(false);
     }
@@ -183,7 +181,7 @@ const CategoryManager = () => {
       const response = await deleteCategory(deleteConfirmId);
       if (response.success) {
         setSuccess('Category deleted successfully!');
-        fetchCategories();
+        fetchCategories(subCategoryId);
       } else {
         setError(response.error || 'Failed to delete category');
       }
@@ -224,23 +222,17 @@ const CategoryManager = () => {
         if (!res.success) throw new Error(res.error);
         setSuccess('Category updated successfully!');
       } else {
-        res = await addCategory(data);
+        res = await addCategory(subCategoryId,data);
         if (!res.success) throw new Error(res.error);
         setSuccess('Category added successfully!');
       }
       setEditingCategory(null);
       setAddingCategory(false);
-      fetchCategories();
+      fetchCategories(subCategoryId);
     } catch (err) {
       setError(err.message || 'Operation failed');
     }
   };
-
-  //Sub Category handling
-  const handleSubCategory = (category) => {
-    setSubCategory(category.id)
-    setShowSubCategory(true);
-  }
 
   if (loading)
     return (
@@ -260,18 +252,19 @@ const CategoryManager = () => {
           }}
           onSave={handleFormSave}
         />
-        ) : showSubCategory ? (
-                <SubCategoryManager
-                    subCategoryId={subCategory}
-                    onClose={() => setShowSubCategory(false)}
-                />) : (
+      ) : (
         <Card>
           <Card.Body>
             <Card.Title className="mb-4 d-flex justify-content-between align-items-center">
-              Category Management
+               SubCategory Management for ID : {subCategoryId}
+              <div className="d-flex" style={{ gap: '8px' }}>
               <Button variant="primary" onClick={handleAdd}>
                 + Add Category
               </Button>
+              <Button variant="secondary" onClick={onClose}>
+                Close
+              </Button>
+              </div>
             </Card.Title>
 
             {error && <Alert variant="danger" dismissible onClose={() => setError('')}>{error}</Alert>}
@@ -328,57 +321,6 @@ const CategoryManager = () => {
 
             <Table striped bordered hover responsive>
               <thead>
-                {/* <tr> // filter inside table another option
-                  <th>
-                    <input
-                      type="text"
-                      className="form-control form-control-sm"
-                      placeholder="Filter ID"
-                      value={filterId}
-                      onChange={(e) => setFilterId(e.target.value)}
-                    />
-                  </th>
-                  <th>
-                    <input
-                      type="text"
-                      className="form-control form-control-sm"
-                      placeholder="Filter Name"
-                      value={filterName}
-                      onChange={(e) => setFilterName(e.target.value)}
-                    />
-                  </th>
-                  <th>
-                    <input
-                      type="text"
-                      className="form-control form-control-sm"
-                      placeholder="Filter Description"
-                      value={filterDesc}
-                      onChange={(e) => setFilterDesc(e.target.value)}
-                    />
-                  </th>
-                  <th>
-                    <select
-                      className="form-control form-control-sm"
-                      value={filterStatus}
-                      onChange={(e) => setFilterStatus(e.target.value)}
-                    >
-                      <option value="">All</option>
-                      <option value="A">Active</option>
-                      <option value="I">Inactive</option>
-                      <option value="D">Deleted</option>
-                    </select>
-                  </th>
-                  <th colSpan="4"></th>
-                </tr>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Description</th>
-                  <th>Status</th>
-                  <th>Created On</th>
-                  <th>Last Modified On</th>
-                  <th style={{ minWidth: '130px' }}>Actions</th>
-                </tr> */}
                 <tr>
                   <th style={{ width: '10%' }}>ID</th>
                   <th style={{ width: '20%' }}>Name</th>
@@ -390,19 +332,19 @@ const CategoryManager = () => {
                 </tr>
               </thead>
               <tbody>
-                {categories.length === 0 ? (
+                {subCategories.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="text-center">No categories found</td>
+                    <td colSpan="7" className="text-center">No subCategories found</td>
                   </tr>
                 ) : (
-                  categories.filter((category) =>
+                  subCategories.filter((category) =>
                       category.id.toString().includes(filterId) &&
                       category.name.toLowerCase().includes(filterName.toLowerCase()) &&
                       (category.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
                       category.status.toString().includes(filterStatus)
                     ).map((category) =>(
 
-                    <tr key={category.id} onDoubleClick={()=>{handleSubCategory(category)}}>
+                    <tr key={category.id}>
                       <td>{category.id}
                         
                       </td>
@@ -501,4 +443,4 @@ const CategoryManager = () => {
   );
 };
 
-export default CategoryManager;
+export default SubCategoryManager;
