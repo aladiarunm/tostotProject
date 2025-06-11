@@ -27,7 +27,7 @@ const statusMap = {
 
 
 // Add and Edit Form
-const CategoryForm = ({ category, onCancel, onSave }) => {
+const CategoryForm = ({ subCategoryName,category, onCancel, onSave }) => {
   const [name, setName] = useState(category?.name || '');
   const [description, setDescription] = useState(category?.description || '');
   const [status, setStatus] = useState(category?.status || 'A');
@@ -41,8 +41,16 @@ const CategoryForm = ({ category, onCancel, onSave }) => {
   return (
     <Card className="mb-4">
       <Card.Body>
-        <h5>{category ? 'Edit Category' : 'Add Category'}</h5>
+        <h5>{category ? 'Edit SubCategory' : 'Add SubCategory'}</h5>
         <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label>Category Name</label>
+            <input
+              value={subCategoryName}
+              disabled
+              className="form-control"
+            />
+          </div>
           <div className="mb-3">
             <label>Name</label>
             <input
@@ -116,6 +124,8 @@ const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
   const [viewCategory, setViewCategory] = useState(null);
   const [editingCategory, setEditingCategory] = useState(null);
   const [addingCategory, setAddingCategory] = useState(false);
+
+  const [SubCategoryName,setSubCategoryName] = useState('');
   
   //states for filter
   const [filterId, setFilterId] = useState('');
@@ -194,7 +204,8 @@ const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
   };
 
   const handleAdd = () => setAddingCategory(true);
-  const handleEdit = (category) => setEditingCategory(category);
+  const handleEdit = (category) => {setEditingCategory(category);
+                                  setSubCategoryName(SubCategoryName)};
   const cancelDelete = () => setDeleteConfirmId(null);
   const handleView = (category) => setViewCategory(category);
   const closeViewModal = () => setViewCategory(null);
@@ -245,6 +256,7 @@ const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
     <Container className="py-4">
       {addingCategory || editingCategory ? (
         <CategoryForm
+          subCategoryName={subCategoryName}
           category={editingCategory}
           onCancel={() => {
             setAddingCategory(false);
