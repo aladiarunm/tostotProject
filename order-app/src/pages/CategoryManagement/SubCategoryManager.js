@@ -106,7 +106,7 @@ const CategoryForm = ({ category, onCancel, onSave }) => {
 };
 
 
-const SubCategoryManager = ({onClose ,subCategoryId}) => {
+const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
   const [subCategories, setSubCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -256,10 +256,10 @@ const SubCategoryManager = ({onClose ,subCategoryId}) => {
         <Card>
           <Card.Body>
             <Card.Title className="mb-4 d-flex justify-content-between align-items-center">
-               SubCategory Management for ID : {subCategoryId}
+               SubCategory Management for {subCategoryName}
               <div className="d-flex" style={{ gap: '8px' }}>
               <Button variant="primary" onClick={handleAdd}>
-                + Add Category
+                + Add SubCategory
               </Button>
               <Button variant="secondary" onClick={onClose}>
                 Close

@@ -9,7 +9,7 @@ import {
   Modal,
   Badge,
 } from 'react-bootstrap';
-import { FaEdit, FaFilter ,FaTrash, FaEye } from 'react-icons/fa';
+import { FaEdit, FaSitemap ,FaFilter ,FaTrash, FaEye } from 'react-icons/fa';
 
 import {
   getCategories,
@@ -119,8 +119,10 @@ const CategoryManager = () => {
   const [addingCategory, setAddingCategory] = useState(false);
 
   //for sub category
-  const [subCategory,setSubCategory] = useState('');
+  const [subCategoryId,setSubCategoryID] = useState('');
+  const [subCategoryName,setSubCategoryName] = useState('');
   const [showSubCategory, setShowSubCategory] = useState(false);
+
   //states for filter
   const [filterId, setFilterId] = useState('');
   const [filterName, setFilterName] = useState('');
@@ -238,7 +240,8 @@ const CategoryManager = () => {
 
   //Sub Category handling
   const handleSubCategory = (category) => {
-    setSubCategory(category.id)
+    setSubCategoryID(category.id);
+    setSubCategoryName(category.name);
     setShowSubCategory(true);
   }
 
@@ -262,7 +265,8 @@ const CategoryManager = () => {
         />
         ) : showSubCategory ? (
                 <SubCategoryManager
-                    subCategoryId={subCategory}
+                    subCategoryId={subCategoryId}
+                    subCategoryName={subCategoryName}
                     onClose={() => setShowSubCategory(false)}
                 />) : (
         <Card>
@@ -328,65 +332,14 @@ const CategoryManager = () => {
 
             <Table striped bordered hover responsive>
               <thead>
-                {/* <tr> // filter inside table another option
-                  <th>
-                    <input
-                      type="text"
-                      className="form-control form-control-sm"
-                      placeholder="Filter ID"
-                      value={filterId}
-                      onChange={(e) => setFilterId(e.target.value)}
-                    />
-                  </th>
-                  <th>
-                    <input
-                      type="text"
-                      className="form-control form-control-sm"
-                      placeholder="Filter Name"
-                      value={filterName}
-                      onChange={(e) => setFilterName(e.target.value)}
-                    />
-                  </th>
-                  <th>
-                    <input
-                      type="text"
-                      className="form-control form-control-sm"
-                      placeholder="Filter Description"
-                      value={filterDesc}
-                      onChange={(e) => setFilterDesc(e.target.value)}
-                    />
-                  </th>
-                  <th>
-                    <select
-                      className="form-control form-control-sm"
-                      value={filterStatus}
-                      onChange={(e) => setFilterStatus(e.target.value)}
-                    >
-                      <option value="">All</option>
-                      <option value="A">Active</option>
-                      <option value="I">Inactive</option>
-                      <option value="D">Deleted</option>
-                    </select>
-                  </th>
-                  <th colSpan="4"></th>
-                </tr>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Description</th>
-                  <th>Status</th>
-                  <th>Created On</th>
-                  <th>Last Modified On</th>
-                  <th style={{ minWidth: '130px' }}>Actions</th>
-                </tr> */}
                 <tr>
                   <th style={{ width: '10%' }}>ID</th>
                   <th style={{ width: '20%' }}>Name</th>
                   <th style={{ width: '25%' }}>Description</th>
                   <th style={{ width: '15%' }}>Status</th>
-                  <th>Created On</th>
-                  <th>Last Modified On</th>
-                  <th style={{ minWidth: '130px' }}>Actions</th>
+                  <th style={{ width: '9%' }}>Created On</th>
+                  <th style={{ width: '9%' }}>Last Modified On</th>
+                  <th style={{ minWidth: '180px' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -402,7 +355,7 @@ const CategoryManager = () => {
                       category.status.toString().includes(filterStatus)
                     ).map((category) =>(
 
-                    <tr key={category.id} onDoubleClick={()=>{handleSubCategory(category)}}>
+                    <tr title='Double click to view subCategory' key={category.id} onDoubleClick={()=>{handleSubCategory(category)}}>
                       <td>{category.id}
                         
                       </td>
@@ -416,6 +369,15 @@ const CategoryManager = () => {
                       <td>{new Date(category.created_on).toLocaleString()}</td>
                       <td>{new Date(category.last_modified_on).toLocaleString()}</td>
                       <td>
+                        <Button
+                          variant="outline-info"
+                          size="sm"
+                          className="me-2"
+                          title="SubCategory"
+                          onClick={()=>{handleSubCategory(category)}}
+                        >
+                          <FaSitemap />
+                        </Button>
                         <Button
                           variant="outline-primary"
                           size="sm"
