@@ -12,7 +12,8 @@ import {
 import { FaEdit,FaFilter, FaTrash, FaEye } from 'react-icons/fa';
 
 import {
-  getCategories,
+  /*getCategories,*/ //filter function
+  getAllCategories,
   deleteCategory,
   addCategory,
   updateCategory,
@@ -126,7 +127,7 @@ const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
   const [addingCategory, setAddingCategory] = useState(false);
 
   const [SubCategoryName,setSubCategoryName] = useState('');
-  
+
   //states for filter
   const [filterId, setFilterId] = useState('');
   const [filterName, setFilterName] = useState('');
@@ -158,16 +159,37 @@ const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
     setTempFilterStatus('');
   };
 
-  useEffect(() => {
-    fetchCategories(subCategoryId);
-  }, [subCategoryId]);
+  // useEffect(() => {
+  //   fetchCategories(subCategoryId);
+  // }, [subCategoryId]);
   
-  const fetchCategories = async (subCategoryId) => {
+  // const fetchCategories = async (subCategoryId) => {
+  //   setLoading(true);
+  //   setError('');
+  //   try {
+  //     console.log(subCategoryId);
+  //     const response = await getCategories(subCategoryId);
+  //     if (response.success) {
+  //       setSubCategories(response.data);
+  //     } else {
+  //       setError('Failed to load subCategories');
+  //     }
+  //   } catch {
+  //     setError('Error loading subCategories');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+   useEffect(() => {
+    fetchCategories();
+  }, []);
+  
+  const fetchCategories = async () => {
     setLoading(true);
     setError('');
     try {
-      console.log(subCategoryId);
-      const response = await getCategories(subCategoryId);
+      const response = await getAllCategories();
       if (response.success) {
         setSubCategories(response.data);
       } else {
@@ -350,6 +372,7 @@ const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
                   </tr>
                 ) : (
                   subCategories.filter((category) =>
+                      category.category_id.toString().includes(subCategoryId)&&
                       category.id.toString().includes(filterId) &&
                       category.name.toLowerCase().includes(filterName.toLowerCase()) &&
                       (category.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&

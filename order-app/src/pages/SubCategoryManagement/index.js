@@ -9,17 +9,14 @@ import {
   Modal,
   Badge,
 } from 'react-bootstrap';
-import { FaEdit, FaSitemap ,FaFilter ,FaTrash, FaEye } from 'react-icons/fa';
+import { FaEdit,FaFilter, FaTrash, FaEye } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import {
-  getCategories,
+  getAllCategories,
   deleteCategory,
   addCategory,
   updateCategory,
-} from '../../api/category';
-
-//importing SubCategory
-import SubCategoryManager from './SubCategoryManager';
+} from '../../api/subCategory';
 
 const statusMap = {
   A: { label: 'Active', variant: 'success' },
@@ -27,8 +24,10 @@ const statusMap = {
   D: { label: 'Deleted', variant: 'danger' },
 };
 
+//
+
 // Add and Edit Form
-const CategoryForm = ({ category, onCancel, onSave }) => {
+const CategoryForm = ({ subCategoryName,category, onCancel, onSave }) => {
   const [name, setName] = useState(category?.name || '');
   const [description, setDescription] = useState(category?.description || '');
   const [status, setStatus] = useState(category?.status || 'A');
@@ -42,8 +41,16 @@ const CategoryForm = ({ category, onCancel, onSave }) => {
   return (
     <Card className="mb-4">
       <Card.Body>
-        <h5>{category ? 'Edit Category' : 'Add Category'}</h5>
+        <h5>{category ? 'Edit SubCategory' : 'Add SubCategory'}</h5>
         <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label>Category Name</label>
+            <input
+              value={subCategoryName}
+              disabled
+              className="form-control"
+            />
+          </div>
           <div className="mb-3">
             <label>Name</label>
             <input
@@ -107,8 +114,8 @@ const CategoryForm = ({ category, onCancel, onSave }) => {
 };
 
 
-const CategoryManager = () => {
-  const [categories, setCategories] = useState([]);
+const SubCategoryManager = () => {
+  const [subCategories, setSubCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -117,24 +124,20 @@ const CategoryManager = () => {
   const [viewCategory, setViewCategory] = useState(null);
   const [editingCategory, setEditingCategory] = useState(null);
   const [addingCategory, setAddingCategory] = useState(false);
-
-  //for sub category
-  const [subCategoryId,setSubCategoryID] = useState('');
-  const [subCategoryName,setSubCategoryName] = useState('');
-  const [showSubCategory, setShowSubCategory] = useState(false);
-
+  
   //states for filter
   const [filterId, setFilterId] = useState('');
   const [filterName, setFilterName] = useState('');
   const [filterDesc, setFilterDesc] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
 
-  // Define temporary states above (to capture input before filtering)
+    // Define temporary states above (to capture input before filtering)
   const [tempFilterId, setTempFilterId] = useState('');
   const [tempFilterName, setTempFilterName] = useState('');
   const [tempFilterDesc, setTempFilterDesc] = useState('');
   const [tempFilterStatus, setTempFilterStatus] = useState('');
 
+  // Button click handler
   const handleApplyFilters = () => {
     setFilterId(tempFilterId);
     setFilterName(tempFilterName);
@@ -153,22 +156,25 @@ const CategoryManager = () => {
     setTempFilterStatus('');
   };
 
+  //
+  const navigate = useNavigate();
+
   useEffect(() => {
     fetchCategories();
   }, []);
-
+  
   const fetchCategories = async () => {
     setLoading(true);
     setError('');
     try {
-      const response = await getCategories();
+      const response = await getAllCategories();
       if (response.success) {
-        setCategories(response.data);
+        setSubCategories(response.data);
       } else {
-        setError('Failed to load categories');
+        setError('Failed to load subCategories');
       }
     } catch {
-      setError('Error loading categories');
+      setError('Error loading subCategories');
     } finally {
       setLoading(false);
     }
@@ -197,11 +203,8 @@ const CategoryManager = () => {
     }
   };
 
-  //
-  const navigate = useNavigate();
-
   const handleAdd = () => setAddingCategory(true);
-  const handleEdit = (category) => setEditingCategory(category);
+  const handleEdit = (category) => {setEditingCategory(category);};
   const cancelDelete = () => setDeleteConfirmId(null);
   const handleView = (category) => setViewCategory(category);
   const closeViewModal = () => setViewCategory(null);
@@ -241,13 +244,6 @@ const CategoryManager = () => {
     }
   };
 
-  //Sub Category handling
-  const handleSubCategory = (category) => {
-    setSubCategoryID(category.id);
-    setSubCategoryName(category.name);
-    setShowSubCategory(true);
-  }
-
   if (loading)
     return (
       <Container className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
@@ -266,23 +262,18 @@ const CategoryManager = () => {
           }}
           onSave={handleFormSave}
         />
-        ) : showSubCategory ? (
-                <SubCategoryManager
-                    subCategoryId={subCategoryId}
-                    subCategoryName={subCategoryName}
-                    onClose={() => setShowSubCategory(false)}
-                />) : (
+      ) : (
         <Card>
           <Card.Body>
             <Card.Title className="mb-4 d-flex justify-content-between align-items-center">
-              Category Management
+               SubCategory Management
               <div className="d-flex" style={{ gap: '8px' }}>
-                <Button variant="primary" onClick={handleAdd}>
-                  + Add Category
-                </Button>
-                <Button variant="secondary" onClick={() => navigate('/attributes')}>
-                  Back
-                </Button>
+              <Button variant="primary" onClick={handleAdd}>
+                + Add SubCategory
+              </Button>
+              <Button variant="secondary" onClick={() => navigate('/attributes')}>
+                Back
+              </Button>
               </div>
             </Card.Title>
 
@@ -345,25 +336,25 @@ const CategoryManager = () => {
                   <th style={{ width: '20%' }}>Name</th>
                   <th style={{ width: '25%' }}>Description</th>
                   <th style={{ width: '15%' }}>Status</th>
-                  <th style={{ width: '9%' }}>Created On</th>
-                  <th style={{ width: '9%' }}>Last Modified On</th>
-                  <th style={{ minWidth: '180px' }}>Actions</th>
+                  <th>Created On</th>
+                  <th>Last Modified On</th>
+                  <th style={{ minWidth: '130px' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {categories.length === 0 ? (
+                {subCategories.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="text-center">No categories found</td>
+                    <td colSpan="7" className="text-center">No subCategories found</td>
                   </tr>
                 ) : (
-                  categories.filter((category) =>
+                  subCategories.filter((category) =>
                       category.id.toString().includes(filterId) &&
                       category.name.toLowerCase().includes(filterName.toLowerCase()) &&
                       (category.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
                       category.status.toString().includes(filterStatus)
                     ).map((category) =>(
 
-                    <tr title='Double click to view subCategory' key={category.id} onDoubleClick={()=>{handleSubCategory(category)}}>
+                    <tr key={category.id}>
                       <td>{category.id}
                         
                       </td>
@@ -377,15 +368,6 @@ const CategoryManager = () => {
                       <td>{new Date(category.created_on).toLocaleString()}</td>
                       <td>{new Date(category.last_modified_on).toLocaleString()}</td>
                       <td>
-                        <Button
-                          variant="outline-info"
-                          size="sm"
-                          className="me-2"
-                          title="SubCategory"
-                          onClick={()=>{handleSubCategory(category)}}
-                        >
-                          <FaSitemap />
-                        </Button>
                         <Button
                           variant="outline-primary"
                           size="sm"
@@ -471,4 +453,4 @@ const CategoryManager = () => {
   );
 };
 
-export default CategoryManager;
+export default SubCategoryManager;

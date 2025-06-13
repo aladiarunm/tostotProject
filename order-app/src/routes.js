@@ -8,6 +8,10 @@ import SellerManagement from './pages/SellerManagement';
 //---
 import BrandManagement from './pages/BrandManagement';
 import CategoryManagement from './pages/CategoryManagement';
+import AttributesManagement from './pages/AttributesManagement'
+import SubCategoryManagement from './pages/SubCategoryManagement';
+import ColorManagement from './pages/ColorManagement';
+import SizeManagement from './pages/SizeManagement'
 //---
 import ProductManagement from './pages/ProductManagement';
 import ProductCategory from './pages/ProductManagement/Category';
@@ -31,6 +35,11 @@ const AppRoutes = ({ onLogin }) => {
 
         <Route path="brands" element={<BrandManagement />} />
         <Route path="categories" element={<CategoryManagement />} />
+
+        <Route path="attributes" element={<AttributesManagement />} />
+        <Route path="subCategories" element={<SubCategoryManagement />} />
+        <Route path="color" element={<ColorManagement />} />
+        <Route path="size" element={<SizeManagement />} />
 
         <Route path="products" element={<ProductManagement />}>
           <Route path="category" element={<ProductCategory />} />

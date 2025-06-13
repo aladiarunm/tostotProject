@@ -3,9 +3,11 @@ import { Link, useLocation } from 'react-router-dom';
 import { 
   FiHome, FiUsers, FiShoppingBag, /*FiPackage, 
   FiShoppingCart, FiTruck,*/ FiSettings,FiUser,
-  FiChevronLeft, FiChevronRight,FiTag, FiGrid
+  FiChevronLeft, FiChevronRight,/*FiTag, FiGrid,*/FiList 
 } from 'react-icons/fi';
 import { Accordion, Nav } from 'react-bootstrap';
+//import { FaSitemap, FaCertificate, FaPalette, FaRulerCombined } from 'react-icons/fa';
+//import { TbLayoutGridAdd } from "react-icons/tb";
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -31,15 +33,16 @@ const Sidebar = () => {
       icon: <FiUsers />,
       path: '/sellers'
     },
-    {
-      name: 'Brands',
-      icon: <FiTag/>,
-      path: '/brands'
-    },{
-      name: 'Categories',
-      icon: <FiGrid />,
-      path: '/categories'
-    },
+    // {
+    //   name: 'Brands',
+    //   icon: <FiTag/>,
+    //   path: '/brands'
+    // },
+    // {
+    //   name: 'Categories',
+    //   icon: <FiGrid />,
+    //   path: '/categories'
+    // },
     {
       name: 'Products',
       icon: <FiShoppingBag />,
@@ -102,6 +105,18 @@ const Sidebar = () => {
       name: 'Profile',
       icon: <FiUser />,
       path: '/profile'
+    },
+    {
+      name: 'Attributes',
+      icon: <FiList />,
+      path: '/attributes',
+      // subItems: [
+      //     {name: 'Category',icon: <TbLayoutGridAdd size={50} />,route: '/categories'},
+      //     {name: 'Sub Category',icon: <FaSitemap size={50} />,route: '/subcategories',},
+      //     {name: 'Brand',icon: <FaCertificate size={50} />,route: '/brands',},
+      //     {name: 'Color',icon: <FaPalette size={50} />,route: '/color',},
+      //     {name: 'Size',icon: <FaRulerCombined size={50} />,route: '/size',},
+      //   ]
     },
   ];
 

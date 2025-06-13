@@ -10,7 +10,7 @@ import {
   Badge,
 } from 'react-bootstrap';
 import { FaEdit, FaFilter, FaTrash, FaEye } from 'react-icons/fa';
-
+import { useNavigate } from 'react-router-dom';
 import { getBrands, deleteBrand, addBrand, updateBrand } from '../../api/brands';
 
 const statusMap = {
@@ -140,6 +140,8 @@ const BrandManager = () => {
     setTempFilterStatus('');
   };
     
+  //
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchBrands();
@@ -249,9 +251,14 @@ const BrandManager = () => {
           <Card.Body>
             <Card.Title className="mb-4 d-flex justify-content-between align-items-center">
               Brand Management
-              <Button variant="primary" onClick={handleAdd}>
-                + Add Brand
-              </Button>
+              <div className="d-flex" style={{ gap: '8px' }}>
+                <Button variant="primary" onClick={handleAdd}>
+                  + Add Category
+                </Button>
+                <Button variant="secondary" onClick={() => navigate('/attributes')}>
+                  Back
+                </Button>
+              </div>
             </Card.Title>
 
             {error && <Alert variant="danger" dismissible onClose={() => setError('')}>{error}</Alert>}

@@ -53,6 +53,55 @@ export const getCategories = async (id) => {
   }
 };
 
+export const getAllCategories = async () => {
+  try {
+    const accessToken = localStorage.getItem('accessToken');
+
+    const response = await axios.get(`${API_BASE_URL}/alldata`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+    
+    if (response.data) {
+    // const data = Array.isArray(response.data) 
+    //     ? response.data 
+    //     : response.data.brands || [];
+
+    return {
+        success: true,
+         data: response.data.data // <-- directly return the array
+    };
+    }
+    return {
+      success: false,
+      message: (response.data && response.data.message) || 'Failed to fetch category'
+      
+    };
+  } catch (error) {
+    let errorMessage = 'An error occurred while fetching category';
+
+    if (error.response) {
+      const status = error.response.status;
+      const msg = error.response.data?.message;
+
+      if (status === 401) errorMessage = 'Unauthorized';
+      else if (status === 400) errorMessage = 'Bad request - please check your input';
+      else if (status >= 500) errorMessage = 'Server error - please try again later';
+      else if (msg) errorMessage = msg;
+    } else if (error.request) {
+      errorMessage = 'Network error - please check your connection';
+    }
+
+    // Optional: console.error(error);
+
+    return {
+      success: false,
+      message: errorMessage
+    };
+  }
+}
+
 export const addCategory = async (id,categoryData) => {
   try {
     const accessToken = localStorage.getItem('accessToken');
@@ -189,8 +238,6 @@ export const deleteCategory = async (id) => {
     };
   }
 };
-
-
 
 // let categories = [
 //   {

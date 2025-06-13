@@ -6,6 +6,8 @@ const subCategoryController = require('../controllers/subCategoryController');
 
 router.get('/data/:id', auth.verifyToken, subCategoryController.getAllCategory);
 
+router.get('/alldata',auth.verifyToken, subCategoryController.getAlllCategory);
+
 router.post('/addCategory/:id', auth.verifyToken, subCategoryController.addCategory);
 
 router.put('/updateCategory/:id', auth.verifyToken, subCategoryController.updateCategory);
