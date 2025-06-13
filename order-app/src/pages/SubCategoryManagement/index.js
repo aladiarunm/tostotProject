@@ -12,7 +12,7 @@ import {
 import { FaEdit,FaFilter, FaTrash, FaEye } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import {
-  getAllCategories,
+  getCategories,
   deleteCategory,
   addCategory,
   updateCategory,
@@ -130,12 +130,14 @@ const SubCategoryManager = () => {
   const [filterName, setFilterName] = useState('');
   const [filterDesc, setFilterDesc] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
-
-    // Define temporary states above (to capture input before filtering)
+  const [filterCategory,setFilterCategory] =useState('');
+  
+  // Define temporary states above (to capture input before filtering)
   const [tempFilterId, setTempFilterId] = useState('');
   const [tempFilterName, setTempFilterName] = useState('');
   const [tempFilterDesc, setTempFilterDesc] = useState('');
   const [tempFilterStatus, setTempFilterStatus] = useState('');
+  const [tempFilterCategory,setTempFilterCategory] =useState('');
 
   // Button click handler
   const handleApplyFilters = () => {
@@ -143,6 +145,7 @@ const SubCategoryManager = () => {
     setFilterName(tempFilterName);
     setFilterDesc(tempFilterDesc);
     setFilterStatus(tempFilterStatus);
+    setFilterCategory(tempFilterCategory);
   };
 
   const handleClearFilter = () => {
@@ -150,10 +153,12 @@ const SubCategoryManager = () => {
     setFilterName('');
     setFilterDesc('');
     setFilterStatus('');
+    setFilterCategory('');
     setTempFilterId('');
     setTempFilterName('');
     setTempFilterDesc('');
     setTempFilterStatus('');
+    setTempFilterCategory('');
   };
 
   //
@@ -167,7 +172,7 @@ const SubCategoryManager = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await getAllCategories();
+      const response = await getCategories('0');
       if (response.success) {
         setSubCategories(response.data);
       } else {
@@ -294,21 +299,29 @@ const SubCategoryManager = () => {
                   type="text"
                   className="form-control"
                   placeholder="Filter by Name"
-                  style={{ width: '19%' }}
+                  style={{ width: '14%' }}
                   value={tempFilterName}
                   onChange={(e) => setTempFilterName(e.target.value)}
                 />
                 <input
                   type="text"
                   className="form-control"
+                  placeholder="Filter by Category"
+                  style={{ width: '15%' }}
+                  value={tempFilterCategory}
+                  onChange={(e) => setTempFilterCategory(e.target.value)}
+                />
+                <input
+                  type="text"
+                  className="form-control"
                   placeholder="Filter by Description"
-                  style={{ width: '24%' }}
+                  style={{ width: '19%' }}
                   value={tempFilterDesc}
                   onChange={(e) => setTempFilterDesc(e.target.value)}
                 />
                 <select
                   className="form-control"
-                  style={{ width: '15%' }}
+                  style={{ width: '9%' }}
                   value={tempFilterStatus}
                   onChange={(e) => setTempFilterStatus(e.target.value)}
                 >
@@ -333,9 +346,10 @@ const SubCategoryManager = () => {
               <thead>
                 <tr>
                   <th style={{ width: '10%' }}>ID</th>
-                  <th style={{ width: '20%' }}>Name</th>
-                  <th style={{ width: '25%' }}>Description</th>
-                  <th style={{ width: '15%' }}>Status</th>
+                  <th style={{ width: '15%' }}>Name</th>
+                  <th style={{ width: '15%' }}>Category Name</th>
+                  <th style={{ width: '20%' }}>Description</th>
+                  <th style={{ width: '10%' }}>Status</th>
                   <th>Created On</th>
                   <th>Last Modified On</th>
                   <th style={{ minWidth: '130px' }}>Actions</th>
@@ -350,6 +364,7 @@ const SubCategoryManager = () => {
                   subCategories.filter((category) =>
                       category.id.toString().includes(filterId) &&
                       category.name.toLowerCase().includes(filterName.toLowerCase()) &&
+                      category.category_name.toLowerCase().includes(filterCategory.toLowerCase()) &&
                       (category.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
                       category.status.toString().includes(filterStatus)
                     ).map((category) =>(
@@ -359,6 +374,7 @@ const SubCategoryManager = () => {
                         
                       </td>
                       <td>{category.name}</td>
+                      <td>{category.category_name}</td>
                       <td>{category.description || '-'}</td>
                       <td>
                         <Badge bg={statusMap[category.status]?.variant || 'dark'}>

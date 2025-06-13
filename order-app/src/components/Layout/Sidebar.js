@@ -44,6 +44,11 @@ const Sidebar = () => {
     //   path: '/categories'
     // },
     {
+      name: 'Attributes',
+      icon: <FiList />,
+      path: '/attributes',
+    },
+    {
       name: 'Products',
       icon: <FiShoppingBag />,
       path: '/products'
@@ -106,18 +111,7 @@ const Sidebar = () => {
       icon: <FiUser />,
       path: '/profile'
     },
-    {
-      name: 'Attributes',
-      icon: <FiList />,
-      path: '/attributes',
-      // subItems: [
-      //     {name: 'Category',icon: <TbLayoutGridAdd size={50} />,route: '/categories'},
-      //     {name: 'Sub Category',icon: <FaSitemap size={50} />,route: '/subcategories',},
-      //     {name: 'Brand',icon: <FaCertificate size={50} />,route: '/brands',},
-      //     {name: 'Color',icon: <FaPalette size={50} />,route: '/color',},
-      //     {name: 'Size',icon: <FaRulerCombined size={50} />,route: '/size',},
-      //   ]
-    },
+    
   ];
 
   return (

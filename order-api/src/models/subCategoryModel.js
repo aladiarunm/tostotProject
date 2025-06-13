@@ -2,8 +2,8 @@ const sql = require('../config/db'); // your configured MySQL connection
 
 // Category constructor
 const subCategory = function (subCategory) {
+  this.category_id = subCategory.id;
   this.category_name = subCategory.category_name;
-  this.category_id = subCategory.category_id;
   this.name = subCategory.name;
   this.description = subCategory.description;
   this.status = subCategory.status;
@@ -13,20 +13,19 @@ const subCategory = function (subCategory) {
 
 // Get all brands
 subCategory.getAll = (id, result) => {
-  sql.query('SELECT * FROM orders_dev_db.ext_sub_category WHERE category_id = ?',id,(err, res) => {
-    if (err) {
-      console.error('Error fetching category:', err);
-      result(err, null);
-      return;
-    }
-    result(null, res);
-  });
-};
+  let query;
+  let params = [];
 
-subCategory.getAlll = (result) => {
-  sql.query('SELECT * FROM orders_dev_db.ext_sub_category',(err, res) => {
+  if (id == '0') {
+    query = 'SELECT sc.id, c.name AS category_name,sc.name AS name,sc.description,sc.status,sc.created_on,sc.last_modified_on FROM orders_dev_db.ext_sub_category sc JOIN orders_dev_db.ext_category c ON sc.category_id = c.id';
+  } else {
+    query = "SELECT * FROM orders_dev_db.ext_sub_category WHERE category_id = ?";
+    params = [id];
+  }
+
+  sql.query(query, params, (err, res) => {
     if (err) {
-      console.error('Error fetching category:', err);
+      console.error('Error fetching subcategories:', err);
       result(err, null);
       return;
     }

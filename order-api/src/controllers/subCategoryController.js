@@ -14,18 +14,6 @@ exports.getAllCategory = (req, res) => {
   });
 };
 
-exports.getAlllCategory = (req, res) => {
-
-  subCategory.getAlll((err, category) => {
-    if (err) {
-      return res.status(500).send({
-        message: err.message || 'Some error occurred while retrieving category.'
-      });
-    }
-    res.status(200).send({ data: category });
-  });
-};
-
 // Add a new category
 exports.addCategory  = (req, res) => {
   const CategoryId = req.params.id;

@@ -12,8 +12,8 @@ import {
 import { FaEdit,FaFilter, FaTrash, FaEye } from 'react-icons/fa';
 
 import {
-  /*getCategories,*/ //filter function
-  getAllCategories,
+  getCategories,
+  // getAllCategories,
   deleteCategory,
   addCategory,
   updateCategory,
@@ -159,37 +159,16 @@ const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
     setTempFilterStatus('');
   };
 
-  // useEffect(() => {
-  //   fetchCategories(subCategoryId);
-  // }, [subCategoryId]);
+  useEffect(() => {
+    fetchCategories(subCategoryId);
+  }, [subCategoryId]);
   
-  // const fetchCategories = async (subCategoryId) => {
-  //   setLoading(true);
-  //   setError('');
-  //   try {
-  //     console.log(subCategoryId);
-  //     const response = await getCategories(subCategoryId);
-  //     if (response.success) {
-  //       setSubCategories(response.data);
-  //     } else {
-  //       setError('Failed to load subCategories');
-  //     }
-  //   } catch {
-  //     setError('Error loading subCategories');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-   useEffect(() => {
-    fetchCategories();
-  }, []);
-  
-  const fetchCategories = async () => {
+  const fetchCategories = async (subCategoryId) => {
     setLoading(true);
     setError('');
     try {
-      const response = await getAllCategories();
+      console.log(subCategoryId);
+      const response = await getCategories(subCategoryId);
       if (response.success) {
         setSubCategories(response.data);
       } else {
@@ -201,6 +180,27 @@ const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
       setLoading(false);
     }
   };
+
+  //  useEffect(() => {
+  //   fetchCategories();
+  // }, []);
+  
+  // const fetchCategories = async () => {
+  //   setLoading(true);
+  //   setError('');
+  //   try {
+  //     const response = await getAllCategories();
+  //     if (response.success) {
+  //       setSubCategories(response.data);
+  //     } else {
+  //       setError('Failed to load subCategories');
+  //     }
+  //   } catch {
+  //     setError('Error loading subCategories');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleDeleteClick = (id) => setDeleteConfirmId(id);
 
