@@ -2,6 +2,7 @@ const sql = require('../config/db'); // your configured MySQL connection
 
 // Category constructor
 const Category = function (category) {
+  this.id = category.id;
   this.name = category.name;
   this.description = category.description;
   this.status = category.status;

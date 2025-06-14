@@ -1,8 +1,9 @@
 const sql = require('../config/db'); // your configured MySQL connection
 
-// Category constructor
+// subCategory constructor
 const subCategory = function (subCategory) {
-  this.category_id = subCategory.id;
+  this.id = subCategory.id;
+  this.category_id = subCategory.category_id; 
   this.category_name = subCategory.category_name;
   this.name = subCategory.name;
   this.description = subCategory.description;
@@ -17,7 +18,7 @@ subCategory.getAll = (id, result) => {
   let params = [];
 
   if (id == '0') {
-    query = 'SELECT sc.id, c.name AS category_name,sc.name AS name,sc.description,sc.status,sc.created_on,sc.last_modified_on FROM orders_dev_db.ext_sub_category sc JOIN orders_dev_db.ext_category c ON sc.category_id = c.id';
+    query = 'SELECT sc.id,sc.category_id,c.name AS category_name,sc.name AS name,sc.description,sc.status,sc.created_on,sc.last_modified_on FROM orders_dev_db.ext_sub_category sc JOIN orders_dev_db.ext_category c ON sc.category_id = c.id';
   } else {
     query = "SELECT * FROM orders_dev_db.ext_sub_category WHERE category_id = ?";
     params = [id];
@@ -33,10 +34,12 @@ subCategory.getAll = (id, result) => {
   });
 };
 
+// 
+
 // Create new category
 subCategory.create = (id,newCategory, result) => {
   const query = 'INSERT INTO orders_dev_db.ext_sub_category (category_id,name,description,status) VALUES (? ,?, ?, ?)';
-  const params = [id,newCategory.name, newCategory.description, newCategory.status];
+  const params = [newCategory.category_id,newCategory.name, newCategory.description, newCategory.status];
 
   sql.query(query, params, (err, res) => {
     if (err) {
@@ -51,9 +54,10 @@ subCategory.create = (id,newCategory, result) => {
 // Update category by ID
 subCategory.update = (id, category, result) => {
   const query =
-    'UPDATE orders_dev_db.ext_sub_category SET name = ?, description = ?, status = ?, last_modified_on = ? WHERE id = ? ';
+    'UPDATE orders_dev_db.ext_sub_category SET name = ?,category_id =  ?,description = ?, status = ?, last_modified_on = ? WHERE id = ? ';
   const params = [
     category.name,
+    category.category_id,
     category.description,
     category.status,
     new Date(),

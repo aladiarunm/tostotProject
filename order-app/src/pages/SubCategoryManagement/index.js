@@ -13,9 +13,10 @@ import { FaEdit,FaFilter, FaTrash, FaEye } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import {
   getCategories,
+  getSubCategories,
   deleteCategory,
-  addCategory,
-  updateCategory,
+  addSubCategory,
+  updateSubCategory,
 } from '../../api/subCategory';
 
 const statusMap = {
@@ -27,29 +28,64 @@ const statusMap = {
 //
 
 // Add and Edit Form
-const CategoryForm = ({ subCategoryName,category, onCancel, onSave }) => {
-  const [name, setName] = useState(category?.name || '');
-  const [description, setDescription] = useState(category?.description || '');
-  const [status, setStatus] = useState(category?.status || 'A');
+const CategoryForm = ({subCategory, onCancel, onSave }) => {
+  const [categories,setCategories] = useState([]);
+  const [category_name,setCategoryName] = useState(subCategory?.category_name || '');
+  const [name, setName] = useState(subCategory?.name || '');
+  const [category_id,setCategoryId] = useState(subCategory?.category_id || '');
+  const [description, setDescription] = useState(subCategory?.description || '');
+  const [status, setStatus] = useState(subCategory?.status || 'A');
+
+  useEffect(() => {
+    fetchCategories('');
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await getCategories();
+      if (response.success) {
+        setCategories(response.data);
+      } else {
+        console.log('Failed to load categories');
+      }
+    } catch {
+      console.log('Error loading categories');
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = { name, description, status };
-    await onSave(payload, category?.id);
+    const payload = { name,category_id,description, status };
+    console.log(name,category_id,description, status,category_name );
+    console.log(subCategory);
+    await onSave(payload, subCategory?.id);
   };
 
   return (
     <Card className="mb-4">
       <Card.Body>
-        <h5>{category ? 'Edit SubCategory' : 'Add SubCategory'}</h5>
+        <h5>{subCategory ? 'Edit SubCategory' : 'Add SubCategory'}</h5>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label>Category Name</label>
-            <input
-              value={subCategoryName}
-              disabled
+            <select
               className="form-control"
-            />
+              value={category_id}
+              required
+              onChange={(e) => {
+                const selectedId = parseInt(e.target.value);
+                const selectedCategory = categories.find(cat => cat.id === selectedId);
+                setCategoryId(selectedId);
+                setCategoryName(selectedCategory?.name || '');
+              }}
+            >
+              <option value="">Select Category</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="mb-3">
             <label>Name</label>
@@ -172,7 +208,8 @@ const SubCategoryManager = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await getCategories('0');
+      const response = await getSubCategories('0');
+      console.log(response.data);
       if (response.success) {
         setSubCategories(response.data);
       } else {
@@ -195,7 +232,7 @@ const SubCategoryManager = () => {
     try {
       const response = await deleteCategory(deleteConfirmId);
       if (response.success) {
-        setSuccess('Category deleted successfully!');
+        setSuccess('Sub Category deleted successfully!');
         fetchCategories();
       } else {
         setError(response.error || 'Failed to delete category');
@@ -233,13 +270,13 @@ const SubCategoryManager = () => {
     try {
       let res;
       if (id) {
-        res = await updateCategory(id, data);
+        res = await updateSubCategory(id, data);
         if (!res.success) throw new Error(res.error);
-        setSuccess('Category updated successfully!');
+        setSuccess('Sub Category updated successfully!');
       } else {
-        res = await addCategory(data);
+        res = await addSubCategory(id ,data);
         if (!res.success) throw new Error(res.error);
-        setSuccess('Category added successfully!');
+        setSuccess('Sub Category added successfully!');
       }
       setEditingCategory(null);
       setAddingCategory(false);
@@ -260,7 +297,7 @@ const SubCategoryManager = () => {
     <Container className="py-4">
       {addingCategory || editingCategory ? (
         <CategoryForm
-          category={editingCategory}
+          subCategory={editingCategory}
           onCancel={() => {
             setAddingCategory(false);
             setEditingCategory(null);
@@ -422,7 +459,7 @@ const SubCategoryManager = () => {
                 <Modal.Title>Confirm Deletion</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                Are you sure you want to delete category ID {deleteConfirmId}?
+                Are you sure you want to delete Sub Category ID {deleteConfirmId}?
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={cancelDelete} disabled={submitting}>

@@ -6,6 +6,50 @@ export const getCategories = async (id) => {
   try {
     const accessToken = localStorage.getItem('accessToken');
 
+    const response = await axios.get(`${API_BASE_URL}/categories`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    if (response.data) {
+
+    return {
+        success: true,
+         data: response.data.data
+    };
+    }
+    return {
+      success: false,
+      message: (response.data && response.data.message) || 'Failed to fetch category'
+      
+    };
+  } catch (error) {
+    let errorMessage = 'An error occurred while fetching category';
+
+    if (error.response) {
+      const status = error.response.status;
+      const msg = error.response.data?.message;
+
+      if (status === 401) errorMessage = 'Unauthorized';
+      else if (status === 400) errorMessage = 'Bad request - please check your input';
+      else if (status >= 500) errorMessage = 'Server error - please try again later';
+      else if (msg) errorMessage = msg;
+    } else if (error.request) {
+      errorMessage = 'Network error - please check your connection';
+    }
+
+    return {
+      success: false,
+      message: errorMessage
+    };
+  }
+};
+
+export const getSubCategories = async (id) => {
+  try {
+    const accessToken = localStorage.getItem('accessToken');
+
     const response = await axios.get(`${API_BASE_URL}/data/${id}`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`
@@ -102,7 +146,7 @@ export const getAllCategories = async () => {
   }
 }
 
-export const addCategory = async (id,categoryData) => {
+export const addSubCategory = async (id,categoryData) => {
   try {
     const accessToken = localStorage.getItem('accessToken');
 
@@ -148,7 +192,7 @@ export const addCategory = async (id,categoryData) => {
   }
 };
 
-export const updateCategory = async (id, categoryData) => {
+export const updateSubCategory = async (id, categoryData) => {
   try {
     const accessToken = localStorage.getItem('accessToken');
 

@@ -1,7 +1,8 @@
-const subCategory = require('../models/subCategoryModel'); // adjust path if needed
+const subCategory = require('../models/subCategoryModel'); 
+const categories = require('../models/categoryModel')
 
 // Get all category
-exports.getAllCategory = (req, res) => {
+exports.getAllSubCategory = (req, res) => {
   const CategoryId = req.params.id;
 
   subCategory.getAll(CategoryId,(err, category) => {
@@ -14,8 +15,21 @@ exports.getAllCategory = (req, res) => {
   });
 };
 
-// Add a new category
-exports.addCategory  = (req, res) => {
+// Get categories
+exports.getCategories = (req, res) => {
+
+  categories.getAll((err, category) => {
+    if (err) {
+      return res.status(500).send({
+        message: err.message || 'Some error occurred while retrieving category.'
+      });
+    }
+    res.status(200).send({ data: category });
+  });
+};
+
+// Add a new subcategory
+exports.addSubCategory  = (req, res) => {
   const CategoryId = req.params.id;
   const newCategory  = req.body;
 
@@ -29,8 +43,8 @@ exports.addCategory  = (req, res) => {
   });
 };
 
-// Update an existing brand by ID
-exports.updateCategory = (req, res) => {
+// Update an existing subCategory ID
+exports.updateSubCategory = (req, res) => {
   const CategoryId = req.params.id;
   const updatedCategory = req.body;
 
@@ -49,8 +63,8 @@ exports.updateCategory = (req, res) => {
   });
 };
 
-// Delete a category by ID
-exports.deleteCategory = (req, res) => {
+// Delete a subcategory by ID
+exports.deleteSubCategory = (req, res) => {
   const CategoryId = req.params.id;
 
   subCategory.delete(CategoryId, (err, result) => {

@@ -12,11 +12,11 @@ import {
 import { FaEdit,FaFilter, FaTrash, FaEye } from 'react-icons/fa';
 
 import {
-  getCategories,
+  getSubCategories,
   // getAllCategories,
   deleteCategory,
-  addCategory,
-  updateCategory,
+  addSubCategory,
+  updateSubCategory,
 } from '../../api/subCategory';
 
 const statusMap = {
@@ -168,7 +168,7 @@ const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
     setError('');
     try {
       console.log(subCategoryId);
-      const response = await getCategories(subCategoryId);
+      const response = await getSubCategories(subCategoryId);
       if (response.success) {
         setSubCategories(response.data);
       } else {
@@ -181,27 +181,6 @@ const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
     }
   };
 
-  //  useEffect(() => {
-  //   fetchCategories();
-  // }, []);
-  
-  // const fetchCategories = async () => {
-  //   setLoading(true);
-  //   setError('');
-  //   try {
-  //     const response = await getAllCategories();
-  //     if (response.success) {
-  //       setSubCategories(response.data);
-  //     } else {
-  //       setError('Failed to load subCategories');
-  //     }
-  //   } catch {
-  //     setError('Error loading subCategories');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const handleDeleteClick = (id) => setDeleteConfirmId(id);
 
   const confirmDelete = async () => {
@@ -212,7 +191,7 @@ const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
     try {
       const response = await deleteCategory(deleteConfirmId);
       if (response.success) {
-        setSuccess('Category deleted successfully!');
+        setSuccess('Sub Category deleted successfully!');
         fetchCategories(subCategoryId);
       } else {
         setError(response.error || 'Failed to delete category');
@@ -251,13 +230,13 @@ const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
     try {
       let res;
       if (id) {
-        res = await updateCategory(id, data);
+        res = await updateSubCategory(id, data);
         if (!res.success) throw new Error(res.error);
-        setSuccess('Category updated successfully!');
+        setSuccess('Sub Category updated successfully!');
       } else {
-        res = await addCategory(subCategoryId,data);
+        res = await addSubCategory(subCategoryId,data);
         if (!res.success) throw new Error(res.error);
-        setSuccess('Category added successfully!');
+        setSuccess('Sub Category added successfully!');
       }
       setEditingCategory(null);
       setAddingCategory(false);
@@ -431,7 +410,7 @@ const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
                 <Modal.Title>Confirm Deletion</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                Are you sure you want to delete category ID {deleteConfirmId}?
+                Are you sure you want to delete Sub Category ID {deleteConfirmId}?
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={cancelDelete} disabled={submitting}>
