@@ -17,3 +17,20 @@ app.use('/api/category',categoryRoutes);
 app.use('/api/subCategory',subCategoryRoutes);
 
 module.exports = app;
+
+
+// backend code below here added by monoj
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
+const buyerRoutes = require('./routes/buyerRoutes'); // ✅ Only buyer
+
+const app = express();
+
+app.use(cors());
+app.use(bodyParser.json());
+
+app.use('/api/buyers', buyerRoutes); // ✅ Only buyer route used
+
+module.exports = app;
