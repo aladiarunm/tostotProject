@@ -28,30 +28,30 @@ const statusMap = {
 //
 
 // Add and Edit Form
-const CategoryForm = ({subCategory, onCancel, onSave }) => {
-  const [categories,setCategories] = useState([]);
+const CategoryForm = ({categories ,subCategory, onCancel, onSave }) => {
+  //const [categories,setCategories] = useState([]);
   const [category_name,setCategoryName] = useState(subCategory?.category_name || '');
   const [name, setName] = useState(subCategory?.name || '');
   const [category_id,setCategoryId] = useState(subCategory?.category_id || '');
   const [description, setDescription] = useState(subCategory?.description || '');
   const [status, setStatus] = useState(subCategory?.status || 'A');
 
-  useEffect(() => {
-    fetchCategories('');
-  }, []);
+  // useEffect(() => {
+  //   fetchCategories('');
+  // }, []);
 
-  const fetchCategories = async () => {
-    try {
-      const response = await getCategories();
-      if (response.success) {
-        setCategories(response.data);
-      } else {
-        console.log('Failed to load categories');
-      }
-    } catch {
-      console.log('Error loading categories');
-    }
-  };
+  // const fetchCategories = async () => {
+  //   try {
+  //     const response = await getCategories();
+  //     if (response.success) {
+  //       setCategories(response.data);
+  //     } else {
+  //       console.log('Failed to load categories');
+  //     }
+  //   } catch {
+  //     console.log('Error loading categories');
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -160,7 +160,7 @@ const SubCategoryManager = () => {
   const [viewCategory, setViewCategory] = useState(null);
   const [editingCategory, setEditingCategory] = useState(null);
   const [addingCategory, setAddingCategory] = useState(false);
-  
+  const [categories,setCategories] = useState([]);
   //states for filter
   const [filterId, setFilterId] = useState('');
   const [filterName, setFilterName] = useState('');
@@ -197,6 +197,15 @@ const SubCategoryManager = () => {
     setTempFilterCategory('');
   };
 
+
+const filteredSubCategories = subCategories.filter((category) =>
+  category.id.toString().includes(filterId) &&
+  category.name.toLowerCase().includes(filterName.toLowerCase()) &&
+  (!filterCategory || category.category_id.toString() === filterCategory) &&
+  (category.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
+  category.status.toString().includes(filterStatus)
+);
+
   //
   const navigate = useNavigate();
 
@@ -209,9 +218,11 @@ const SubCategoryManager = () => {
     setError('');
     try {
       const response = await getSubCategories('0');
+      const response2 = await getCategories();
       console.log(response.data);
       if (response.success) {
         setSubCategories(response.data);
+        setCategories(response2.data);
       } else {
         setError('Failed to load subCategories');
       }
@@ -297,6 +308,7 @@ const SubCategoryManager = () => {
     <Container className="py-4">
       {addingCategory || editingCategory ? (
         <CategoryForm
+          categories = {categories}
           subCategory={editingCategory}
           onCancel={() => {
             setAddingCategory(false);
@@ -340,14 +352,20 @@ const SubCategoryManager = () => {
                   value={tempFilterName}
                   onChange={(e) => setTempFilterName(e.target.value)}
                 />
-                <input
-                  type="text"
+                <select
                   className="form-control"
-                  placeholder="Filter by Category"
                   style={{ width: '15%' }}
+                  required
                   value={tempFilterCategory}
                   onChange={(e) => setTempFilterCategory(e.target.value)}
-                />
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
                 <input
                   type="text"
                   className="form-control"
@@ -378,7 +396,6 @@ const SubCategoryManager = () => {
               </div>
             </div>
 
-
             <Table striped bordered hover responsive>
               <thead>
                 <tr>
@@ -393,23 +410,14 @@ const SubCategoryManager = () => {
                 </tr>
               </thead>
               <tbody>
-                {subCategories.length === 0 ? (
+                {filteredSubCategories.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="text-center">No subCategories found</td>
+                    <td colSpan="8" className="text-center">No subCategories found</td>
                   </tr>
                 ) : (
-                  subCategories.filter((category) =>
-                      category.id.toString().includes(filterId) &&
-                      category.name.toLowerCase().includes(filterName.toLowerCase()) &&
-                      category.category_name.toLowerCase().includes(filterCategory.toLowerCase()) &&
-                      (category.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
-                      category.status.toString().includes(filterStatus)
-                    ).map((category) =>(
-
+                  filteredSubCategories.map((category) => (
                     <tr key={category.id}>
-                      <td>{category.id}
-                        
-                      </td>
+                      <td>{category.id}</td>
                       <td>{category.name}</td>
                       <td>{category.category_name}</td>
                       <td>{category.description || '-'}</td>

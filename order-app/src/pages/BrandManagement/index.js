@@ -139,7 +139,11 @@ const BrandManager = () => {
     setTempFilterDesc('');
     setTempFilterStatus('');
   };
-    
+  const filteredBrands = brands.filter((brand) =>
+                      brand.id.toString().includes(filterId) &&
+                      brand.name.toLowerCase().includes(filterName.toLowerCase()) &&
+                      (brand.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
+                      brand.status.toString().includes(filterStatus));
   //
   const navigate = useNavigate();
 
@@ -325,17 +329,12 @@ const BrandManager = () => {
                 </tr>
               </thead>
               <tbody>
-                {brands.length === 0 ? (
+                {filteredBrands.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="text-center">No brands found</td>
+                    <td colSpan="8" className="text-center">No subCategories found</td>
                   </tr>
                 ) : (
-                  brands.filter((brand) =>
-                      brand.id.toString().includes(filterId) &&
-                      brand.name.toLowerCase().includes(filterName.toLowerCase()) &&
-                      (brand.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
-                      brand.status.toString().includes(filterStatus)
-                    ).map((brand) =>(
+                  filteredBrands.map((brand) => (
                     <tr key={brand.id}>
                       <td>{brand.id}</td>
                       <td>{brand.name}</td>

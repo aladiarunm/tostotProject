@@ -159,6 +159,13 @@ const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
     setTempFilterStatus('');
   };
 
+const filteredSubCategories = subCategories.filter((category) =>
+  category.id.toString().includes(filterId) &&
+  category.name.toLowerCase().includes(filterName.toLowerCase()) &&
+  (category.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
+  category.status.toString().includes(filterStatus)
+);
+
   useEffect(() => {
     fetchCategories(subCategoryId);
   }, [subCategoryId]);
@@ -345,18 +352,12 @@ const SubCategoryManager = ({onClose ,subCategoryId,subCategoryName}) => {
                 </tr>
               </thead>
               <tbody>
-                {subCategories.length === 0 ? (
+                {filteredSubCategories.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="text-center">No subCategories found</td>
+                    <td colSpan="8" className="text-center">No subCategories found</td>
                   </tr>
                 ) : (
-                  subCategories.filter((category) =>
-                      category.category_id.toString().includes(subCategoryId)&&
-                      category.id.toString().includes(filterId) &&
-                      category.name.toLowerCase().includes(filterName.toLowerCase()) &&
-                      (category.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
-                      category.status.toString().includes(filterStatus)
-                    ).map((category) =>(
+                  filteredSubCategories.map((category) => (
 
                     <tr key={category.id}>
                       <td>{category.id}

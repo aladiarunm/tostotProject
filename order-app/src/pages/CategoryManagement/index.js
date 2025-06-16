@@ -153,6 +153,12 @@ const CategoryManager = () => {
     setTempFilterStatus('');
   };
 
+const filteredCategories = categories.filter((category) =>
+                      category.id.toString().includes(filterId) &&
+                      category.name.toLowerCase().includes(filterName.toLowerCase()) &&
+                      (category.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
+                      category.status.toString().includes(filterStatus));
+
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -346,22 +352,17 @@ const CategoryManager = () => {
                   <th style={{ width: '25%' }}>Description</th>
                   <th style={{ width: '15%' }}>Status</th>
                   <th style={{ width: '9%' }}>Created On</th>
-                  <th style={{ width: '9%' }}>Last Modified On</th>
-                  <th style={{ minWidth: '180px' }}>Actions</th>
+                  <th>Last Modified On</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {categories.length === 0 ? (
+                {filteredCategories.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="text-center">No categories found</td>
+                    <td colSpan="8" className="text-center">No subCategories found</td>
                   </tr>
                 ) : (
-                  categories.filter((category) =>
-                      category.id.toString().includes(filterId) &&
-                      category.name.toLowerCase().includes(filterName.toLowerCase()) &&
-                      (category.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
-                      category.status.toString().includes(filterStatus)
-                    ).map((category) =>(
+                  filteredCategories.map((category) => (
 
                     <tr title='Double click to view subCategory' key={category.id} onDoubleClick={()=>{handleSubCategory(category)}}>
                       <td>{category.id}
