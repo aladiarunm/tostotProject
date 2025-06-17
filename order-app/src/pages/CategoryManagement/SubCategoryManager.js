@@ -426,7 +426,7 @@ const filteredSubCategories = subCategories.filter((category) =>
 
             <Modal show={!!viewCategory} onHide={closeViewModal} centered>
               <Modal.Header closeButton>
-                <Modal.Title>View Brand Details</Modal.Title>
+                <Modal.Title>View SubCategory Details</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 {viewCategory && (

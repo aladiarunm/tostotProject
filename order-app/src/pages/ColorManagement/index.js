@@ -22,12 +22,13 @@ const statusMap = {
 // Add and Edit Form
 const ColorForm = ({ color, onCancel, onSave }) => {
   const [name, setName] = useState(color?.name || '');
+  const [code, setCode] = useState(color?.code || '');
   const [description, setDescription] = useState(color?.description || '');
   const [status, setStatus] = useState(color?.status || 'A');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = { name, description, status };
+    const payload = { name,code,description, status };
     await onSave(payload, color?.id);
   };
 
@@ -41,6 +42,15 @@ const ColorForm = ({ color, onCancel, onSave }) => {
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
+              required
+              className="form-control"
+            />
+          </div>
+          <div className="mb-3">
+            <label>code</label>
+            <input
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
               required
               className="form-control"
             />
@@ -295,7 +305,7 @@ const ColorManager = () => {
                   type="text"
                   className="form-control"
                   placeholder="Filter by Code"
-                  style={{ width: '10%' }}
+                  style={{ width: '10.5%' }}
                   value={tempFilterCode}
                   onChange={(e) => setTempFilterCode(e.target.value)}
                 />
@@ -309,7 +319,7 @@ const ColorManager = () => {
                 />
                 <select
                   className="form-control"
-                  style={{ width: '10%' }}
+                  style={{ width: '9.5%' }}
                   value={tempFilterStatus}
                   onChange={(e) => setTempFilterStatus(e.target.value)}
                 >
@@ -319,11 +329,11 @@ const ColorManager = () => {
                   <option value="D">Deleted</option>
                 </select>
 
-                <Button variant="primary"  style={{ width: '9%' }} onClick={handleApplyFilters}>
+                <Button variant="primary"  style={{ width: '8.5%' }} onClick={handleApplyFilters}>
                   <FaFilter/>
                     Filter
                 </Button>
-                <Button variant="secondary"  style={{ width: '9%' }} onClick={handleClearFilter}>
+                <Button variant="secondary"  style={{ width: '8.5%' }} onClick={handleClearFilter}>
                     Clear Filter
                 </Button>
               </div>
@@ -334,12 +344,12 @@ const ColorManager = () => {
                 <tr>
                   <th style={{ width: '10%' }}>ID</th>
                   <th style={{ width: '15%' }}>Name</th>
-                  <th style={{ width: '10%' }}>Code</th>
+                  <th style={{ width: '11%' }}>Code</th>
                   <th style={{ width: '25%' }}>Description</th>
-                  <th style={{ width: '10.5%' }}>Status</th>
+                  <th style={{ width: '10%' }}>Status</th>
                   <th>Created On</th>
                   <th>Last Modified On</th>
-                  <th style={{width : '10.5%'}}>Actions</th>
+                  <th style={{width : '11%'}}>Actions</th>
                 </tr>
               </thead>
               <tbody>

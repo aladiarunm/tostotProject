@@ -439,7 +439,7 @@ const filteredCategories = categories.filter((category) =>
 
             <Modal show={!!viewCategory} onHide={closeViewModal} centered>
               <Modal.Header closeButton>
-                <Modal.Title>View Brand Details</Modal.Title>
+                <Modal.Title>View Category Details</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 {viewCategory && (
