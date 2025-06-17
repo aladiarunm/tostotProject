@@ -153,4 +153,93 @@ CREATE TABLE `ext_seller_contact` (
   CONSTRAINT `seller_contact_seller_company_id` FOREIGN KEY (`company_id`) REFERENCES `ext_seller_company` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Table structure for table ext_brand
+--
+DROP TABLE IF EXISTS ext_brand;
+CREATE TABLE ext_brand (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(100) NOT NULL UNIQUE,
+  description varchar(250) DEFAULT NULL,
+  status enum('A','I','D') NOT NULL DEFAULT 'A',
+  created_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_modified_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table ext_category
+--
+DROP TABLE IF EXISTS ext_category;
+CREATE TABLE ext_category (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(50) NOT NULL UNIQUE,
+  description varchar(250) DEFAULT NULL,
+  status enum('A','I','D') NOT NULL DEFAULT 'A',
+  created_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_modified_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table ext_sub_category
+--
+DROP TABLE IF EXISTS ext_sub_category;
+CREATE TABLE ext_sub_category (
+  id int NOT NULL AUTO_INCREMENT,
+  category_id int NOT NULL,
+  name varchar(50) NOT NULL UNIQUE,
+  description varchar(250) DEFAULT NULL,
+  status enum('A','I','D') NOT NULL DEFAULT 'A',
+  created_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_modified_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY sub_category_category_id (category_id),
+  CONSTRAINT sub_category_category_id FOREIGN KEY (category_id) REFERENCES ext_category (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table ext_color
+--
+DROP TABLE IF EXISTS ext_color;
+CREATE TABLE ext_color (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(100) NOT NULL UNIQUE,
+  code varchar(40) NOT NULL UNIQUE,
+  description varchar(250) DEFAULT NULL,
+  status enum('A','I','D') NOT NULL DEFAULT 'A',
+  created_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_modified_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table ext_size
+--
+DROP TABLE IF EXISTS ext_size;
+CREATE TABLE ext_size (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(100) NOT NULL UNIQUE,
+  code varchar(40) NOT NULL UNIQUE,
+  description varchar(250) DEFAULT NULL,
+  status enum('A','I','D') NOT NULL DEFAULT 'A',
+  created_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_modified_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table ext_style
+--
+DROP TABLE IF EXISTS ext_style;
+CREATE TABLE ext_style (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(100) NOT NULL UNIQUE,
+  code varchar(40) NOT NULL UNIQUE,
+  description varchar(250) DEFAULT NULL,
+  status enum('A','I','D') NOT NULL DEFAULT 'A',
+  created_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_modified_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
