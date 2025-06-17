@@ -60,16 +60,17 @@ subCategory.create = (id,newCategory, result) => {
 
 // Update category by ID
 subCategory.update = (id, category, result) => {
+  
   const query =
-    'UPDATE orders_dev_db.ext_sub_category SET name = ?,category_id =  ?,description = ?, status = ?, last_modified_on = ? WHERE id = ? ';
+    'UPDATE orders_dev_db.ext_sub_category SET name = ?,description = ?, status = ?, last_modified_on = ? WHERE id = ? ';
   const params = [
     category.name,
-    category.category_id,
     category.description,
     category.status,
     new Date(),
     id,
   ];
+
   sql.query(query, params, (err, res) => {
     if (err) {
       console.error('Error updating category:', err);

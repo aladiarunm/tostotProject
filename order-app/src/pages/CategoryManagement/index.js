@@ -353,7 +353,7 @@ const filteredCategories = categories.filter((category) =>
                   <th style={{ width: '10%' }}>Status</th>
                   <th style={{ width: '9%' }}>Created On</th>
                   <th style={{ width: '9%' }}>Last Modified On</th>
-                  <th style={{ width: '13%' }}>Actions</th>
+                  <th style={{ width: '13.5%' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
