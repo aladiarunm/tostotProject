@@ -301,7 +301,7 @@ const filteredCategories = categories.filter((category) =>
                   type="text"
                   className="form-control"
                   placeholder="Filter by ID"
-                  style={{ width: '10%' }}
+                  style={{ width: '10.5%' }}
                   value={tempFilterId}
                   onChange={(e) => setTempFilterId(e.target.value)}
                 />
@@ -309,7 +309,7 @@ const filteredCategories = categories.filter((category) =>
                   type="text"
                   className="form-control"
                   placeholder="Filter by Name"
-                  style={{ width: '19%' }}
+                  style={{ width: '19.5%' }}
                   value={tempFilterName}
                   onChange={(e) => setTempFilterName(e.target.value)}
                 />
@@ -317,13 +317,13 @@ const filteredCategories = categories.filter((category) =>
                   type="text"
                   className="form-control"
                   placeholder="Filter by Description"
-                  style={{ width: '24%' }}
+                  style={{ width: '25%' }}
                   value={tempFilterDesc}
                   onChange={(e) => setTempFilterDesc(e.target.value)}
                 />
                 <select
                   className="form-control"
-                  style={{ width: '15%' }}
+                  style={{ width: '10%' }}
                   value={tempFilterStatus}
                   onChange={(e) => setTempFilterStatus(e.target.value)}
                 >
@@ -348,12 +348,12 @@ const filteredCategories = categories.filter((category) =>
               <thead>
                 <tr>
                   <th style={{ width: '10%' }}>ID</th>
-                  <th style={{ width: '20%' }}>Name</th>
-                  <th style={{ width: '25%' }}>Description</th>
-                  <th style={{ width: '15%' }}>Status</th>
+                  <th style={{ width: '19%' }}>Name</th>
+                  <th style={{ width: '24%' }}>Description</th>
+                  <th style={{ width: '10%' }}>Status</th>
                   <th style={{ width: '9%' }}>Created On</th>
-                  <th>Last Modified On</th>
-                  <th>Actions</th>
+                  <th style={{ width: '9%' }}>Last Modified On</th>
+                  <th style={{ width: '13%' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>

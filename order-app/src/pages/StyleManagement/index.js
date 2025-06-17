@@ -2,8 +2,8 @@ import NotFoundPage from "../NotFound";
 
 function Buyers(){
     return (
-        <>
-         <h1>size page</h1>
+        <> 
+        <h1>style page</h1>
         <NotFoundPage/>
        
         </>

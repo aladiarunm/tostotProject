@@ -11,7 +11,8 @@ import CategoryManagement from './pages/CategoryManagement';
 import AttributesManagement from './pages/AttributesManagement'
 import SubCategoryManagement from './pages/SubCategoryManagement';
 import ColorManagement from './pages/ColorManagement';
-import SizeManagement from './pages/SizeManagement'
+import SizeManagement from './pages/SizeManagement';
+import StyleManagement from './pages/StyleManagement';
 //---
 import ProductManagement from './pages/ProductManagement';
 import ProductCategory from './pages/ProductManagement/Category';
@@ -40,6 +41,7 @@ const AppRoutes = ({ onLogin }) => {
         <Route path="subCategories" element={<SubCategoryManagement />} />
         <Route path="color" element={<ColorManagement />} />
         <Route path="size" element={<SizeManagement />} />
+        <Route path="style" element={<StyleManagement />} />
 
         <Route path="products" element={<ProductManagement />}>
           <Route path="category" element={<ProductCategory />} />

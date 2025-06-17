@@ -197,17 +197,17 @@ const BrandManager = () => {
   const handleView = (brand) => setViewBrand(brand);
   const closeViewModal = () => setViewBrand(null);
 
-  const handleEditFromView = (category) => {
+  const handleEditFromView = (brand) => {
     closeViewModal();
     setTimeout(() => {
-      handleEdit(category);
+      handleEdit(brand);
     }, 300);
   };
 
-  const handleDeleteFromView = (category) => {
+  const handleDeleteFromView = (brand) => {
     closeViewModal();
     setTimeout(() => {
-      handleDeleteClick(category.id);
+      handleDeleteClick(brand.id);
     }, 300);
   };
 
@@ -257,7 +257,7 @@ const BrandManager = () => {
               Brand Management
               <div className="d-flex" style={{ gap: '8px' }}>
                 <Button variant="primary" onClick={handleAdd}>
-                  + Add Category
+                  + Add Brand
                 </Button>
                 <Button variant="secondary" onClick={() => navigate('/attributes')}>
                   Back

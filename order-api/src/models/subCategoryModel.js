@@ -38,9 +38,16 @@ subCategory.getAll = (id, result) => {
 
 // Create new category
 subCategory.create = (id,newCategory, result) => {
-  const query = 'INSERT INTO orders_dev_db.ext_sub_category (category_id,name,description,status) VALUES (? ,?, ?, ?)';
-  const params = [newCategory.category_id,newCategory.name, newCategory.description, newCategory.status];
+  let params = [];
 
+  const query = 'INSERT INTO orders_dev_db.ext_sub_category (category_id,name,description,status) VALUES (? ,?, ?, ?)';
+  if(id==0){
+    params = [newCategory.category_id,newCategory.name, newCategory.description, newCategory.status];
+  }
+  else{
+    params = [id,newCategory.name, newCategory.description, newCategory.status];
+  }
+  
   sql.query(query, params, (err, res) => {
     if (err) {
       console.error('Error creating category:', err);

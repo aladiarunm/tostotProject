@@ -12,13 +12,3 @@ app.get('/api/test', function(request, response) {
 app.get('/api/adminAPIList', function(request, response) {
   response.sendFile('adminAPIList.html', {root: __dirname })
 });
-
-// Test route
-app.get('/api/test', (req, res) => {
-  res.send('Orders application REST service working fine');
-});
-
-// Start server
-app.listen(PORT, () => {
-  console.log(Server running on port ${PORT});
-});

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaSitemap, FaCertificate, FaPalette, FaRulerCombined } from 'react-icons/fa';
 //import {FiTag, FiGrid} from 'react-icons/fi'
 import { TbLayoutGridAdd } from "react-icons/tb";
+import { SiStylelint } from "react-icons/si";
 
 const Attributes = () => {
   const navigate = useNavigate();
@@ -34,6 +35,11 @@ const Attributes = () => {
       icon: <FaRulerCombined size={50} />,
       route: '/size',
     },
+    {
+      name: 'Style',
+      icon: <SiStylelint size={50} />,
+      route: '/style',
+    }
   ];
 
   return (

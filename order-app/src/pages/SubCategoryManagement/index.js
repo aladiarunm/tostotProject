@@ -285,7 +285,7 @@ const filteredSubCategories = subCategories.filter((category) =>
         if (!res.success) throw new Error(res.error);
         setSuccess('Sub Category updated successfully!');
       } else {
-        res = await addSubCategory(id ,data);
+        res = await addSubCategory(0 ,data);
         if (!res.success) throw new Error(res.error);
         setSuccess('Sub Category added successfully!');
       }
