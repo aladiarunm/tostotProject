@@ -22,7 +22,7 @@ const statusMap = {
 // Add and Edit Form
 const ColorForm = ({ color, onCancel, onSave }) => {
   const [name, setName] = useState(color?.name || '');
-  const [code, setCode] = useState(color?.code || '');
+  const [code, setCode] = useState(color?.code || '#ffffff');
   const [description, setDescription] = useState(color?.description || '');
   const [status, setStatus] = useState(color?.status || 'A');
 
@@ -46,12 +46,14 @@ const ColorForm = ({ color, onCancel, onSave }) => {
               className="form-control"
             />
           </div>
-          <div className="mb-3">
-            <label>code</label>
-            <input
+          <div className="mb-3" >
+            <label>color</label>
+            <input 
               value={code}
-              onChange={(e) => setCode(e.target.value)}
+              type='color'
+              onChange={(e) => {setCode(e.target.value); console.log(e.target)}}
               required
+              style={{width : '55px' ,height : '35px',cursor:'pointer'}}
               className="form-control"
             />
           </div>
@@ -329,11 +331,11 @@ const ColorManager = () => {
                   <option value="D">Deleted</option>
                 </select>
 
-                <Button variant="primary"  style={{ width: '8.5%' }} onClick={handleApplyFilters}>
+                <Button variant="primary"  style={{ width: '8%' }} onClick={handleApplyFilters}>
                   <FaFilter/>
                     Filter
                 </Button>
-                <Button variant="secondary"  style={{ width: '8.5%' }} onClick={handleClearFilter}>
+                <Button variant="secondary"  style={{ width: '9%' }} onClick={handleClearFilter}>
                     Clear Filter
                 </Button>
               </div>
