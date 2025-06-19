@@ -1,0 +1,42 @@
+/* button.css */
+
+/* Container to space buttons evenly */
+.button-container {
+  display: flex;
+  gap: 8px;
+}
+
+/* Common button style */
+.button-container .btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Edit Button */
+.button-container .edit-btn {
+  background-color: #007bff; /* blue */
+}
+.button-container .edit-btn:hover {
+  background-color: #0056b3;
+}
+
+/* View Button */
+.button-container .view-btn {
+  background-color: #28a745; /* green */
+}
+.button-container .view-btn:hover {
+  background-color: #1e7e34;
+}
+
+/* Update/Delete Button */
+.button-container .update-btn {
+  background-color: #dc3545; /* red */
+}
+.button-container .update-btn:hover {
+  background-color: #a71d2a;
+}
