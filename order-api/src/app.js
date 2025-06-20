@@ -7,6 +7,8 @@ const brandRoutes = require('./routes/brand-Routes');
 const categoryRoutes = require('./routes/category-Routes');
 const subCategoryRoutes = require('./routes/subCategory-Routes');
 const colorRoutes = require('./routes/color-Routes');
+const sizeRoutes = require('./routes/size-Routes');
+const styleRoutes = require('./routes/style-Routes');
 //pravin team
 const buyerRoutes = require('./routes/buyerRoutes');
 
@@ -19,7 +21,8 @@ app.use('/api/brands', brandRoutes);
 app.use('/api/category',categoryRoutes);
 app.use('/api/subCategory',subCategoryRoutes);
 app.use('/api/colors',colorRoutes);
-
+app.use('/api/sizes',sizeRoutes);
+app.use('/api/styles',styleRoutes);
 //pravin team
 app.use('/api/buyers', buyerRoutes);
 

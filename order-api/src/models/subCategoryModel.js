@@ -61,15 +61,18 @@ subCategory.create = (id,newCategory, result) => {
 // Update category by ID
 subCategory.update = (id, category, result) => {
   
-  const query =
-    'UPDATE orders_dev_db.ext_sub_category SET name = ?,description = ?, status = ?, last_modified_on = ? WHERE id = ? ';
-  const params = [
-    category.name,
-    category.description,
-    category.status,
-    new Date(),
-    id,
-  ];
+  let query = '';
+  let params = [];
+
+  if(category.category_id !=null){
+    query ='UPDATE orders_dev_db.ext_sub_category SET category_id= ?,name = ?,description = ?, status = ?, last_modified_on = ? WHERE id = ? ';
+    params = [category.category_id,category.name,category.description,category.status,new Date(),id,];
+  }
+  else{
+    query ='UPDATE orders_dev_db.ext_sub_category SET name = ?,description = ?, status = ?, last_modified_on = ? WHERE id = ? ';
+    params = [category.name,category.description,category.status,new Date(),id,];
+  }
+
 
   sql.query(query, params, (err, res) => {
     if (err) {

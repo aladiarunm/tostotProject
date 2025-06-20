@@ -51,7 +51,7 @@ const ColorForm = ({ color, onCancel, onSave }) => {
             <input 
               value={code}
               type='color'
-              onChange={(e) => {setCode(e.target.value); console.log(e.target)}}
+              onChange={(e) => setCode(e.target.value)}
               required
               style={{width : '55px' ,height : '35px',cursor:'pointer'}}
               className="form-control"
@@ -124,24 +124,24 @@ const ColorManager = () => {
 
   const [filterId, setFilterId] = useState('');
   const [filterName, setFilterName] = useState('');
-  const [filterCode, setFilterCode] = useState('');
   const [filterDesc, setFilterDesc] = useState('');
-  const [filterStatus, setFilterStatus] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');  
+  const [filterCode, setFilterCode] = useState('');
 
   // Define temporary states above (to capture input before filtering)
   const [tempFilterId, setTempFilterId] = useState('');
   const [tempFilterName, setTempFilterName] = useState('');
-  const [tempFilterCode, setTempFilterCode] = useState('');
   const [tempFilterDesc, setTempFilterDesc] = useState('');
   const [tempFilterStatus, setTempFilterStatus] = useState('');
+  const [tempFilterCode, setTempFilterCode] = useState('');
 
   // Button click handler
   const handleApplyFilters = () => {
     setFilterId(tempFilterId);
-    setFilterName(tempFilterName);
-    setFilterCode(tempFilterCode);
+    setFilterName(tempFilterName);    
     setFilterDesc(tempFilterDesc);
     setFilterStatus(tempFilterStatus);
+    setFilterCode(tempFilterCode);
   };
 
   const handleClearFilter = () => {
@@ -149,6 +149,7 @@ const ColorManager = () => {
     setFilterName('');
     setFilterDesc('');
     setFilterStatus('');
+    setFilterCode('');
     setTempFilterId('');
     setTempFilterName('');
     setTempFilterCode('');
@@ -158,7 +159,7 @@ const ColorManager = () => {
   const filteredColors = colors.filter((color) =>
                       color.id.toString().includes(filterId) &&
                       color.name.toLowerCase().includes(filterName.toLowerCase()) &&
-                      color.code.toLowerCase().includes(filterCode.toLowerCase()) &&
+                      (!filterCode || (color.code && color.code.toLowerCase().includes(filterCode.toLowerCase()))) &&
                       (color.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
                       color.status.toString().includes(filterStatus));
   //
@@ -346,7 +347,7 @@ const ColorManager = () => {
                 <tr>
                   <th style={{ width: '10%' }}>ID</th>
                   <th style={{ width: '15%' }}>Name</th>
-                  <th style={{ width: '11%' }}>Code</th>
+                  <th style={{ width: '11%' }}>Code </th>
                   <th style={{ width: '25%' }}>Description</th>
                   <th style={{ width: '10%' }}>Status</th>
                   <th>Created On</th>
@@ -364,7 +365,21 @@ const ColorManager = () => {
                     <tr key={color.id}>
                       <td>{color.id}</td>
                       <td>{color.name}</td>
-                      <td>{color.code}</td>
+                      <td>
+                          <div className="d-flex align-items-center">
+                          <div
+                            style={{
+                              width: '20px',
+                              height: '20px',
+                              backgroundColor: color.code,
+                              borderRadius: '3px',
+                              border: '1px solid black',
+                              marginRight: '8px'
+                            }}
+                          />
+                          {color.code}
+                          </div>
+                      </td>
                       <td>{color.description || '-'}</td>
                       <td>
                         <Badge bg={statusMap[color.status]?.variant || 'dark'}>
@@ -406,6 +421,19 @@ const ColorManager = () => {
                 <>
                   <p><strong>ID:</strong> {viewColor.id}</p>
                   <p><strong>Name:</strong> {viewColor.name}</p>
+                  <p className="d-flex align-items-center"><strong>Code:</strong> 
+                          <div
+                            style={{
+                              width: '20px',
+                              height: '20px',
+                              backgroundColor: viewColor.code,
+                              borderRadius: '3px',
+                              border: '1px solid black',
+                              margin: '8px'
+                            }}
+                          />
+                          {viewColor.code}
+                  </p>
                   <p><strong>Description:</strong> {viewColor.description || '-'}</p>
                   <p>
                     <strong>Status:</strong>{' '}
