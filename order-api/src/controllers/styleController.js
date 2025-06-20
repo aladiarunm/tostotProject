@@ -18,6 +18,11 @@ exports.addStyle = (req, res) => {
 
   Style.create(newStyle, (err, style) => {
     if (err) {
+      if(err.code === 'ER_DUP_ENTRY'){
+          return res.status(400).send({
+          message: `Duplicate name or code enterd while Creating.`
+        });
+      }
       return res.status(500).send({
         message: err.message || 'Some error occurred while creating the style.'
       });
@@ -36,6 +41,11 @@ exports.updateStyle = (req, res) => {
       if (err.kind === 'not_found') {
         return res.status(404).send({
           message: `Style not found with id ${styleId}.`
+        });
+      }
+      if(err.code === 'ER_DUP_ENTRY'){
+          return res.status(400).send({
+          message: `Duplicate name or code enterd for id ${styleId}.`
         });
       }
       return res.status(500).send({

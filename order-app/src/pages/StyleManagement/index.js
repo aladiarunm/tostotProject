@@ -235,18 +235,20 @@ const StyleManager = () => {
       let res;
       if (id) {
         res = await updateStyle(id, data);
-        if (!res.success) throw new Error(res.error);
+        if (!res.success) throw new Error(res.message);
         setSuccess('Style updated successfully!');
       } else {
         res = await addStyle(data);
-        if (!res.success) throw new Error(res.error);
+        if (!res.success) throw new Error(res.message);
         setSuccess('Style added successfully!');
       }
       setEditingStyle(null);
       setAddingStyle(false);
       fetchStyles();
     } catch (err) {
-      setError(err.message || 'Operation failed');
+      setError(err.message.includes("Bad request")? 'Duplicate Name or code entered!':'Operation failed');
+      setEditingStyle(null);
+      setAddingStyle(false);
     }
   };
 

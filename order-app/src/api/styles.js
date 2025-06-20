@@ -111,7 +111,7 @@ export const updateStyle = async (id, styleData) => {
         'Content-Type': 'application/json'
       }
     });
-
+    console.log(response);
     if (response.data) {
       return {
         success: true,

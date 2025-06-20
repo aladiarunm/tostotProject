@@ -18,6 +18,11 @@ exports.addColor = (req, res) => {
 
   Color.create(newColor, (err, color) => {
     if (err) {
+      if (err.code === 'ER_DUP_ENTRY') {
+        return res.status(400).send({
+          message: `Duplicate name or code enterd .`
+        });
+      }
       return res.status(500).send({
         message: err.message || 'Some error occurred while creating the color.'
       });
@@ -36,6 +41,11 @@ exports.updateColor = (req, res) => {
       if (err.kind === 'not_found') {
         return res.status(404).send({
           message: `Color not found with id ${colorId}.`
+        });
+      }
+      if (err.code === 'ER_DUP_ENTRY') {
+        return res.status(400).send({
+          message: `Duplicate name or code enterd .`
         });
       }
       return res.status(500).send({

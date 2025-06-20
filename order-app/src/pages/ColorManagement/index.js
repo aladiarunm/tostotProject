@@ -235,18 +235,20 @@ const ColorManager = () => {
       let res;
       if (id) {
         res = await updateColor(id, data);
-        if (!res.success) throw new Error(res.error);
+        if (!res.success) throw new Error(res.message);
         setSuccess('Color updated successfully!');
       } else {
         res = await addColor(data);
-        if (!res.success) throw new Error(res.error);
+        if (!res.success) throw new Error(res.message);
         setSuccess('Color added successfully!');
       }
       setEditingColor(null);
       setAddingColor(false);
       fetchColors();
     } catch (err) {
-      setError(err.message || 'Operation failed');
+      setError(err.message.includes("Bad request")? 'Duplicate Name or code entered!':'Operation failed');
+      setEditingColor(null);
+      setAddingColor(false);    
     }
   };
 

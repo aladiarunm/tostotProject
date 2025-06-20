@@ -35,8 +35,13 @@ exports.addSubCategory  = (req, res) => {
 
   subCategory.create(CategoryId,newCategory, (err, brand) => {
     if (err) {
+      if (err.code === 'ER_DUP_ENTRY') {
+        return res.status(400).send({
+          message: `Duplicate Name or Code while creating the subcategory.`
+        });
+      }
       return res.status(500).send({
-        message: err.message || 'Some error occurred while creating the category .'
+        message: err.message || 'Some error occurred while creating the subcategory.'
       });
     }
     res.status(201).send(brand);
@@ -53,6 +58,11 @@ exports.updateSubCategory = (req, res) => {
       if (err.kind === 'not_found') {
         return res.status(404).send({
           message: `Category not found with id ${CategoryId}.`
+        });
+      }
+      if (err.code === 'ER_DUP_ENTRY') {
+        return res.status(400).send({
+          message: `Duplicate Name or Code with id ${CategoryId}.`
         });
       }
       return res.status(500).send({

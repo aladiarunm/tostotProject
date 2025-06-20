@@ -234,18 +234,20 @@ const SizeManager = () => {
       let res;
       if (id) {
         res = await updateSize(id, data);
-        if (!res.success) throw new Error(res.error);
+        if (!res.success) throw new Error(res.message);
         setSuccess('Size updated successfully!');
       } else {
         res = await addSize(data);
-        if (!res.success) throw new Error(res.error);
+        if (!res.success) throw new Error(res.message);
         setSuccess('Size added successfully!');
       }
       setEditingSize(null);
       setAddingSize(false);
       fetchSizes();
     } catch (err) {
-      setError(err.message || 'Operation failed');
+      setError(err.message.includes("Bad request")? 'Duplicate Name or code entered!':'Operation failed');
+      setEditingSize(null);
+      setAddingSize(false);
     }
   };
 

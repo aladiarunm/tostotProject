@@ -232,18 +232,20 @@ const filteredCategories = categories.filter((category) =>
       let res;
       if (id) {
         res = await updateCategory(id, data);
-        if (!res.success) throw new Error(res.error);
+        if (!res.success) throw new Error(res.message);
         setSuccess('Category updated successfully!');
       } else {
         res = await addCategory(data);
-        if (!res.success) throw new Error(res.error);
+        if (!res.success) throw new Error(res.message);
         setSuccess('Category added successfully!');
       }
       setEditingCategory(null);
       setAddingCategory(false);
       fetchCategories();
-    } catch (err) {
-      setError(err.message || 'Operation failed');
+    } catch (err) { 
+      setError(err.message.includes("Bad request")? 'Duplicate Name entered!':'Operation failed');
+      setEditingCategory(null);
+      setAddingCategory(false);
     }
   };
 
@@ -359,7 +361,7 @@ const filteredCategories = categories.filter((category) =>
               <tbody>
                 {filteredCategories.length === 0 ? (
                   <tr>
-                    <td colSpan="8" className="text-center">No subCategories found</td>
+                    <td colSpan="8" className="text-center">No Categories found</td>
                   </tr>
                 ) : (
                   filteredCategories.map((category) => (

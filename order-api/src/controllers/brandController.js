@@ -18,6 +18,11 @@ exports.addBrand = (req, res) => {
 
   Brand.create(newBrand, (err, brand) => {
     if (err) {
+      if (err.code === 'ER_DUP_ENTRY') {
+        return res.status(400).send({
+          message: `Duplicate name or code enterd .`
+        });
+      }
       return res.status(500).send({
         message: err.message || 'Some error occurred while creating the brand.'
       });
@@ -36,6 +41,11 @@ exports.updateBrand = (req, res) => {
       if (err.kind === 'not_found') {
         return res.status(404).send({
           message: `Brand not found with id ${brandId}.`
+        });
+      }
+      if (err.code === 'ER_DUP_ENTRY') {
+        return res.status(400).send({
+          message: `Duplicate name or code enterd .`
         });
       }
       return res.status(500).send({

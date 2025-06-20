@@ -217,18 +217,20 @@ const BrandManager = () => {
       let res;
       if (id) {
         res = await updateBrand(id, data);
-        if (!res.success) throw new Error(res.error);
+        if (!res.success) throw new Error(res.message);
         setSuccess('Brand updated successfully!');
       } else {
         res = await addBrand(data);
-        if (!res.success) throw new Error(res.error);
+        if (!res.success) throw new Error(res.message);
         setSuccess('Brand added successfully!');
       }
       setEditingBrand(null);
       setAddingBrand(false);
       fetchBrands();
     } catch (err) {
-      setError(err.message || 'Operation failed');
+      setError(err.message.includes("Bad request")? 'Duplicate Name entered!':'Operation failed');
+      setEditingBrand(null);
+      setAddingBrand(false);
     }
   };
 
@@ -331,7 +333,7 @@ const BrandManager = () => {
               <tbody>
                 {filteredBrands.length === 0 ? (
                   <tr>
-                    <td colSpan="8" className="text-center">No subCategories found</td>
+                    <td colSpan="8" className="text-center">No brands found</td>
                   </tr>
                 ) : (
                   filteredBrands.map((brand) => (

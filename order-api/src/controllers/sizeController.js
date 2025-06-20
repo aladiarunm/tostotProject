@@ -18,6 +18,11 @@ exports.addSize = (req, res) => {
 
   Size.create(newSize, (err, size) => {
     if (err) {
+      if (err.code === 'ER_DUP_ENTRY') {
+        return res.status(400).send({
+          message: `Duplicate name or code enterd .`
+        });
+      }
       return res.status(500).send({
         message: err.message || 'Some error occurred while creating the size.'
       });
@@ -36,6 +41,11 @@ exports.updateSize = (req, res) => {
       if (err.kind === 'not_found') {
         return res.status(404).send({
           message: `Size not found with id ${sizeId}.`
+        });
+      }
+      if (err.code === 'ER_DUP_ENTRY') {
+        return res.status(400).send({
+          message: `Duplicate name or code enterd for id ${sizeId}.`
         });
       }
       return res.status(500).send({

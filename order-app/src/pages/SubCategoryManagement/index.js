@@ -282,18 +282,20 @@ const filteredSubCategories = subCategories.filter((category) =>
       let res;
       if (id) {
         res = await updateSubCategory(id, data);
-        if (!res.success) throw new Error(res.error);
+        if (!res.success) throw new Error(res.message);
         setSuccess('Sub Category updated successfully!');
       } else {
         res = await addSubCategory(0 ,data);
-        if (!res.success) throw new Error(res.error);
+        if (!res.success) throw new Error(res.message);
         setSuccess('Sub Category added successfully!');
       }
       setEditingCategory(null);
       setAddingCategory(false);
       fetchCategories();
     } catch (err) {
-      setError(err.message || 'Operation failed');
+      setError(err.message.includes("Bad request")? 'Duplicate Name entered!':'Operation failed');
+      setEditingCategory(null);
+      setAddingCategory(false);
     }
   };
 

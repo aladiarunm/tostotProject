@@ -238,19 +238,21 @@ const filteredSubCategories = subCategories.filter((category) =>
       let res;
       if (id) {
         res = await updateSubCategory(id, data);
-        if (!res.success) throw new Error(res.error);
+        if (!res.success) throw new Error(res.message);
         setSuccess('Sub Category updated successfully!');
       } else {
         res = await addSubCategory(subCategoryId,data);
         console.log(subCategoryId);
-        if (!res.success) throw new Error(res.error);
+        if (!res.success) throw new Error(res.message);
         setSuccess('Sub Category added successfully!');
       }
       setEditingCategory(null);
       setAddingCategory(false);
       fetchCategories(subCategoryId);
-    } catch (err) {
-      setError(err.message || 'Operation failed');
+    } catch (err) { 
+      setError(err.message.includes("Bad request")? 'Duplicate Name entered!':'Operation failed');
+      setEditingCategory(null);
+      setAddingCategory(false);
     }
   };
 
@@ -432,6 +434,7 @@ const filteredSubCategories = subCategories.filter((category) =>
                 {viewCategory && (
                   <>
                     <p><strong>ID:</strong> {viewCategory.id}</p>
+                    <p><strong>Category:</strong> {subCategoryName}</p>
                     <p><strong>Name:</strong> {viewCategory.name}</p>
                     <p><strong>Description:</strong> {viewCategory.description || '-'}</p>
                     <p>
