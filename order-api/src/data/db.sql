@@ -242,3 +242,49 @@ CREATE TABLE ext_style (
   last_modified_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table ext_material
+--
+DROP TABLE IF EXISTS ext_material;
+CREATE TABLE ext_material (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(100) NOT NULL UNIQUE,
+  code varchar(40) NOT NULL UNIQUE,
+  description varchar(250) DEFAULT NULL,
+  status enum('A','I','D') NOT NULL DEFAULT 'A',
+  created_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_modified_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+--
+-- Table structure for table ext_season
+--
+DROP TABLE IF EXISTS ext_season;
+CREATE TABLE ext_season (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(100) NOT NULL UNIQUE,
+  code varchar(40) NOT NULL UNIQUE,
+  description varchar(250) DEFAULT NULL,
+  status enum('A','I','D') NOT NULL DEFAULT 'A',
+  created_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_modified_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table ext_gender
+--
+DROP TABLE IF EXISTS ext_gender;
+CREATE TABLE ext_gender (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(100) NOT NULL UNIQUE,
+  code varchar(40) NOT NULL UNIQUE,
+  description varchar(250) DEFAULT NULL,
+  status enum('A','I','D') NOT NULL DEFAULT 'A',
+  created_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_modified_on datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -8,11 +8,10 @@ import {
   Spinner,
   Modal,
   Badge,
-  Form
 } from 'react-bootstrap';
 import { FaEdit, FaFilter, FaTrash, FaEye } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { getColors, deleteColor, addColor, updateColor } from '../../api/colors';
+import { getMaterials, deleteMaterial, addMaterial, updateMaterial } from '../../api/materials';
 
 const statusMap = {
   A: { label: 'Active', variant: 'success' },
@@ -21,22 +20,22 @@ const statusMap = {
 };
 
 // Add and Edit Form
-const ColorForm = ({ color, onCancel, onSave }) => {
-  const [name, setName] = useState(color?.name || '');
-  const [code, setCode] = useState(color?.code || '#ffffff');
-  const [description, setDescription] = useState(color?.description || '');
-  const [status, setStatus] = useState(color?.status || 'A');
+const MaterialForm = ({ material, onCancel, onSave }) => {
+  const [name, setName] = useState(material?.name || '');
+  const [code, setCode] = useState(material?.code || '');
+  const [description, setDescription] = useState(material?.description || '');
+  const [status, setStatus] = useState(material?.status || 'A');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = { name,code,description, status };
-    await onSave(payload, color?.id);
+    await onSave(payload, material?.id);
   };
 
   return (
     <Card className="mb-4">
       <Card.Body>
-        <h5>{color ? 'Edit Color' : 'Add Color'}</h5>
+        <h5>{material ? 'Edit Material' : 'Add Material'}</h5>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label>Name</label>
@@ -47,11 +46,10 @@ const ColorForm = ({ color, onCancel, onSave }) => {
               className="form-control"
             />
           </div>
-          <div className="mb-3" >
-            <label>color</label>
-            <Form.Control
+          <div className="mb-3">
+            <label>Code</label>
+            <input
               value={code}
-              type='color'
               onChange={(e) => setCode(e.target.value)}
               required
               className="form-control"
@@ -110,44 +108,45 @@ const ColorForm = ({ color, onCancel, onSave }) => {
   );
 };
 
-const ColorManager = () => {
-  const [colors, setColors] = useState([]);
+const MaterialManager = () => {
+  const [materials, setMaterials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [submitting, setSubmitting] = useState(false);
-  const [viewColor, setViewColor] = useState(null);
-  const [editingColor, setEditingColor] = useState(null);
-  const [addingColor, setAddingColor] = useState(false);
+  const [viewMaterial, setViewMaterial] = useState(null);
+  const [editingMaterial, setEditingMaterial] = useState(null);
+  const [addingMaterial, setAddingMaterial] = useState(false);
 
 
   const [filterId, setFilterId] = useState('');
   const [filterName, setFilterName] = useState('');
-  const [filterDesc, setFilterDesc] = useState('');
-  const [filterStatus, setFilterStatus] = useState('');  
   const [filterCode, setFilterCode] = useState('');
+  const [filterDesc, setFilterDesc] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
 
   // Define temporary states above (to capture input before filtering)
   const [tempFilterId, setTempFilterId] = useState('');
   const [tempFilterName, setTempFilterName] = useState('');
+  const [tempFilterCode, setTempFilterCode] = useState('');
   const [tempFilterDesc, setTempFilterDesc] = useState('');
   const [tempFilterStatus, setTempFilterStatus] = useState('');
-  const [tempFilterCode, setTempFilterCode] = useState('');
 
   // Button click handler
   const handleApplyFilters = () => {
     setFilterId(tempFilterId);
-    setFilterName(tempFilterName);    
+    setFilterName(tempFilterName);
+    setFilterCode(tempFilterCode);
     setFilterDesc(tempFilterDesc);
     setFilterStatus(tempFilterStatus);
-    setFilterCode(tempFilterCode);
   };
 
   const handleClearFilter = () => {
     setFilterId('');
     setFilterName('');
     setFilterDesc('');
+    setFilterStatus('');
     setFilterStatus('');
     setFilterCode('');
     setTempFilterId('');
@@ -156,31 +155,31 @@ const ColorManager = () => {
     setTempFilterDesc('');
     setTempFilterStatus('');
   };
-  const filteredColors = colors.filter((color) =>
-                      color.id.toString().includes(filterId) &&
-                      color.name.toLowerCase().includes(filterName.toLowerCase()) &&
-                      (!filterCode || (color.code && color.code.toLowerCase().includes(filterCode.toLowerCase()))) &&
-                      (color.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
-                      color.status.toString().includes(filterStatus));
+  const filteredMaterials = materials.filter((material) =>
+                      material.id.toString().includes(filterId) &&
+                      material.name.toLowerCase().includes(filterName.toLowerCase()) &&
+                      material.code.toString().includes(filterCode) &&
+                      (material.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
+                      material.status.toString().includes(filterStatus));
   //
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchColors();
+    fetchMaterials();
   }, []);
 
-  const fetchColors = async () => {
+  const fetchMaterials = async () => {
     setLoading(true);
     setError('');
     try {
-      const response = await getColors();
+      const response = await getMaterials();
       if (response.success) {
-        setColors(response.data);
+        setMaterials(response.data);
       } else {
-        setError('Failed to load colors');
+        setError('Failed to load materials');
       }
     } catch {
-      setError('Error loading colors');
+      setError('Error loading materials');
     } finally {
       setLoading(false);
     }
@@ -194,26 +193,26 @@ const ColorManager = () => {
     setSuccess('');
     setSubmitting(true);
     try {
-      const response = await deleteColor(deleteConfirmId);
+      const response = await deleteMaterial(deleteConfirmId);
       if (response.success) {
-        setSuccess('Color deleted successfully!');
-        fetchColors();
+        setSuccess('Material deleted successfully!');
+        fetchMaterials();
       } else {
-        setError(response.error || 'Failed to delete color');
+        setError(response.error || 'Failed to delete material');
       }
     } catch {
-      setError('Failed to delete color');
+      setError('Failed to delete material');
     } finally {
       setSubmitting(false);
       setDeleteConfirmId(null);
     }
   };
 
-  const handleAdd = () => setAddingColor(true);
-  const handleEdit = (color) => setEditingColor(color);
+  const handleAdd = () => setAddingMaterial(true);
+  const handleEdit = (material) => setEditingMaterial(material);
   const cancelDelete = () => setDeleteConfirmId(null);
-  const handleView = (color) => setViewColor(color);
-  const closeViewModal = () => setViewColor(null);
+  const handleView = (material) => setViewMaterial(material);
+  const closeViewModal = () => setViewMaterial(null);
 
   const handleEditFromView = (category) => {
     closeViewModal();
@@ -234,21 +233,21 @@ const ColorManager = () => {
     try {
       let res;
       if (id) {
-        res = await updateColor(id, data);
+        res = await updateMaterial(id, data);
         if (!res.success) throw new Error(res.message);
-        setSuccess('Color updated successfully!');
+        setSuccess('Material updated successfully!');
       } else {
-        res = await addColor(data);
+        res = await addMaterial(data);
         if (!res.success) throw new Error(res.message);
-        setSuccess('Color added successfully!');
+        setSuccess('Material added successfully!');
       }
-      setEditingColor(null);
-      setAddingColor(false);
-      fetchColors();
+      setEditingMaterial(null);
+      setAddingMaterial(false);
+      fetchMaterials();
     } catch (err) {
       setError(err.message.includes("Bad request")? 'Duplicate Name or code entered!':'Operation failed');
-      setEditingColor(null);
-      setAddingColor(false);    
+      setEditingMaterial(null);
+      setAddingMaterial(false);
     }
   };
 
@@ -261,12 +260,12 @@ const ColorManager = () => {
 
   return (
     <Container className="py-4">
-      {addingColor || editingColor ? (
-        <ColorForm
-          color={editingColor}
+      {addingMaterial || editingMaterial ? (
+        <MaterialForm
+          material={editingMaterial}
           onCancel={() => {
-            setAddingColor(false);
-            setEditingColor(null);
+            setAddingMaterial(false);
+            setEditingMaterial(null);
           }}
           onSave={handleFormSave}
         />
@@ -274,10 +273,10 @@ const ColorManager = () => {
         <Card>
           <Card.Body>
             <Card.Title className="mb-4 d-flex justify-content-between align-items-center">
-              Color Management
+              Material Management
               <div className="d-flex" style={{ gap: '8px' }}>
                 <Button variant="primary" onClick={handleAdd}>
-                  + Add Color
+                  + Add Material
                 </Button>
                 <Button variant="secondary" onClick={() => navigate('/attributes')}>
                   Back
@@ -349,7 +348,7 @@ const ColorManager = () => {
                 <tr>
                   <th style={{ width: '10%' }}>ID</th>
                   <th style={{ width: '15%' }}>Name</th>
-                  <th style={{ width: '11%' }}>Code </th>
+                  <th style={{ width: '11%' }}>Code</th>
                   <th style={{ width: '25%' }}>Description</th>
                   <th style={{ width: '10%' }}>Status</th>
                   <th>Created On</th>
@@ -358,42 +357,28 @@ const ColorManager = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredColors.length === 0 ? (
+                {filteredMaterials.length === 0 ? (
                   <tr>
-                    <td colSpan="8" className="text-center">No colors found</td>
+                    <td colSpan="8" className="text-center">No materials found</td>
                   </tr>
                 ) : (
-                  filteredColors.map((color) => (
-                    <tr key={color.id}>
-                      <td>{color.id}</td>
-                      <td>{color.name}</td>
+                  filteredMaterials.map((material) => (
+                    <tr key={material.id}>
+                      <td>{material.id}</td>
+                      <td>{material.name}</td>
+                      <td>{material.code}</td>
+                      <td>{material.description || '-'}</td>
                       <td>
-                          <div className="d-flex align-items-center">
-                          <div
-                            style={{
-                              width: '20px',
-                              height: '20px',
-                              backgroundColor: color.code,
-                              borderRadius: '3px',
-                              border: '1px solid black',
-                              marginRight: '8px'
-                            }}
-                          />
-                          {color.code}
-                          </div>
-                      </td>
-                      <td>{color.description || '-'}</td>
-                      <td>
-                        <Badge bg={statusMap[color.status]?.variant || 'dark'}>
-                          {statusMap[color.status]?.label || color.status}
+                        <Badge bg={statusMap[material.status]?.variant || 'dark'}>
+                          {statusMap[material.status]?.label || material.status}
                         </Badge>
                       </td>
-                      <td>{new Date(color.created_on).toLocaleString()}</td>
-                      <td>{new Date(color.last_modified_on).toLocaleString()}</td>
+                      <td>{new Date(material.created_on).toLocaleString()}</td>
+                      <td>{new Date(material.last_modified_on).toLocaleString()}</td>
                       <td>
-                        <Button variant="outline-primary" size="sm" className="me-2" title="View" onClick={() => handleView(color)}><FaEye /></Button>
-                        <Button variant="outline-warning" size="sm" className="me-2" title="Edit" onClick={() => handleEdit(color)}><FaEdit /></Button>
-                        <Button variant="outline-danger" size="sm" title="Delete" onClick={() => handleDeleteClick(color.id)}><FaTrash /></Button>
+                        <Button variant="outline-primary" size="sm" className="me-2" title="View" onClick={() => handleView(material)}><FaEye /></Button>
+                        <Button variant="outline-warning" size="sm" className="me-2" title="Edit" onClick={() => handleEdit(material)}><FaEdit /></Button>
+                        <Button variant="outline-danger" size="sm" title="Delete" onClick={() => handleDeleteClick(material.id)}><FaTrash /></Button>
                       </td>
                     </tr>
                   ))
@@ -406,7 +391,7 @@ const ColorManager = () => {
                 <Modal.Title>Confirm Deletion</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                Are you sure you want to delete color ID {deleteConfirmId}?
+                Are you sure you want to delete material ID {deleteConfirmId}?
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={cancelDelete} disabled={submitting}>Cancel</Button>
@@ -414,43 +399,31 @@ const ColorManager = () => {
               </Modal.Footer>
             </Modal>
 
-            <Modal show={!!viewColor} onHide={closeViewModal} centered>
+            <Modal show={!!viewMaterial} onHide={closeViewModal} centered>
             <Modal.Header closeButton>
-              <Modal.Title>View Color Details</Modal.Title>
+              <Modal.Title>View Material Details</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              {viewColor && (
+              {viewMaterial && (
                 <>
-                  <p><strong>ID:</strong> {viewColor.id}</p>
-                  <p><strong>Name:</strong> {viewColor.name}</p>
-                  <p className="d-flex align-items-center"><strong>Code:</strong> 
-                          <div
-                            style={{
-                              width: '20px',
-                              height: '20px',
-                              backgroundColor: viewColor.code,
-                              borderRadius: '3px',
-                              border: '1px solid black',
-                              margin: '8px'
-                            }}
-                          />
-                          {viewColor.code}
-                  </p>
-                  <p><strong>Description:</strong> {viewColor.description || '-'}</p>
+                  <p><strong>ID:</strong> {viewMaterial.id}</p>
+                  <p><strong>Name:</strong> {viewMaterial.name}</p>
+                  <p><strong>Code:</strong> {viewMaterial.code}</p>
+                  <p><strong>Description:</strong> {viewMaterial.description || '-'}</p>
                   <p>
                     <strong>Status:</strong>{' '}
-                    <Badge bg={statusMap[viewColor.status]?.variant || 'dark'}>
-                      {statusMap[viewColor.status]?.label || viewColor.status}
+                    <Badge bg={statusMap[viewMaterial.status]?.variant || 'dark'}>
+                      {statusMap[viewMaterial.status]?.label || viewMaterial.status}
                     </Badge>
                   </p>
-                  <p><strong>Created On:</strong> {new Date(viewColor.created_on).toLocaleString()}</p>
-                  <p><strong>Last Modified On:</strong> {new Date(viewColor.last_modified_on).toLocaleString()}</p>
+                  <p><strong>Created On:</strong> {new Date(viewMaterial.created_on).toLocaleString()}</p>
+                  <p><strong>Last Modified On:</strong> {new Date(viewMaterial.last_modified_on).toLocaleString()}</p>
                 </>
               )}
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="warning" onClick={() => handleEditFromView(viewColor)}>Edit</Button>
-              <Button variant="danger" onClick={() => handleDeleteFromView(viewColor)}>Delete</Button>
+              <Button variant="warning" onClick={() => handleEditFromView(viewMaterial)}>Edit</Button>
+              <Button variant="danger" onClick={() => handleDeleteFromView(viewMaterial)}>Delete</Button>
               <Button variant="secondary" onClick={closeViewModal}>Close</Button>
             </Modal.Footer>
           </Modal>
@@ -462,4 +435,4 @@ const ColorManager = () => {
   );
 };
 
-export default ColorManager;
+export default MaterialManager;

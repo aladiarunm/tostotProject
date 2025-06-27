@@ -9,6 +9,9 @@ const subCategoryRoutes = require('./routes/subCategory-Routes');
 const colorRoutes = require('./routes/color-Routes');
 const sizeRoutes = require('./routes/size-Routes');
 const styleRoutes = require('./routes/style-Routes');
+const materialRoutes = require('./routes/material-Routes');
+const seasonRoutes = require('./routes/season-Routes')
+const genderRoutes = require('./routes/gender-Routes')
 //pravin team
 const buyerRoutes = require('./routes/buyerRoutes');
 
@@ -23,6 +26,9 @@ app.use('/api/subCategory',subCategoryRoutes);
 app.use('/api/colors',colorRoutes);
 app.use('/api/sizes',sizeRoutes);
 app.use('/api/styles',styleRoutes);
+app.use('/api/materials',materialRoutes);
+app.use('/api/seasons',seasonRoutes);
+app.use('/api/genders',genderRoutes);
 //pravin team
 app.use('/api/buyers', buyerRoutes);
 

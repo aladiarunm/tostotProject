@@ -13,6 +13,9 @@ import SubCategoryManagement from './pages/SubCategoryManagement';
 import ColorManagement from './pages/ColorManagement';
 import SizeManagement from './pages/SizeManagement';
 import StyleManagement from './pages/StyleManagement';
+import MaterialManagement from './pages/MaterialManagement';
+import GenderManagement from './pages/GenderManagement';
+import SeasonManagement from './pages/SeasonManagement';
 //---
 import ProductManagement from './pages/ProductManagement';
 import ProductCategory from './pages/ProductManagement/Category';
@@ -42,6 +45,9 @@ const AppRoutes = ({ onLogin }) => {
         <Route path="color" element={<ColorManagement />} />
         <Route path="size" element={<SizeManagement />} />
         <Route path="style" element={<StyleManagement />} />
+        <Route path="material" element={<MaterialManagement />} />
+        <Route path="season" element={<SeasonManagement />} />
+        <Route path="gender" element={<GenderManagement />} />
 
         <Route path="products" element={<ProductManagement />}>
           <Route path="category" element={<ProductCategory />} />

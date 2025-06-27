@@ -8,11 +8,10 @@ import {
   Spinner,
   Modal,
   Badge,
-  Form
 } from 'react-bootstrap';
 import { FaEdit, FaFilter, FaTrash, FaEye } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { getColors, deleteColor, addColor, updateColor } from '../../api/colors';
+import { getSeasons, deleteSeason, addSeason, updateSeason } from '../../api/seasons';
 
 const statusMap = {
   A: { label: 'Active', variant: 'success' },
@@ -21,22 +20,22 @@ const statusMap = {
 };
 
 // Add and Edit Form
-const ColorForm = ({ color, onCancel, onSave }) => {
-  const [name, setName] = useState(color?.name || '');
-  const [code, setCode] = useState(color?.code || '#ffffff');
-  const [description, setDescription] = useState(color?.description || '');
-  const [status, setStatus] = useState(color?.status || 'A');
+const SeasonForm = ({ season, onCancel, onSave }) => {
+  const [name, setName] = useState(season?.name || '');
+  const [code, setCode] = useState(season?.code || '');
+  const [description, setDescription] = useState(season?.description || '');
+  const [status, setStatus] = useState(season?.status || 'A');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = { name,code,description, status };
-    await onSave(payload, color?.id);
+    await onSave(payload, season?.id);
   };
 
   return (
     <Card className="mb-4">
       <Card.Body>
-        <h5>{color ? 'Edit Color' : 'Add Color'}</h5>
+        <h5>{season ? 'Edit Season' : 'Add Season'}</h5>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label>Name</label>
@@ -47,11 +46,10 @@ const ColorForm = ({ color, onCancel, onSave }) => {
               className="form-control"
             />
           </div>
-          <div className="mb-3" >
-            <label>color</label>
-            <Form.Control
+          <div className="mb-3">
+            <label>Code</label>
+            <input
               value={code}
-              type='color'
               onChange={(e) => setCode(e.target.value)}
               required
               className="form-control"
@@ -110,44 +108,45 @@ const ColorForm = ({ color, onCancel, onSave }) => {
   );
 };
 
-const ColorManager = () => {
-  const [colors, setColors] = useState([]);
+const SeasonManager = () => {
+  const [seasons, setSeasons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [submitting, setSubmitting] = useState(false);
-  const [viewColor, setViewColor] = useState(null);
-  const [editingColor, setEditingColor] = useState(null);
-  const [addingColor, setAddingColor] = useState(false);
+  const [viewSeason, setViewSeason] = useState(null);
+  const [editingSeason, setEditingSeason] = useState(null);
+  const [addingSeason, setAddingSeason] = useState(false);
 
 
   const [filterId, setFilterId] = useState('');
   const [filterName, setFilterName] = useState('');
-  const [filterDesc, setFilterDesc] = useState('');
-  const [filterStatus, setFilterStatus] = useState('');  
   const [filterCode, setFilterCode] = useState('');
+  const [filterDesc, setFilterDesc] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
 
   // Define temporary states above (to capture input before filtering)
   const [tempFilterId, setTempFilterId] = useState('');
   const [tempFilterName, setTempFilterName] = useState('');
+  const [tempFilterCode, setTempFilterCode] = useState('');
   const [tempFilterDesc, setTempFilterDesc] = useState('');
   const [tempFilterStatus, setTempFilterStatus] = useState('');
-  const [tempFilterCode, setTempFilterCode] = useState('');
 
   // Button click handler
   const handleApplyFilters = () => {
     setFilterId(tempFilterId);
-    setFilterName(tempFilterName);    
+    setFilterName(tempFilterName);
+    setFilterCode(tempFilterCode);
     setFilterDesc(tempFilterDesc);
     setFilterStatus(tempFilterStatus);
-    setFilterCode(tempFilterCode);
   };
 
   const handleClearFilter = () => {
     setFilterId('');
     setFilterName('');
     setFilterDesc('');
+    setFilterStatus('');
     setFilterStatus('');
     setFilterCode('');
     setTempFilterId('');
@@ -156,31 +155,31 @@ const ColorManager = () => {
     setTempFilterDesc('');
     setTempFilterStatus('');
   };
-  const filteredColors = colors.filter((color) =>
-                      color.id.toString().includes(filterId) &&
-                      color.name.toLowerCase().includes(filterName.toLowerCase()) &&
-                      (!filterCode || (color.code && color.code.toLowerCase().includes(filterCode.toLowerCase()))) &&
-                      (color.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
-                      color.status.toString().includes(filterStatus));
+  const filteredSeasons = seasons.filter((season) =>
+                      season.id.toString().includes(filterId) &&
+                      season.name.toLowerCase().includes(filterName.toLowerCase()) &&
+                      season.code.toString().includes(filterCode) &&
+                      (season.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
+                      season.status.toString().includes(filterStatus));
   //
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchColors();
+    fetchSeasons();
   }, []);
 
-  const fetchColors = async () => {
+  const fetchSeasons = async () => {
     setLoading(true);
     setError('');
     try {
-      const response = await getColors();
+      const response = await getSeasons();
       if (response.success) {
-        setColors(response.data);
+        setSeasons(response.data);
       } else {
-        setError('Failed to load colors');
+        setError('Failed to load seasons');
       }
     } catch {
-      setError('Error loading colors');
+      setError('Error loading seasons');
     } finally {
       setLoading(false);
     }
@@ -194,26 +193,26 @@ const ColorManager = () => {
     setSuccess('');
     setSubmitting(true);
     try {
-      const response = await deleteColor(deleteConfirmId);
+      const response = await deleteSeason(deleteConfirmId);
       if (response.success) {
-        setSuccess('Color deleted successfully!');
-        fetchColors();
+        setSuccess('Season deleted successfully!');
+        fetchSeasons();
       } else {
-        setError(response.error || 'Failed to delete color');
+        setError(response.error || 'Failed to delete season');
       }
     } catch {
-      setError('Failed to delete color');
+      setError('Failed to delete season');
     } finally {
       setSubmitting(false);
       setDeleteConfirmId(null);
     }
   };
 
-  const handleAdd = () => setAddingColor(true);
-  const handleEdit = (color) => setEditingColor(color);
+  const handleAdd = () => setAddingSeason(true);
+  const handleEdit = (season) => setEditingSeason(season);
   const cancelDelete = () => setDeleteConfirmId(null);
-  const handleView = (color) => setViewColor(color);
-  const closeViewModal = () => setViewColor(null);
+  const handleView = (season) => setViewSeason(season);
+  const closeViewModal = () => setViewSeason(null);
 
   const handleEditFromView = (category) => {
     closeViewModal();
@@ -234,21 +233,21 @@ const ColorManager = () => {
     try {
       let res;
       if (id) {
-        res = await updateColor(id, data);
+        res = await updateSeason(id, data);
         if (!res.success) throw new Error(res.message);
-        setSuccess('Color updated successfully!');
+        setSuccess('Season updated successfully!');
       } else {
-        res = await addColor(data);
+        res = await addSeason(data);
         if (!res.success) throw new Error(res.message);
-        setSuccess('Color added successfully!');
+        setSuccess('Season added successfully!');
       }
-      setEditingColor(null);
-      setAddingColor(false);
-      fetchColors();
+      setEditingSeason(null);
+      setAddingSeason(false);
+      fetchSeasons();
     } catch (err) {
       setError(err.message.includes("Bad request")? 'Duplicate Name or code entered!':'Operation failed');
-      setEditingColor(null);
-      setAddingColor(false);    
+      setEditingSeason(null);
+      setAddingSeason(false);
     }
   };
 
@@ -261,12 +260,12 @@ const ColorManager = () => {
 
   return (
     <Container className="py-4">
-      {addingColor || editingColor ? (
-        <ColorForm
-          color={editingColor}
+      {addingSeason || editingSeason ? (
+        <SeasonForm
+          season={editingSeason}
           onCancel={() => {
-            setAddingColor(false);
-            setEditingColor(null);
+            setAddingSeason(false);
+            setEditingSeason(null);
           }}
           onSave={handleFormSave}
         />
@@ -274,10 +273,10 @@ const ColorManager = () => {
         <Card>
           <Card.Body>
             <Card.Title className="mb-4 d-flex justify-content-between align-items-center">
-              Color Management
+              Season Management
               <div className="d-flex" style={{ gap: '8px' }}>
                 <Button variant="primary" onClick={handleAdd}>
-                  + Add Color
+                  + Add Season
                 </Button>
                 <Button variant="secondary" onClick={() => navigate('/attributes')}>
                   Back
@@ -349,7 +348,7 @@ const ColorManager = () => {
                 <tr>
                   <th style={{ width: '10%' }}>ID</th>
                   <th style={{ width: '15%' }}>Name</th>
-                  <th style={{ width: '11%' }}>Code </th>
+                  <th style={{ width: '11%' }}>Code</th>
                   <th style={{ width: '25%' }}>Description</th>
                   <th style={{ width: '10%' }}>Status</th>
                   <th>Created On</th>
@@ -358,42 +357,28 @@ const ColorManager = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredColors.length === 0 ? (
+                {filteredSeasons.length === 0 ? (
                   <tr>
-                    <td colSpan="8" className="text-center">No colors found</td>
+                    <td colSpan="8" className="text-center">No seasons found</td>
                   </tr>
                 ) : (
-                  filteredColors.map((color) => (
-                    <tr key={color.id}>
-                      <td>{color.id}</td>
-                      <td>{color.name}</td>
+                  filteredSeasons.map((season) => (
+                    <tr key={season.id}>
+                      <td>{season.id}</td>
+                      <td>{season.name}</td>
+                      <td>{season.code}</td>
+                      <td>{season.description || '-'}</td>
                       <td>
-                          <div className="d-flex align-items-center">
-                          <div
-                            style={{
-                              width: '20px',
-                              height: '20px',
-                              backgroundColor: color.code,
-                              borderRadius: '3px',
-                              border: '1px solid black',
-                              marginRight: '8px'
-                            }}
-                          />
-                          {color.code}
-                          </div>
-                      </td>
-                      <td>{color.description || '-'}</td>
-                      <td>
-                        <Badge bg={statusMap[color.status]?.variant || 'dark'}>
-                          {statusMap[color.status]?.label || color.status}
+                        <Badge bg={statusMap[season.status]?.variant || 'dark'}>
+                          {statusMap[season.status]?.label || season.status}
                         </Badge>
                       </td>
-                      <td>{new Date(color.created_on).toLocaleString()}</td>
-                      <td>{new Date(color.last_modified_on).toLocaleString()}</td>
+                      <td>{new Date(season.created_on).toLocaleString()}</td>
+                      <td>{new Date(season.last_modified_on).toLocaleString()}</td>
                       <td>
-                        <Button variant="outline-primary" size="sm" className="me-2" title="View" onClick={() => handleView(color)}><FaEye /></Button>
-                        <Button variant="outline-warning" size="sm" className="me-2" title="Edit" onClick={() => handleEdit(color)}><FaEdit /></Button>
-                        <Button variant="outline-danger" size="sm" title="Delete" onClick={() => handleDeleteClick(color.id)}><FaTrash /></Button>
+                        <Button variant="outline-primary" size="sm" className="me-2" title="View" onClick={() => handleView(season)}><FaEye /></Button>
+                        <Button variant="outline-warning" size="sm" className="me-2" title="Edit" onClick={() => handleEdit(season)}><FaEdit /></Button>
+                        <Button variant="outline-danger" size="sm" title="Delete" onClick={() => handleDeleteClick(season.id)}><FaTrash /></Button>
                       </td>
                     </tr>
                   ))
@@ -406,7 +391,7 @@ const ColorManager = () => {
                 <Modal.Title>Confirm Deletion</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                Are you sure you want to delete color ID {deleteConfirmId}?
+                Are you sure you want to delete season ID {deleteConfirmId}?
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={cancelDelete} disabled={submitting}>Cancel</Button>
@@ -414,43 +399,31 @@ const ColorManager = () => {
               </Modal.Footer>
             </Modal>
 
-            <Modal show={!!viewColor} onHide={closeViewModal} centered>
+            <Modal show={!!viewSeason} onHide={closeViewModal} centered>
             <Modal.Header closeButton>
-              <Modal.Title>View Color Details</Modal.Title>
+              <Modal.Title>View Season Details</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              {viewColor && (
+              {viewSeason && (
                 <>
-                  <p><strong>ID:</strong> {viewColor.id}</p>
-                  <p><strong>Name:</strong> {viewColor.name}</p>
-                  <p className="d-flex align-items-center"><strong>Code:</strong> 
-                          <div
-                            style={{
-                              width: '20px',
-                              height: '20px',
-                              backgroundColor: viewColor.code,
-                              borderRadius: '3px',
-                              border: '1px solid black',
-                              margin: '8px'
-                            }}
-                          />
-                          {viewColor.code}
-                  </p>
-                  <p><strong>Description:</strong> {viewColor.description || '-'}</p>
+                  <p><strong>ID:</strong> {viewSeason.id}</p>
+                  <p><strong>Name:</strong> {viewSeason.name}</p>
+                  <p><strong>Code:</strong> {viewSeason.code}</p>
+                  <p><strong>Description:</strong> {viewSeason.description || '-'}</p>
                   <p>
                     <strong>Status:</strong>{' '}
-                    <Badge bg={statusMap[viewColor.status]?.variant || 'dark'}>
-                      {statusMap[viewColor.status]?.label || viewColor.status}
+                    <Badge bg={statusMap[viewSeason.status]?.variant || 'dark'}>
+                      {statusMap[viewSeason.status]?.label || viewSeason.status}
                     </Badge>
                   </p>
-                  <p><strong>Created On:</strong> {new Date(viewColor.created_on).toLocaleString()}</p>
-                  <p><strong>Last Modified On:</strong> {new Date(viewColor.last_modified_on).toLocaleString()}</p>
+                  <p><strong>Created On:</strong> {new Date(viewSeason.created_on).toLocaleString()}</p>
+                  <p><strong>Last Modified On:</strong> {new Date(viewSeason.last_modified_on).toLocaleString()}</p>
                 </>
               )}
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="warning" onClick={() => handleEditFromView(viewColor)}>Edit</Button>
-              <Button variant="danger" onClick={() => handleDeleteFromView(viewColor)}>Delete</Button>
+              <Button variant="warning" onClick={() => handleEditFromView(viewSeason)}>Edit</Button>
+              <Button variant="danger" onClick={() => handleDeleteFromView(viewSeason)}>Delete</Button>
               <Button variant="secondary" onClick={closeViewModal}>Close</Button>
             </Modal.Footer>
           </Modal>
@@ -462,4 +435,4 @@ const ColorManager = () => {
   );
 };
 
-export default ColorManager;
+export default SeasonManager;

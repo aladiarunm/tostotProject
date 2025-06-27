@@ -1,10 +1,10 @@
-// // api/brands.js
+// api/seasons.js
 
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3001/api/brands';
+const API_BASE_URL = 'http://localhost:3001/api/seasons';
 
-export const getBrands = async () => {
+export const getSeasons = async () => {
   try {
     const accessToken = localStorage.getItem('accessToken');
     console.log(accessToken);
@@ -14,13 +14,13 @@ export const getBrands = async () => {
         'Authorization': `Bearer ${accessToken}`
       }
     });
-    console.log("Inside get brands");
-    console.log("Raw brand data:", response.data);
+    console.log("Inside get seasons");
+    console.log("Raw season data:", response.data);
 
     if (response.data) {
     // const data = Array.isArray(response.data) 
     //     ? response.data 
-    //     : response.data.brands || [];
+    //     : response.data.seasons || [];
 
     return {
         success: true,
@@ -29,11 +29,11 @@ export const getBrands = async () => {
     }
     return {
       success: false,
-      message: (response.data && response.data.message) || 'Failed to fetch brands'
+      message: (response.data && response.data.message) || 'Failed to fetch seasons'
       
     };
   } catch (error) {
-    let errorMessage = 'An error occurred while fetching brands';
+    let errorMessage = 'An error occurred while fetching seasons';
 
     if (error.response) {
       const status = error.response.status;
@@ -56,11 +56,11 @@ export const getBrands = async () => {
   }
 };
 
-export const addBrand = async (brandData) => {
+export const addSeason = async (seasonData) => {
   try {
     const accessToken = localStorage.getItem('accessToken');
 
-    const response = await axios.post(`${API_BASE_URL}/addBrand`, brandData, {
+    const response = await axios.post(`${API_BASE_URL}/addSeason`, seasonData, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
@@ -75,11 +75,11 @@ export const addBrand = async (brandData) => {
     } else {
       return {
         success: false,
-        message: response.data.message || 'Failed to add brand'
+        message: response.data.message || 'Failed to add season'
       };
     }
   } catch (error) {
-    let errorMessage = 'An error occurred while adding brand';
+    let errorMessage = 'An error occurred while adding season';
 
     if (error.response) {
       if (error.response.status === 401) {
@@ -102,17 +102,17 @@ export const addBrand = async (brandData) => {
   }
 };
 
-export const updateBrand = async (id, brandData) => {
+export const updateSeason = async (id, seasonData) => {
   try {
     const accessToken = localStorage.getItem('accessToken');
 
-    const response = await axios.put(`${API_BASE_URL}/updateBrand/${id}`, brandData, {
+    const response = await axios.put(`${API_BASE_URL}/updateSeason/${id}`, seasonData, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       }
     });
-
+    console.log(response);
     if (response.data) {
       return {
         success: true,
@@ -121,11 +121,11 @@ export const updateBrand = async (id, brandData) => {
     } else {
       return {
         success: false,
-        message: response.data.message || 'Failed to update brand'
+        message: response.data.message || 'Failed to update season'
       };
     }
   } catch (error) {
-    let errorMessage = 'An error occurred while updating brand';
+    let errorMessage = 'An error occurred while updating season';
 
     if (error.response) {
       if (error.response.status === 401) {
@@ -148,11 +148,11 @@ export const updateBrand = async (id, brandData) => {
   }
 };
 
-export const deleteBrand = async (id) => {
+export const deleteSeason = async (id) => {
   try {
     const accessToken = localStorage.getItem('accessToken');
 
-    const response = await axios.delete(`${API_BASE_URL}/deleteBrand/${id}`, {
+    const response = await axios.delete(`${API_BASE_URL}/deleteSeason/${id}`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`
       }
@@ -166,11 +166,11 @@ export const deleteBrand = async (id) => {
     } else {
       return {
         success: false,
-        message: response.data.message || 'Failed to delete brand'
+        message: response.data.message || 'Failed to delete season'
       };
     }
   } catch (error) {
-    let errorMessage = 'An error occurred while deleting brand';
+    let errorMessage = 'An error occurred while deleting season';
 
     if (error.response) {
       if (error.response.status === 401) {
@@ -192,92 +192,3 @@ export const deleteBrand = async (id) => {
     };
   }
 };
-
-
-// mock api
-
-// let brands = [
-//   {
-//     id: 1,
-//     name: 'Cotton Classics',
-//     description: 'Premium cotton apparel and fabrics',
-//     status: 'A', // 'A' for active, 'I' for inactive, 'D' for deleted
-//     created_on: new Date().toISOString(),
-//     last_modified_on: new Date().toISOString(),
-//   },
-//   {
-//     id: 2,
-//     name: 'Silk & Satin',
-//     description: 'Luxury silk and satin textile products',
-//     status: 'A',
-//     created_on: new Date().toISOString(),
-//     last_modified_on: new Date().toISOString(),
-//   },
-//   {
-//     id: 3,
-//     name: 'Denim Dynasty',
-//     description: 'Quality denim wear and accessories',
-//     status: 'I',
-//     created_on: new Date().toISOString(),
-//     last_modified_on: new Date().toISOString(),
-//   },
-//   {
-//     id: 4,
-//     name: 'Wool Wonders',
-//     description: 'Cozy wool textiles and knitwear',
-//     status: 'A',
-//     created_on: new Date().toISOString(),
-//     last_modified_on: new Date().toISOString(),
-//   },
-//   {
-//     id: 5,
-//     name: 'Linen Legacy',
-//     description: 'Breathable linen fabrics and apparel',
-//     status: 'A',
-//     created_on: new Date().toISOString(),
-//     last_modified_on: new Date().toISOString(),
-//   },
-// ];
-
-
-// const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-// export const getBrands = async () => {
-//   await delay(700);
-//   return { success: true, data: brands };
-// };
-
-// export const addBrand = async (newBrand) => {
-//   await delay(500);
-//   const id = brands.length ? Math.max(...brands.map((b) => b.id)) + 1 : 1;
-//   const now = new Date().toISOString();
-//   // By default, if status is not provided, we'll use 'A' (active)
-//   const brand = { id, ...newBrand, status: newBrand.status || 'A', created_on: now, last_modified_on: now };
-//   brands.push(brand);
-//   return { success: true, data: brand };
-// };
-
-// export const updateBrand = async (id, updatedData) => {
-//   await delay(500);
-//   const index = brands.findIndex((b) => b.id === id);
-//   if (index === -1) return { success: false, error: 'Brand not found' };
-
-//   // Update the brand and modify its last_modified_on timestamp
-//   const now = new Date().toISOString();
-//   brands[index] = {
-//     ...brands[index],
-//     ...updatedData,
-//     last_modified_on: now,
-//   };
-//   return { success: true, data: brands[index] };
-// };
-
-// export const deleteBrand = async (id) => {
-//   await delay(500);
-//   const index = brands.findIndex((b) => b.id === id);
-//   if (index === -1) return { success: false, error: 'Brand not found' };
-
-//   // Remove the brand from the array (or you could update its status to 'D' for deleted)
-//   brands.splice(index, 1);
-//   return { success: true };
-// };

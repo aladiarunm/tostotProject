@@ -8,11 +8,10 @@ import {
   Spinner,
   Modal,
   Badge,
-  Form
 } from 'react-bootstrap';
 import { FaEdit, FaFilter, FaTrash, FaEye } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { getColors, deleteColor, addColor, updateColor } from '../../api/colors';
+import { getGenders, deleteGender, addGender, updateGender } from '../../api/genders';
 
 const statusMap = {
   A: { label: 'Active', variant: 'success' },
@@ -21,22 +20,22 @@ const statusMap = {
 };
 
 // Add and Edit Form
-const ColorForm = ({ color, onCancel, onSave }) => {
-  const [name, setName] = useState(color?.name || '');
-  const [code, setCode] = useState(color?.code || '#ffffff');
-  const [description, setDescription] = useState(color?.description || '');
-  const [status, setStatus] = useState(color?.status || 'A');
+const GenderForm = ({ gender, onCancel, onSave }) => {
+  const [name, setName] = useState(gender?.name || '');
+  const [code, setCode] = useState(gender?.code || '');
+  const [description, setDescription] = useState(gender?.description || '');
+  const [status, setStatus] = useState(gender?.status || 'A');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = { name,code,description, status };
-    await onSave(payload, color?.id);
+    await onSave(payload, gender?.id);
   };
 
   return (
     <Card className="mb-4">
       <Card.Body>
-        <h5>{color ? 'Edit Color' : 'Add Color'}</h5>
+        <h5>{gender ? 'Edit Gender' : 'Add Gender'}</h5>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label>Name</label>
@@ -47,11 +46,10 @@ const ColorForm = ({ color, onCancel, onSave }) => {
               className="form-control"
             />
           </div>
-          <div className="mb-3" >
-            <label>color</label>
-            <Form.Control
+          <div className="mb-3">
+            <label>Code</label>
+            <input
               value={code}
-              type='color'
               onChange={(e) => setCode(e.target.value)}
               required
               className="form-control"
@@ -110,44 +108,45 @@ const ColorForm = ({ color, onCancel, onSave }) => {
   );
 };
 
-const ColorManager = () => {
-  const [colors, setColors] = useState([]);
+const GenderManager = () => {
+  const [genders, setGenders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [submitting, setSubmitting] = useState(false);
-  const [viewColor, setViewColor] = useState(null);
-  const [editingColor, setEditingColor] = useState(null);
-  const [addingColor, setAddingColor] = useState(false);
+  const [viewGender, setViewGender] = useState(null);
+  const [editingGender, setEditingGender] = useState(null);
+  const [addingGender, setAddingGender] = useState(false);
 
 
   const [filterId, setFilterId] = useState('');
   const [filterName, setFilterName] = useState('');
-  const [filterDesc, setFilterDesc] = useState('');
-  const [filterStatus, setFilterStatus] = useState('');  
   const [filterCode, setFilterCode] = useState('');
+  const [filterDesc, setFilterDesc] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
 
   // Define temporary states above (to capture input before filtering)
   const [tempFilterId, setTempFilterId] = useState('');
   const [tempFilterName, setTempFilterName] = useState('');
+  const [tempFilterCode, setTempFilterCode] = useState('');
   const [tempFilterDesc, setTempFilterDesc] = useState('');
   const [tempFilterStatus, setTempFilterStatus] = useState('');
-  const [tempFilterCode, setTempFilterCode] = useState('');
 
   // Button click handler
   const handleApplyFilters = () => {
     setFilterId(tempFilterId);
-    setFilterName(tempFilterName);    
+    setFilterName(tempFilterName);
+    setFilterCode(tempFilterCode);
     setFilterDesc(tempFilterDesc);
     setFilterStatus(tempFilterStatus);
-    setFilterCode(tempFilterCode);
   };
 
   const handleClearFilter = () => {
     setFilterId('');
     setFilterName('');
     setFilterDesc('');
+    setFilterStatus('');
     setFilterStatus('');
     setFilterCode('');
     setTempFilterId('');
@@ -156,31 +155,31 @@ const ColorManager = () => {
     setTempFilterDesc('');
     setTempFilterStatus('');
   };
-  const filteredColors = colors.filter((color) =>
-                      color.id.toString().includes(filterId) &&
-                      color.name.toLowerCase().includes(filterName.toLowerCase()) &&
-                      (!filterCode || (color.code && color.code.toLowerCase().includes(filterCode.toLowerCase()))) &&
-                      (color.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
-                      color.status.toString().includes(filterStatus));
+  const filteredGenders = genders.filter((gender) =>
+                      gender.id.toString().includes(filterId) &&
+                      gender.name.toLowerCase().includes(filterName.toLowerCase()) &&
+                      gender.code.toString().includes(filterCode) &&
+                      (gender.description || '').toLowerCase().includes(filterDesc.toLowerCase()) &&
+                      gender.status.toString().includes(filterStatus));
   //
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchColors();
+    fetchGenders();
   }, []);
 
-  const fetchColors = async () => {
+  const fetchGenders = async () => {
     setLoading(true);
     setError('');
     try {
-      const response = await getColors();
+      const response = await getGenders();
       if (response.success) {
-        setColors(response.data);
+        setGenders(response.data);
       } else {
-        setError('Failed to load colors');
+        setError('Failed to load genders');
       }
     } catch {
-      setError('Error loading colors');
+      setError('Error loading genders');
     } finally {
       setLoading(false);
     }
@@ -194,26 +193,26 @@ const ColorManager = () => {
     setSuccess('');
     setSubmitting(true);
     try {
-      const response = await deleteColor(deleteConfirmId);
+      const response = await deleteGender(deleteConfirmId);
       if (response.success) {
-        setSuccess('Color deleted successfully!');
-        fetchColors();
+        setSuccess('Gender deleted successfully!');
+        fetchGenders();
       } else {
-        setError(response.error || 'Failed to delete color');
+        setError(response.error || 'Failed to delete gender');
       }
     } catch {
-      setError('Failed to delete color');
+      setError('Failed to delete gender');
     } finally {
       setSubmitting(false);
       setDeleteConfirmId(null);
     }
   };
 
-  const handleAdd = () => setAddingColor(true);
-  const handleEdit = (color) => setEditingColor(color);
+  const handleAdd = () => setAddingGender(true);
+  const handleEdit = (gender) => setEditingGender(gender);
   const cancelDelete = () => setDeleteConfirmId(null);
-  const handleView = (color) => setViewColor(color);
-  const closeViewModal = () => setViewColor(null);
+  const handleView = (gender) => setViewGender(gender);
+  const closeViewModal = () => setViewGender(null);
 
   const handleEditFromView = (category) => {
     closeViewModal();
@@ -234,21 +233,21 @@ const ColorManager = () => {
     try {
       let res;
       if (id) {
-        res = await updateColor(id, data);
+        res = await updateGender(id, data);
         if (!res.success) throw new Error(res.message);
-        setSuccess('Color updated successfully!');
+        setSuccess('Gender updated successfully!');
       } else {
-        res = await addColor(data);
+        res = await addGender(data);
         if (!res.success) throw new Error(res.message);
-        setSuccess('Color added successfully!');
+        setSuccess('Gender added successfully!');
       }
-      setEditingColor(null);
-      setAddingColor(false);
-      fetchColors();
+      setEditingGender(null);
+      setAddingGender(false);
+      fetchGenders();
     } catch (err) {
       setError(err.message.includes("Bad request")? 'Duplicate Name or code entered!':'Operation failed');
-      setEditingColor(null);
-      setAddingColor(false);    
+      setEditingGender(null);
+      setAddingGender(false);
     }
   };
 
@@ -261,12 +260,12 @@ const ColorManager = () => {
 
   return (
     <Container className="py-4">
-      {addingColor || editingColor ? (
-        <ColorForm
-          color={editingColor}
+      {addingGender || editingGender ? (
+        <GenderForm
+          gender={editingGender}
           onCancel={() => {
-            setAddingColor(false);
-            setEditingColor(null);
+            setAddingGender(false);
+            setEditingGender(null);
           }}
           onSave={handleFormSave}
         />
@@ -274,10 +273,10 @@ const ColorManager = () => {
         <Card>
           <Card.Body>
             <Card.Title className="mb-4 d-flex justify-content-between align-items-center">
-              Color Management
+              Gender Management
               <div className="d-flex" style={{ gap: '8px' }}>
                 <Button variant="primary" onClick={handleAdd}>
-                  + Add Color
+                  + Add Gender
                 </Button>
                 <Button variant="secondary" onClick={() => navigate('/attributes')}>
                   Back
@@ -349,7 +348,7 @@ const ColorManager = () => {
                 <tr>
                   <th style={{ width: '10%' }}>ID</th>
                   <th style={{ width: '15%' }}>Name</th>
-                  <th style={{ width: '11%' }}>Code </th>
+                  <th style={{ width: '11%' }}>Code</th>
                   <th style={{ width: '25%' }}>Description</th>
                   <th style={{ width: '10%' }}>Status</th>
                   <th>Created On</th>
@@ -358,42 +357,28 @@ const ColorManager = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredColors.length === 0 ? (
+                {filteredGenders.length === 0 ? (
                   <tr>
-                    <td colSpan="8" className="text-center">No colors found</td>
+                    <td colSpan="8" className="text-center">No genders found</td>
                   </tr>
                 ) : (
-                  filteredColors.map((color) => (
-                    <tr key={color.id}>
-                      <td>{color.id}</td>
-                      <td>{color.name}</td>
+                  filteredGenders.map((gender) => (
+                    <tr key={gender.id}>
+                      <td>{gender.id}</td>
+                      <td>{gender.name}</td>
+                      <td>{gender.code}</td>
+                      <td>{gender.description || '-'}</td>
                       <td>
-                          <div className="d-flex align-items-center">
-                          <div
-                            style={{
-                              width: '20px',
-                              height: '20px',
-                              backgroundColor: color.code,
-                              borderRadius: '3px',
-                              border: '1px solid black',
-                              marginRight: '8px'
-                            }}
-                          />
-                          {color.code}
-                          </div>
-                      </td>
-                      <td>{color.description || '-'}</td>
-                      <td>
-                        <Badge bg={statusMap[color.status]?.variant || 'dark'}>
-                          {statusMap[color.status]?.label || color.status}
+                        <Badge bg={statusMap[gender.status]?.variant || 'dark'}>
+                          {statusMap[gender.status]?.label || gender.status}
                         </Badge>
                       </td>
-                      <td>{new Date(color.created_on).toLocaleString()}</td>
-                      <td>{new Date(color.last_modified_on).toLocaleString()}</td>
+                      <td>{new Date(gender.created_on).toLocaleString()}</td>
+                      <td>{new Date(gender.last_modified_on).toLocaleString()}</td>
                       <td>
-                        <Button variant="outline-primary" size="sm" className="me-2" title="View" onClick={() => handleView(color)}><FaEye /></Button>
-                        <Button variant="outline-warning" size="sm" className="me-2" title="Edit" onClick={() => handleEdit(color)}><FaEdit /></Button>
-                        <Button variant="outline-danger" size="sm" title="Delete" onClick={() => handleDeleteClick(color.id)}><FaTrash /></Button>
+                        <Button variant="outline-primary" size="sm" className="me-2" title="View" onClick={() => handleView(gender)}><FaEye /></Button>
+                        <Button variant="outline-warning" size="sm" className="me-2" title="Edit" onClick={() => handleEdit(gender)}><FaEdit /></Button>
+                        <Button variant="outline-danger" size="sm" title="Delete" onClick={() => handleDeleteClick(gender.id)}><FaTrash /></Button>
                       </td>
                     </tr>
                   ))
@@ -406,7 +391,7 @@ const ColorManager = () => {
                 <Modal.Title>Confirm Deletion</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                Are you sure you want to delete color ID {deleteConfirmId}?
+                Are you sure you want to delete gender ID {deleteConfirmId}?
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={cancelDelete} disabled={submitting}>Cancel</Button>
@@ -414,43 +399,31 @@ const ColorManager = () => {
               </Modal.Footer>
             </Modal>
 
-            <Modal show={!!viewColor} onHide={closeViewModal} centered>
+            <Modal show={!!viewGender} onHide={closeViewModal} centered>
             <Modal.Header closeButton>
-              <Modal.Title>View Color Details</Modal.Title>
+              <Modal.Title>View Gender Details</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              {viewColor && (
+              {viewGender && (
                 <>
-                  <p><strong>ID:</strong> {viewColor.id}</p>
-                  <p><strong>Name:</strong> {viewColor.name}</p>
-                  <p className="d-flex align-items-center"><strong>Code:</strong> 
-                          <div
-                            style={{
-                              width: '20px',
-                              height: '20px',
-                              backgroundColor: viewColor.code,
-                              borderRadius: '3px',
-                              border: '1px solid black',
-                              margin: '8px'
-                            }}
-                          />
-                          {viewColor.code}
-                  </p>
-                  <p><strong>Description:</strong> {viewColor.description || '-'}</p>
+                  <p><strong>ID:</strong> {viewGender.id}</p>
+                  <p><strong>Name:</strong> {viewGender.name}</p>
+                  <p><strong>Code:</strong> {viewGender.code}</p>
+                  <p><strong>Description:</strong> {viewGender.description || '-'}</p>
                   <p>
                     <strong>Status:</strong>{' '}
-                    <Badge bg={statusMap[viewColor.status]?.variant || 'dark'}>
-                      {statusMap[viewColor.status]?.label || viewColor.status}
+                    <Badge bg={statusMap[viewGender.status]?.variant || 'dark'}>
+                      {statusMap[viewGender.status]?.label || viewGender.status}
                     </Badge>
                   </p>
-                  <p><strong>Created On:</strong> {new Date(viewColor.created_on).toLocaleString()}</p>
-                  <p><strong>Last Modified On:</strong> {new Date(viewColor.last_modified_on).toLocaleString()}</p>
+                  <p><strong>Created On:</strong> {new Date(viewGender.created_on).toLocaleString()}</p>
+                  <p><strong>Last Modified On:</strong> {new Date(viewGender.last_modified_on).toLocaleString()}</p>
                 </>
               )}
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="warning" onClick={() => handleEditFromView(viewColor)}>Edit</Button>
-              <Button variant="danger" onClick={() => handleDeleteFromView(viewColor)}>Delete</Button>
+              <Button variant="warning" onClick={() => handleEditFromView(viewGender)}>Edit</Button>
+              <Button variant="danger" onClick={() => handleDeleteFromView(viewGender)}>Delete</Button>
               <Button variant="secondary" onClick={closeViewModal}>Close</Button>
             </Modal.Footer>
           </Modal>
@@ -462,4 +435,4 @@ const ColorManager = () => {
   );
 };
 
-export default ColorManager;
+export default GenderManager;

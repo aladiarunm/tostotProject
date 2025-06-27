@@ -1,10 +1,11 @@
 import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { FaSitemap, FaCertificate, FaPalette, FaRulerCombined } from 'react-icons/fa';
+import { FaSitemap, FaCertificate, FaPalette, FaRulerCombined , FaCloudSunRain , FaMale} from 'react-icons/fa';
 //import {FiTag, FiGrid} from 'react-icons/fi'
 import { TbLayoutGridAdd } from "react-icons/tb";
 import { SiStylelint } from "react-icons/si";
+import { GiRolledCloth } from 'react-icons/gi';
 
 const Attributes = () => {
   const navigate = useNavigate();
@@ -39,6 +40,21 @@ const Attributes = () => {
       name: 'Style',
       icon: <SiStylelint size={50} />,
       route: '/style',
+    },
+     {
+      name: 'Material',
+      icon: <GiRolledCloth size={50} />,
+      route: '/material',
+    },
+     {
+      name: 'Season',
+      icon: <FaCloudSunRain size={50} />,
+      route: '/season',
+    },
+     {
+      name: 'Gender',
+      icon: <FaMale size={50} />,
+      route: '/gender',
     }
   ];
 
