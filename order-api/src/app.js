@@ -14,6 +14,7 @@ const seasonRoutes = require('./routes/season-Routes')
 const genderRoutes = require('./routes/gender-Routes')
 //pravin team
 const buyerRoutes = require('./routes/buyerRoutes');
+const sellerRoutes = require('./routes/sellerRoutes.js');
 
 app.options('*', cors());
 app.use(cors());
@@ -31,6 +32,7 @@ app.use('/api/seasons',seasonRoutes);
 app.use('/api/genders',genderRoutes);
 //pravin team
 app.use('/api/buyers', buyerRoutes);
+app.use('/api/sellers', sellerRoutes);
 
 module.exports = app;
 
