@@ -1,4 +1,4 @@
-# Web Intern Project â€“ Order Management System
+# Web Intern Project Order Management System
 
 This is a full-stack web project that includes both backend (`order-api`) and frontend (`order-app`) components for managing orders.
 
@@ -20,7 +20,7 @@ Unzip both the `order-api` and `order-app` folders into a directory (e.g., `proj
 
 ---
 
-# Backend Setup (`order-api`)
+## Backend Setup (`order-api`)
 
 ### 2. Configure Environment
 
