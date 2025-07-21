@@ -2,17 +2,17 @@
 
 This is a full-stack web project that includes both backend (`order-api`) and frontend (`order-app`) components for managing orders.
 
-## ðŸ“ Project Structure
+##  Project Structure
 
 ```
 project1/
-â”œâ”€â”€ order-api/       # Backend - Node.js (Express)
-â”œâ”€â”€ order-app/       # Frontend - React
+ order-api/       # Backend - Node.js (Express)
+ order-app/       # Frontend - React
 ```
 
 ---
 
-## ðŸš€ Getting Started
+## Getting Started
 
 ### 1. Extract Project Files
 
@@ -20,7 +20,7 @@ Unzip both the `order-api` and `order-app` folders into a directory (e.g., `proj
 
 ---
 
-## âš™ï¸ Backend Setup (`order-api`)
+# Backend Setup (`order-api`)
 
 ### 2. Configure Environment
 
@@ -80,7 +80,7 @@ VALUES ('admin', 'Admin', 'User', '9876543210', 'admin@example.com',
 
 ---
 
-## ðŸ–¥ï¸ Run the Application
+## Run the Application
 
 ### 6. Start Backend
 
@@ -102,14 +102,14 @@ Use **Google Chrome** for best compatibility.
 
 ---
 
-## ðŸ” Admin Credentials
+## Admin Credentials
 
-- **Username:** `admin`  
-- **Password:** `admin123`
+- **Username: `admin`  
+- **Password: `admin123`
 
 ---
 
-## ðŸ§¾ Notes
+## Notes
 
 - Ensure MySQL is running locally.
 - React and Node must be installed.
